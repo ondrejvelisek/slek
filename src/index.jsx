@@ -8,4 +8,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 
-ReactDOM.render(<h1>Hello world</h1>, document.getElementById('app-root'));
+import ChatPage from "./components/ChatPage";
+
+ReactDOM.render(<ChatPage/>, document.getElementById('app-root'));
