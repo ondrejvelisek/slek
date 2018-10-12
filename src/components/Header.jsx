@@ -7,7 +7,7 @@ import {
   faCommentAlt, faPowerOff, faUser
 } from '@fortawesome/free-solid-svg-icons';
 import Avatar from "./Avatar";
-import terryImg from '../img/terry.jpg';
+import state from './state';
 
 import '../less/Header.less';
 
@@ -27,6 +27,7 @@ export default class Header extends React.PureComponent {
   };
 
   render() {
+    const { name, avatar } = state.account.content;
     const { accountDropdownOpen } = this.state;
     return (
       <Navbar className="header text-light">
@@ -36,16 +37,16 @@ export default class Header extends React.PureComponent {
             <span> Slek</span>
           </NavbarBrand>
 
-          <Nav right navbar>
+          <Nav right="true" navbar>
             <NavItem>
               <Dropdown className="account-dropdown" isOpen={accountDropdownOpen} toggle={this.toggleAccountDropdown}>
 
                 <DropdownToggle tag="div" className="toggler">
-                  <Avatar image={terryImg} className="clickable"/>
+                  <Avatar image={avatar} className="clickable"/>
                 </DropdownToggle>
 
                 <DropdownMenu>
-                  <DropdownItem header>Terry Crews</DropdownItem>
+                  <DropdownItem header>{name}</DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem>
                     <FontAwesomeIcon icon={faUser}/>

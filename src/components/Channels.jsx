@@ -7,6 +7,8 @@ import {
   faPlus, faUserFriends
 } from '@fortawesome/free-solid-svg-icons';
 import '../less/Channels.less';
+import * as _ from 'lodash';
+import state from './state';
 
 export default class Channels extends React.PureComponent {
   render() {
@@ -19,18 +21,18 @@ export default class Channels extends React.PureComponent {
             <FontAwesomeIcon icon={faUserFriends}/>
             <span> Channels</span>
           </ListGroupItem>
-
-          <ListGroupItem className="clickable">
-            <span>Developers </span>
-            <Badge pill>2</Badge>
-          </ListGroupItem>
-          <ListGroupItem className="clickable">
-            <span>Sales & Marketing </span>
-          </ListGroupItem>
-          <ListGroupItem className="clickable">
-            <span>User Support </span>
-            <Badge pill>11</Badge>
-          </ListGroupItem>
+          {
+            _.map(state.channels.content, (channel, id) => (
+              <ListGroupItem key={id} className={`clickable ${channel.active ? 'selected' : ''}`}>
+                <span>
+                  {channel.name}
+                </span>
+                {channel.messages > 0 && (
+                  <Badge pill>{channel.messages}</Badge>
+                )}
+              </ListGroupItem>
+            ))
+          }
           <ListGroupItem className="clickable">
             <FontAwesomeIcon icon={faPlus}/>
             <span> Add</span>

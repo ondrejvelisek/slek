@@ -6,9 +6,9 @@ export default class Message extends React.PureComponent {
     const { text, mine } = this.props;
     return (
       <p className={`message ${mine ? 'mine' : ''}`}>
-        <div>
+        <span>
           {text}
-        </div>
+        </span>
       </p>
     );
   }
