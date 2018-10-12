@@ -1,94 +1,17 @@
 
 @import "variables";
 
-body {
-  background-color: @colorDarkest;
+::-webkit-scrollbar {
+  width: .7rem;
 }
 
-.channels {
-  height: 100%;
-  background-color: @colorDarker;
-  padding: 20px 0;
-
-  .list-group-item {
-    background-color: @colorDarker;
-
-    &.header {
-      color: @colorLightDark;
-    }
-
-    .badge {
-      background-color: @colorPrimaryDarker;
-    }
-  }
+::-webkit-scrollbar-thumb {
+  background: @colorDarkLight;
+  border-left: 0.2rem solid rgba(0, 0, 0, 0);
+  border-right: 0.2rem solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
 }
 
-.avatar {
-  height: 70px;
-  width: 70px;
-  border-radius: 40px;
-  margin: 0 20px;
-  border: 2px solid @colorLightDark;
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-radius: 40px;
-  }
-}
-
-.messages {
-
-  margin: 40px 0;
-  padding: 0;
-
-  li {
-
-    .media-body p div {
-      background-color: @colorDarkLight;
-      padding: 8px 12px;
-      border-radius: 8px;
-      display: inline-block;
-      color: @colorWhite;
-    }
-
-    &.text-right .media-body p div {
-      background-color: @colorPrimaryDarkest;
-    }
-
-    + li {
-      margin-top: 20px;
-    }
-  }
-
-
-}
-
-.dropdown.account-dropdown {
-
-  .avatar {
-    margin: -10px -10px -20px -20px;
-    position: relative;
-    z-index: 10000;
-    transition: all 200ms;
-
-    &:hover {
-      border-width: 0;
-      cursor: pointer;
-    }
-  }
-
-  &.show .avatar {
-    border-width: 0;
-  }
-
-  .dropdown-menu {
-    top: -63px !important;
-    left: auto !important;
-    right: 0;
-
-    .dropdown-header {
-      margin-right: 54px;
-    }
-  }
+::-webkit-scrollbar-thumb:hover {
+  background: @colorPrimaryDarker;
 }

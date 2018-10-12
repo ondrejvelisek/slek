@@ -1,0 +1,32 @@
+
+@import "variables";
+
+.input-box {
+
+  input.form-control {
+    background-color: @colorDarker;
+    border-color: @colorDarkLight;
+    color: @colorLight;
+
+    &:focus {
+      background-color: @colorDarkLight;
+      color: @colorLighter;
+    }
+  }
+
+  .btn {
+    background-color: @colorDarker;
+    border-color: @colorDarkLight;
+    color: @colorLight;
+  }
+
+  .btn:hover {
+    background-color: @colorDarkLight;
+    color: @colorLighter;
+  }
+
+  .btn:active {
+    background-color: @colorDarkLight;
+    color: @colorLighter;
+  }
+}

@@ -1,0 +1,31 @@
+
+@import "variables";
+
+.header {
+
+  .dropdown.account-dropdown {
+
+    .toggler {
+      z-index: 1200;
+      position: relative;
+
+      .avatar {
+        margin: -10px 0px -20px 0px;
+      }
+    }
+
+    &.show .toggler .avatar {
+      border-color: @colorPrimaryDarker;
+    }
+
+    .dropdown-menu {
+      top: -63px !important;
+      left: auto !important;
+      right: -50px !important;
+
+      .dropdown-header {
+        margin-right: 54px;
+      }
+    }
+  }
+}
