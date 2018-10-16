@@ -3,21 +3,19 @@ export default {
   channels: {
     isLoading: false,
     error: null,
+    active: 12,
     content: {
       11: {
-        active: false,
         name: 'Developers',
         messages: 2,
         accountIds: [21, 22]
       },
       12: {
-        active: true,
         name: 'Sales & Marketing',
         messages: 0,
         accountIds: [21, 22, 23]
       },
       13: {
-        active: false,
         name: 'User Support',
         messages: 11,
         accountIds: [21, 23]

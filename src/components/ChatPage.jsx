@@ -2,7 +2,7 @@ import React from 'react';
 
 import ChatLayout from './ChatLayout';
 import Header from "./Header";
-import Channels from "./Channels";
+import Channels from "../containers/Channels";
 import Messages from "./Messages";
 import InputBox from "./InputBox";
 

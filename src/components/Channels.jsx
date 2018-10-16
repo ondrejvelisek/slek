@@ -8,10 +8,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import '../less/Channels.less';
 import * as _ from 'lodash';
-import state from './state';
 
 export default class Channels extends React.PureComponent {
+
+  addChannel = () => {
+    const { addChannel } = this.props;
+    addChannel(`Random #${Math.floor(Math.random() * 100)}`, Math.floor(Math.random() * 100), []);
+  };
+
   render() {
+    const { channels } = this.props;
     return (
 
       <div className="channels text-light">
@@ -22,8 +28,8 @@ export default class Channels extends React.PureComponent {
             <span> Channels</span>
           </ListGroupItem>
           {
-            _.map(state.channels.content, (channel, id) => (
-              <ListGroupItem key={id} className={`clickable ${channel.active ? 'selected' : ''}`}>
+            _.map(channels.content, (channel, id) => (
+              <ListGroupItem key={id} className={`clickable ${Number(id) === channels.active ? 'selected' : ''}`}>
                 <span>
                   {channel.name}
                 </span>
@@ -33,7 +39,7 @@ export default class Channels extends React.PureComponent {
               </ListGroupItem>
             ))
           }
-          <ListGroupItem className="clickable">
+          <ListGroupItem className="clickable" onClick={this.addChannel}>
             <FontAwesomeIcon icon={faPlus}/>
             <span> Add</span>
           </ListGroupItem>
