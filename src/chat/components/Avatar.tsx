@@ -1,8 +1,8 @@
-import React from 'react';
+import * as React from 'react';
 import '../less/Avatar.less';
 
-export default class Avatar extends React.PureComponent {
-  render() {
+export class Avatar extends React.PureComponent<AvatarType> {
+  render(): JSX.Element {
     const { image, className } = this.props;
     return (
       <div className={`avatar ${className}`}>

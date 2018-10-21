@@ -1,8 +1,18 @@
-import React from 'react';
+import * as React from 'react';
 import '../less/ChatLayout.less';
+import { ILayoutProps } from '../models/IChat';
 
-export default class ChatLayout extends React.PureComponent {
-  render() {
+export interface IChatLayoutStateProps {
+  readonly isLoading: boolean;
+  readonly isSaving: boolean;
+}
+
+export interface IChatLayoutDispatchProps {
+  readonly loadItems: () => void;
+}
+
+export class ChatLayout extends React.PureComponent<ILayoutProps> {
+  render(): JSX.Element {
     const {
       header,
       sidebar,
