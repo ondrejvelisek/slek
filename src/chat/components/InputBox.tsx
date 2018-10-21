@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSmile, faImage
@@ -6,10 +6,10 @@ import {
 import '../less/InputBox.less';
 import {
   Button, Input, InputGroup, InputGroupAddon, Navbar
-} from "reactstrap";
+} from 'reactstrap';
 
-export default class InputBox extends React.PureComponent {
-  render() {
+export class InputBox extends React.PureComponent {
+  render(): JSX.Element {
     return (
       <Navbar className="input-box">
         <InputGroup>
