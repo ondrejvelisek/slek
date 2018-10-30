@@ -3,6 +3,7 @@ type Action = {
   payload?: any;
 };
 
+//TODO premenovat ..Type na I..
 type AvatarType = {
   id?: number,
   image: string,
@@ -28,6 +29,4 @@ type ChannelType = {
   name: string,
   messages: number,
   accountIds: number[],
-  // messages: MessageType[],
-  // accounts: AccountType[],
 };

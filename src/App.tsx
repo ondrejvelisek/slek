@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import { rootReducer } from './common/rootReducer';
-import {ChatPage} from './chat/components/ChatPage';
+import { rootReducer } from './reducers/rootReducer';
+import {ChatPage} from './components/chat/ChatPage';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middleware = [thunk];
