@@ -1,42 +1,22 @@
 import * as React from 'react';
-// import * as _ from 'lodash';
 import { Media } from 'reactstrap';
 import '../../less/chat/Messages.less';
-import { Message } from './Message';
-import { state } from './state';
-import { Avatar } from './Avatar';
-import { IMessage } from '../../models/chat/IMessage';
-import { IAccountState } from '../../states/chat/IChat';
+import {ILoadable} from '../../states/common/ILoadable';
+import {MessageContainer} from '../../containers/chat/Message';
+import * as Immutable from 'immutable';
 
-export class Messages extends React.PureComponent {
+export interface IMessagesProps extends ILoadable<Immutable.List<Uuid>> {}
+
+export interface IMessagesActions {}
+
+export class Messages extends React.PureComponent<IMessagesProps & IMessagesActions> {
   render(): JSX.Element {
     return (
       <Media list className="messages">
         {
-          state.messagesState.messages.content.map((message: IMessage) => {
-            if (state.account === message.accountId) {
-              return (
-                <Media key={message.id} tag="li" className="text-right">
-                  <Media body>
-                    <Message mine text={message.text}/>
-                  </Media>
-                </Media>
-              );
-            }
-            const account = state.accountsState.find((a: IAccountState) => a.content.id === message.accountId);
-            let imageUrl = '';
-            if (account) {
-              imageUrl = account.content.avatar;
-            }
-            return (
-              <Media key={message.id} tag="li">
-                <Avatar className="avatar align-self-end" image={imageUrl}/>
-                <Media body>
-                  <Message text={message.text}/>
-                </Media>
-              </Media>
-            );
-          })
+          this.props.content.map((messageId: Uuid) => (
+            <MessageContainer key={messageId} id={messageId}/>
+          ))
         }
       </Media>
     );

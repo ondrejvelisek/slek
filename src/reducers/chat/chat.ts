@@ -1,6 +1,9 @@
-import { channels } from './channels';
-import { IChatApp } from '../../states/chat/IChat';
+import {combineReducers} from 'redux';
+import {channels} from './channels';
+import {accounts} from './accounts';
+import {messages} from './messages';
+import {IChatState} from '../../states/chat/IChatState';
 
-export const chat = (prevState = {} as IChatApp, action: Action): IChatApp => ({
-  channels: channels(prevState.channels, action),
+export const chat = combineReducers<IChatState, Action>({
+  channels, accounts, messages
 });

@@ -1,6 +1,4 @@
 export interface IMessage {
-  id?: Uuid;
-  accountId?: Uuid;
+  accountId: Uuid;
   text: string;
-  mine?: boolean;
 }

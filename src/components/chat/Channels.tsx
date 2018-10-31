@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  ListGroup, ListGroupItem, Badge
+  ListGroup, ListGroupItem
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -8,32 +8,38 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import '../../less/chat/Channels.less';
 import * as Immutable from 'immutable';
-import * as _ from 'lodash';
+import {ChannelContainer} from '../../containers/chat/Channel';
+import {ILoadable} from '../../states/common/ILoadable';
 import {IChannel} from '../../models/chat/IChannel';
-import {IChannelsListState} from '../../states/chat/IChat';
 
-export interface IChannelsDispatchProps {
-  readonly addChannel: (name: string, messages: number, accountIds: Immutable.List<Uuid>) => void;
+export interface IChannelsProps extends ILoadable<Immutable.List<Uuid>> {}
+
+export interface IChannelsActions {
+  readonly addChannel: (channel: IChannel) => void;
 }
 
-export class Channels extends React.PureComponent<IChannelsListState & IChannelsDispatchProps> {
+export class Channels extends React.PureComponent<IChannelsProps & IChannelsActions> {
 
   addChannel = () => {
-    this.props.addChannel(`Random #${Math.floor(Math.random() * 100)}`, Math.floor(Math.random() * 100), Immutable.List<Uuid>());
+    this.props.addChannel({name: 'New one', unread: 666, accountIds: Immutable.Set<Uuid>()});
   };
 
   render(): JSX.Element {
-    if (this.props.channels.isLoading) {
+    const { content: channelIds, error, isLoading } = this.props;
+    if (isLoading) {
       return (
         <div className="channels text-light">
-              {/*<ScaleLoader/>*/}
+          Loading
         </div>
       );
     }
-    const { channels } = this.props;
-    _.map(channels.content, (channel: IChannel) => {
-      console.log(channel);
-    });
+    if (error) {
+      return (
+        <div className="channels text-light">
+          Error
+        </div>
+      );
+    }
     return (
 
       <div className="channels text-light">
@@ -44,25 +50,8 @@ export class Channels extends React.PureComponent<IChannelsListState & IChannels
             <span> Channels</span>
           </ListGroupItem>
           {
-            // _.map(channels.content, ( channel: IChannel, id: Uuid ) => (
-            //   <ListGroupItem key={id} className={`clickable ${Number(channel.id) === this.props.active ? 'selected' : ''}`}>
-            //     <span>
-            //       {channel.name}
-            //     </span>
-            //     {channel.messages > 0 && (
-            //       <Badge pill>{channel.messages}</Badge>
-            //     )}
-            //   </ListGroupItem>
-            // ))
-            channels.content.map((channel: IChannel, id: Uuid) => (
-              <ListGroupItem key={id} className={`clickable ' ${Number(channel.id) === this.props.active ? 'selected' : ''}`}>
-                <span>
-                  {channel.name}
-                </span>
-                {channel.messages > 0 && (
-                  <Badge pill>{channel.messages}</Badge>
-                )}
-              </ListGroupItem>
+            channelIds.map((channelId: Uuid) => (
+              <ChannelContainer key={channelId} id={channelId}/>
             ))
           }
           <ListGroupItem className="clickable" onClick={this.addChannel}>

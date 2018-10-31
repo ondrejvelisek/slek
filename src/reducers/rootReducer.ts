@@ -1,6 +1,7 @@
-import { IState } from '../states/IState';
 import {chat} from './chat/chat';
+import {combineReducers} from 'redux';
+import {IRootState} from '../states/IRootState';
 
-export const rootReducer = (prevState = {} as IState, action: Action): IState => ({
-  chat: chat(prevState.chat, action),
+export const rootReducer = combineReducers<IRootState, Action>({
+  chat
 });

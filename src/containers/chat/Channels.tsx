@@ -1,20 +1,19 @@
 import { connect } from 'react-redux';
-import { Channels, IChannelsDispatchProps } from '../../components/chat/Channels';
+import {Channels, IChannelsActions, IChannelsProps} from '../../components/chat/Channels';
 import { addChannel } from '../../actions/chat/Channels';
-import { Dispatch } from 'redux';
-import { IChannelsListState } from '../../states/chat/IChat';
-import * as Immutable from 'immutable';
+import {IRootState} from '../../states/IRootState';
+import {selectChannelsKeys} from '../../selectors/chat';
 
-const mapStateToProps = (state: IChannelsListState) => {
+const mapStateToProps = (state: IRootState): IChannelsProps => {
   return {
-    channelsState: state
+    isLoading: state.chat.channels.isLoading,
+    error: state.chat.channels.error,
+    content: selectChannelsKeys(state)
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch): IChannelsDispatchProps => {
-  return {
-    addChannel: (name: string, messages: number, accountIds: Immutable.List<Uuid>) => dispatch(addChannel(name, messages, accountIds)),
-  };
+const mapDispatchToProps: IChannelsActions = {
+    addChannel
 };
 
 export const ChannelsContainer = connect(mapStateToProps, mapDispatchToProps)(Channels);

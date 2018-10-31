@@ -1,36 +1,34 @@
 import * as React from 'react';
-import {Header} from './Header';
 import {InputBox} from './InputBox';
-import {Messages} from './Messages';
 import {ChannelsContainer} from '../../containers/chat/Channels';
-import {state} from './state';
 import { IAccount } from '../../models/chat/IAccount';
 import '../../less/chat/ChatPage.less';
+import {HeaderContainer} from '../../containers/chat/Header';
+import {MessagesContainer} from '../../containers/chat/Messages';
 
 export class ChatPage extends React.PureComponent {
   constructor(props: IAccount) {
     super(props);
   }
   render(): JSX.Element {
-    const account  = state.accountsState.get(state.account);
     return (
 
       <div className="h-100 d-flex flex-column">
 
         <div className="header">
-          <Header avatar={account.content.avatar} name={account.content.name}/>
+          <HeaderContainer/>
         </div>
 
         <div className="flex-grow-1 d-flex flex-column flex-md-row">
 
           <div className="sidebar">
-            <ChannelsContainer active={state.channelsState.active} channels={state.channelsState.channels}/>
+            <ChannelsContainer/>
           </div>
 
           <div className="d-flex flex-grow-1 flex-column">
 
             <div className="content flex-grow-1">
-              <Messages/>
+              <MessagesContainer/>
             </div>
 
             <div className="footer">

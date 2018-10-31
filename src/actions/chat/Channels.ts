@@ -1,13 +1,11 @@
 import { SLEK_ADD_CHANNEL, SLEK_REMOVE_CHANNEL } from '../../constants/actions';
-import * as Immutable from 'immutable';
+import {IChannel} from '../../models/chat/IChannel';
 
-export const addChannel = (name: string, messages: number, accountIds: Immutable.List<Uuid>): Action => ({
+export const addChannel = (channel: IChannel): Action => ({
   type: SLEK_ADD_CHANNEL,
   payload: {
     id: Math.random(),
-    channel: {
-      name, messages, accountIds
-    }
+    channel
   }
 });
 

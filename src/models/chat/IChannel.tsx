@@ -1,6 +1,7 @@
+import * as Immutable from 'immutable';
+
 export interface IChannel {
-  id: Uuid;
   name: string;
-  messages: number;
-  accountIds: Uuid[];
+  unread: number;
+  accountIds: Immutable.Set<Uuid>;
 }
