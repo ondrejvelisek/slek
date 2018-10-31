@@ -1,25 +1,30 @@
 import { SLEK_ADD_CHANNEL, SLEK_REMOVE_CHANNEL} from '../../constants/actions';
-import { IChannels } from '../../states/chat/IChat';
+import { IChannelsListState } from '../../states/chat/IChat';
 import * as Immutable from 'immutable';
+import {IChannel} from '../../models/chat/IChannel';
 
-export const channels = (state: IChannels =
+export const channels = (state: IChannelsListState =
                               {
                                 active: 0,
-                                isLoading: false,
-                                error: null,
-                                content: Immutable.List<ChannelType>()
+                                channels: {
+                                  isLoading: false,
+                                  error: null,
+                                  content: Immutable.Map<Uuid, IChannel>()
+                                }
                               },
-                         action: Action): IChannels => {
+                         action: Action): IChannelsListState => {
   switch (action.type) {
     case SLEK_ADD_CHANNEL:
       return {
         ...state,
         active: action.payload.id,
-        isLoading: action.payload.isLoading,
-        error: action.payload.error,
-        content: {
-          ...state.content,
-          [action.payload.id]: action.payload.channel
+        channels: {
+          isLoading: action.payload.isLoading,
+          error: action.payload.error,
+          content: {
+            ...state.channels.content,
+            [action.payload.id]: action.payload.channel
+          }
         }
       };
     case SLEK_REMOVE_CHANNEL:

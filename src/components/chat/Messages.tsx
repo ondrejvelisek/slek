@@ -5,14 +5,15 @@ import '../../less/chat/Messages.less';
 import { Message } from './Message';
 import { state } from './state';
 import { Avatar } from './Avatar';
-import { IAccountProps } from '../models/IChat';
+import { IMessage } from '../../models/chat/IMessage';
+import { IAccountState } from '../../states/chat/IChat';
 
 export class Messages extends React.PureComponent {
   render(): JSX.Element {
     return (
       <Media list className="messages">
         {
-          state.messages.content.map((message: MessageType) => {
+          state.messagesState.messages.content.map((message: IMessage) => {
             if (state.account === message.accountId) {
               return (
                 <Media key={message.id} tag="li" className="text-right">
@@ -22,7 +23,7 @@ export class Messages extends React.PureComponent {
                 </Media>
               );
             }
-            const account = state.accounts.find((a: IAccountProps) => a.content.id === message.accountId);
+            const account = state.accountsState.find((a: IAccountState) => a.content.id === message.accountId);
             let imageUrl = '';
             if (account) {
               imageUrl = account.content.avatar;

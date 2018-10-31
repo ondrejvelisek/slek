@@ -1,44 +1,27 @@
 import * as Immutable from 'immutable';
+import {ILoadable} from '../../models/ILoadable';
+import {IAccount} from '../../models/chat/IAccount';
+import {IMessage} from '../../models/chat/IMessage';
+import {IChannel} from '../../models/chat/IChannel';
 
-export interface IChannels {
-  readonly isLoading: boolean;
-  readonly error: any;
-  readonly active: number;
-  readonly content: Immutable.List<ChannelType>;
+export interface IChannelsListState {
+  channels: ILoadable<Immutable.Map<Uuid, IChannel>>;
+  active: number;
 }
 
-export interface ILayoutProps {
-  readonly header: any;
-  readonly sidebar: any;
-  readonly content: any;
-  readonly footer: any;
+export interface IMessagesListState {
+  messages: ILoadable<Immutable.Map<Uuid, IMessage>>;
 }
 
-//TODO premenovat na State miesto props
-//TODO vytvorit genericky interface ILoadable<T> {isLoading, error, content}
-export interface IMessagesListProps {
-  readonly isLoading: boolean;
-  readonly error: any;
-  readonly content: Immutable.List<MessageType>;
-}
-
-export interface IAccountProps {
-  readonly isLoading: boolean;
-  readonly error: any;
-  readonly content: AccountType;
-}
-
-export interface IHeader {
-  readonly account: AccountType;
-}
+export type IAccountState = ILoadable<IAccount>;
 
 export interface IChat {
-  readonly channels: IChannels;
-  readonly account: number;
-  readonly accounts: Immutable.List<IAccountProps>;
-  readonly messages: IMessagesListProps;
+  readonly channelsState: IChannelsListState;
+  readonly account: Uuid;
+  readonly accountsState: Immutable.Map<Uuid, IAccountState>;
+  readonly messagesState: IMessagesListState;
 }
 
 export interface IChatApp {
-  channels: IChannels;
+  channels: IChannelsListState;
 }

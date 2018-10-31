@@ -1,7 +1,8 @@
 import * as React from 'react';
 import '../../less/chat/Avatar.less';
+import {IAvatar} from '../../models/chat/IAvatar';
 
-export class Avatar extends React.PureComponent<AvatarType> {
+export class Avatar extends React.PureComponent<IAvatar> {
   render(): JSX.Element {
     const { image, className } = this.props;
     return (

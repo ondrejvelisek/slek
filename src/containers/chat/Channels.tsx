@@ -2,18 +2,18 @@ import { connect } from 'react-redux';
 import { Channels, IChannelsDispatchProps } from '../../components/chat/Channels';
 import { addChannel } from '../../actions/chat/Channels';
 import { Dispatch } from 'redux';
-import { IChannels } from '../../states/chat/IChat';
+import { IChannelsListState } from '../../states/chat/IChat';
 import * as Immutable from 'immutable';
 
-const mapStateToProps = (state: IChannels) => {
+const mapStateToProps = (state: IChannelsListState) => {
   return {
-    channels: state
+    channelsState: state
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch): IChannelsDispatchProps => {
   return {
-    addChannel: (name: string, messages: number, accountIds: Immutable.List<number>) => dispatch(addChannel(name, messages, accountIds)),
+    addChannel: (name: string, messages: number, accountIds: Immutable.List<Uuid>) => dispatch(addChannel(name, messages, accountIds)),
   };
 };
 

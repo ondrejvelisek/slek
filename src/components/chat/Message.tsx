@@ -1,7 +1,8 @@
 import * as React from 'react';
 import '../../less/chat/Message.less';
+import {IMessage} from '../../models/chat/IMessage';
 
-export class Message extends React.PureComponent<MessageType > {
+export class Message extends React.PureComponent<IMessage > {
   render(): JSX.Element {
     const { text, mine } = this.props;
     return (

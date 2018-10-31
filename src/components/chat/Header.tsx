@@ -9,14 +9,14 @@ import {
 import { Avatar } from './Avatar';
 
 import '../../less/chat/Header.less';
-import {IHeader} from '../models/IChat';
+import {IAccount} from '../../models/chat/IAccount';
 
 interface IState {
   readonly accountDropdownOpen: boolean;
 }
 
-export class Header extends React.PureComponent<IHeader, IState> {
-  constructor(props: IHeader) {
+export class Header extends React.PureComponent<IAccount, IState> {
+  constructor(props: IAccount) {
     super(props);
     this.state = {
       accountDropdownOpen: false
@@ -31,7 +31,7 @@ export class Header extends React.PureComponent<IHeader, IState> {
   };
 
   render(): JSX.Element {
-    const { name, avatar } = this.props.account;
+    const { name, avatar } = this.props;
     const { accountDropdownOpen } = this.state;
     return (
       <Navbar className="header text-light">
