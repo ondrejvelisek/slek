@@ -1,0 +1,34 @@
+
+@import "./variables";
+
+.header {
+  background-color: @colorDarkLight;
+}
+
+.sidebar {
+  background-color: @colorDark;
+}
+
+.content {
+  background-color: @colorDarkest;
+  overflow: auto;
+}
+
+.footer {
+  background-color: @colorDarker;
+}
+
+::-webkit-scrollbar {
+  width: .7rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: @colorDarkLight;
+  border-left: 0.2rem solid rgba(0, 0, 0, 0);
+  border-right: 0.2rem solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: @colorPrimaryDarker;
+}
