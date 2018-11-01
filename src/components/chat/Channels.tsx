@@ -4,42 +4,61 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPlus, faUserFriends
+  faPlus, faUserFriends, faExclamationCircle
 } from '@fortawesome/free-solid-svg-icons';
 import '../../less/chat/Channels.less';
 import * as Immutable from 'immutable';
 import {ChannelContainer} from '../../containers/chat/Channel';
 import {ILoadable} from '../../states/common/ILoadable';
-import {IChannel} from '../../models/chat/IChannel';
+import {Loader} from './Loader';
+import {IChannelData} from '../../models/chat/IChannelData';
 
 export interface IChannelsProps extends ILoadable<Immutable.List<Uuid>> {}
 
 export interface IChannelsActions {
-  readonly addChannel: (channel: IChannel) => void;
+  readonly channelsMounted: () => void;
+  readonly addChannel: (channel: IChannelData) => void;
 }
 
 export class Channels extends React.PureComponent<IChannelsProps & IChannelsActions> {
 
+  componentDidMount() {
+    this.reloadChannels();
+  };
+
+  reloadChannels = () => {
+    this.props.channelsMounted();
+  };
+
   addChannel = () => {
-    this.props.addChannel({name: 'New one', unread: 666, accountIds: Immutable.Set<Uuid>()});
+    this.props.addChannel({name: `New #${randId()}`, unread: 666, accountIds: Immutable.Set<Uuid>()});
+
+    function randId() {
+      return `${Math.floor(Math.random() * 1000)}`;
+    }
+  };
+
+  renderList = () => {
+    const { content: channelIds, error, isLoading } = this.props;
+    if (error) {
+      return (
+        <ListGroupItem className="clickable" onClick={this.reloadChannels}>
+          <FontAwesomeIcon icon={faExclamationCircle}/>
+          <span> Error - Try again</span>
+        </ListGroupItem>
+      );
+    }
+    return (
+      <div>
+        {channelIds.map((channelId: Uuid) => (
+          <ChannelContainer key={channelId} id={channelId}/>
+        ))}
+        {isLoading && (<Loader/>)}
+      </div>
+    );
   };
 
   render(): JSX.Element {
-    const { content: channelIds, error, isLoading } = this.props;
-    if (isLoading) {
-      return (
-        <div className="channels text-light">
-          Loading
-        </div>
-      );
-    }
-    if (error) {
-      return (
-        <div className="channels text-light">
-          Error
-        </div>
-      );
-    }
     return (
 
       <div className="channels text-light">
@@ -49,11 +68,7 @@ export class Channels extends React.PureComponent<IChannelsProps & IChannelsActi
             <FontAwesomeIcon icon={faUserFriends}/>
             <span> Channels</span>
           </ListGroupItem>
-          {
-            channelIds.map((channelId: Uuid) => (
-              <ChannelContainer key={channelId} id={channelId}/>
-            ))
-          }
+          {this.renderList()}
           <ListGroupItem className="clickable" onClick={this.addChannel}>
             <FontAwesomeIcon icon={faPlus}/>
             <span> Add</span>
