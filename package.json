@@ -21,7 +21,8 @@
     "react-redux": "^5.0.7",
     "reactstrap": "^6.5.0",
     "redux": "^4.0.1",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@types/jest": "~23.3.4",
@@ -30,6 +31,7 @@
     "@types/react-dom": "~16.0.9",
     "@types/react-redux": "~6.0.9",
     "@types/reactstrap": "~6.4.2",
+    "@types/uuid": "^3.4.4",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "~10.0.1",

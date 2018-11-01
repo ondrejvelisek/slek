@@ -1,7 +1,4 @@
-import * as Immutable from 'immutable';
+import {IChannelData} from './IChannelData';
+import {IHasId} from './IHasId';
 
-export interface IChannel {
-  name: string;
-  unread: number;
-  accountIds: Immutable.Set<Uuid>;
-}
+export interface IChannel extends IChannelData, IHasId {}

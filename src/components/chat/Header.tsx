@@ -11,9 +11,8 @@ import '../../less/chat/Header.less';
 import {IAccount} from '../../models/chat/IAccount';
 import {ILoadable} from '../../states/common/ILoadable';
 import {AvatarContainer} from '../../containers/chat/Avatar';
-import {IHasId} from '../../models/chat/IHasId';
 
-export interface IHeaderProps extends ILoadable<(IAccount & IHasId) | null> {}
+export interface IHeaderProps extends ILoadable<(IAccount) | null> {}
 
 export interface IHeaderActions {}
 

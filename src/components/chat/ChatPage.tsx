@@ -5,6 +5,7 @@ import { IAccount } from '../../models/chat/IAccount';
 import '../../less/chat/ChatPage.less';
 import {HeaderContainer} from '../../containers/chat/Header';
 import {MessagesContainer} from '../../containers/chat/Messages';
+import {ChannelHeaderContainer} from '../../containers/chat/ChannelHeader';
 
 export class ChatPage extends React.PureComponent {
   constructor(props: IAccount) {
@@ -26,6 +27,10 @@ export class ChatPage extends React.PureComponent {
           </div>
 
           <div className="d-flex flex-grow-1 flex-column">
+
+            <div className="content-header">
+              <ChannelHeaderContainer/>
+            </div>
 
             <div className="content flex-grow-1">
               <MessagesContainer/>

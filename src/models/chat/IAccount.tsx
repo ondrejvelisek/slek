@@ -1,4 +1,4 @@
-export interface IAccount {
-  name: string;
-  avatar: string;
-}
+import {IHasId} from './IHasId';
+import {IAccountData} from './IAccountData';
+
+export interface IAccount extends IAccountData, IHasId {}
