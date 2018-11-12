@@ -32,7 +32,7 @@ const addChannelFailure = (tempId: Uuid): Action => ({
   }
 });
 
-export const addChannel = (channelData: IChannelData): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const addChannel = (channelData: IChannelData, token: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
   const tempId = uuid();
   try {
     dispatch({
@@ -42,7 +42,7 @@ export const addChannel = (channelData: IChannelData): ThunkAction<void, IRootSt
         tempId
       }
     });
-    const channel = await api.addChannel(channelData);
+    const channel = await api.addChannel(channelData, token);
     dispatch(addChannelSuccess(channel, tempId));
   } catch (e) {
     dispatch(addChannelFailure(tempId));
@@ -58,13 +58,13 @@ const removeChannelFailure = (): Action => ({
   type: SLEK_REMOVE_CHANNEL_FAILURE
 });
 
-export const removeChannel = (channelId: Uuid): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const removeChannel = (channelId: Uuid, token: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
   try {
     dispatch({
       type: SLEK_REMOVE_CHANNEL,
       payload: channelId
     });
-    await api.removeChannel(channelId);
+    await api.removeChannel(channelId, token);
     dispatch(removeChannelSuccess(channelId));
   } catch (e) {
     dispatch(removeChannelFailure());
@@ -85,12 +85,12 @@ const getChannelsFailure = (): Action => ({
   type: SLEK_GET_CHANNELS_FAILURE
 });
 
-export const channelsMounted = (): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const channelsMounted = (token: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
   try {
     dispatch({
       type: SLEK_CHANNELS_MOUNTED
     });
-    const channels = await api.getChannels();
+    const channels = await api.getChannels(token);
     dispatch(getChannelsSuccess(channels));
   } catch (e) {
     dispatch(getChannelsFailure());

@@ -11,20 +11,29 @@ import '../../less/chat/Header.less';
 import {IAccount} from '../../models/chat/IAccount';
 import {ILoadable} from '../../states/common/ILoadable';
 import {AvatarContainer} from '../../containers/chat/Avatar';
+// import {NavLink} from 'react-router-dom';
 
-export interface IHeaderProps extends ILoadable<(IAccount) | null> {}
+export interface IHeaderProps extends ILoadable<IAccount | null> {}
 
-export interface IHeaderActions {}
+export interface IHeaderOwnProps {
+  token: string;
+}
+
+export interface IHeaderActions {
+  logout: (token: string) => void;
+}
 
 interface IState {
   readonly accountDropdownOpen: boolean;
 }
 
-export class Header extends React.PureComponent<IHeaderProps & IHeaderActions, IState> {
-  constructor(props: IHeaderProps) {
+type IProps = IHeaderProps & IHeaderOwnProps & IHeaderActions;
+
+export class Header extends React.PureComponent<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
-      accountDropdownOpen: false
+      accountDropdownOpen: false,
     };
   }
 
@@ -34,8 +43,14 @@ export class Header extends React.PureComponent<IHeaderProps & IHeaderActions, I
       accountDropdownOpen: !prevState.accountDropdownOpen
     }));
   };
+  onLogoutHandler = () => {
+    this.props.logout(this.props.token);
+  }
 
   renderAccount = (props: IHeaderProps): JSX.Element => {
+    if (this.props.token.length === 0) {
+      return (<div/>);
+    }
     const { isLoading, error, content: account } = props;
     const { accountDropdownOpen } = this.state;
     if (!isLoading && !error && account) {
@@ -50,12 +65,14 @@ export class Header extends React.PureComponent<IHeaderProps & IHeaderActions, I
             <DropdownMenu>
               <DropdownItem header>{account.name}</DropdownItem>
               <DropdownItem divider />
-              <DropdownItem>
-                <FontAwesomeIcon icon={faUser}/>
-                <span> Edit profile</span>
-              </DropdownItem>
+              {/*<NavLink to={`/profile/${this.props.token}`}>*/}
+                <DropdownItem>
+                  <FontAwesomeIcon icon={faUser}/>
+                  <span> Edit profile</span>
+                </DropdownItem>
+              {/*</NavLink>*/}
               <DropdownItem divider />
-              <DropdownItem>
+              <DropdownItem onClick={this.onLogoutHandler}>
                 <FontAwesomeIcon icon={faPowerOff}/>
                 <span> Logout</span>
               </DropdownItem>

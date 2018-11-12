@@ -7,6 +7,14 @@ import {ILoadable} from '../states/common/ILoadable';
 
 export const state: IRootState = {
   chat: {
+    auth: {
+      isLoading: false,
+      error: null,
+      content: {
+        token: '',
+        expiration: ''
+      }
+    },
     channels: {
       active: null,
       isLoading: false,

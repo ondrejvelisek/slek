@@ -5,13 +5,11 @@ export const SLEK_APP_ID = 'e491f720-857a-4874-b434-21661e400776';
 // TODO will be replaced by login page
 export const SLEK_EMAIL = 'ondrejvelisek@gmail.com';
 export const SLEK_TOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9' +
-  '.' +
-  'eyJzdWIiOiJvbmRyZWp2ZWxpc2VrQGdtYWlsLmNvbSI' +
-  'sImp0aSI6IjJlN2IxYzk0LTE2MzAtNDI2ZS04ZDE4LW' +
-  'JjMTk1M2ZlMDBmMCIsImlhdCI6MTU0MTA3NzUwNywib' +
-  'mJmIjoxNTQxMDc3NTA3LCJleHAiOjE1NDExNjM5MDcs' +
-  'ImlzcyI6IlBWMjQ3IEFQSSIsImF1ZCI6IlBWMjQ3IFN' +
-  '0dWRlbnRzIn0' +
-  '.' +
-  'tWVhQyqI_K9Is9titX7UgSpUs3q1UkxHpVQFJzKWe7A';
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+  'eyJzdWIiOiJvbmRyZWp2ZWxpc2VrQGdtYWlsL' +
+  'mNvbSIsImp0aSI6ImJmZWQyZWU2LWFmYmYtNG' +
+  'VkZC1hZGQ5LTI5N2U4OWJjNjRmYSIsImlhdCI' +
+  '6MTU0MTUxMTEyMSwibmJmIjoxNTQxNTExMTIx' +
+  'LCJleHAiOjE1NDE1OTc1MjEsImlzcyI6IlBWM' +
+  'jQ3IEFQSSIsImF1ZCI6IlBWMjQ3IFN0dWRlbn' +
+  'RzIn0.X7F1RXwr_wt5pKy3H2RDixjsl_jTqnOSjD7hfOiFWZU';
