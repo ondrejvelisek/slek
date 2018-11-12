@@ -14,7 +14,7 @@ export async function get<T>(path: string, token: string|null = null): Promise<T
     method: 'GET',
     headers: {
       Accept: 'application/json',
-      Authorization: `Bearer ${token}` // TODO exclude when token is null
+      Authorization: `Bearer ${token}` // TODO exclude when auth is null
     }
   });
   if (!response.ok) {
@@ -23,15 +23,15 @@ export async function get<T>(path: string, token: string|null = null): Promise<T
   return response.json();
 }
 
-export async function post<T>(path: string, body: object|null, token: string|null = null): Promise<T> {
+export async function post<T>(path: string, body: object|null, token: string|null = null, acceptType: string): Promise<T> {
   await delay(DELAY);
   error(ERROR);
   const response = await fetch(`${API_URL}${path}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}` // TODO exclude when token is null
+      Accept: acceptType,
+      Authorization: `Bearer ${token}` // TODO exclude when auth is null
     },
     body: JSON.stringify(body)
   });
@@ -49,7 +49,7 @@ export async function put<T>(path: string, body: object|null, token: string|null
     headers: {
       'Content-Type': 'application/json',
       Accept: 'application/json',
-      Authorization: `Bearer ${token}` // TODO exclude when token is null
+      Authorization: `Bearer ${token}` // TODO exclude when auth is null
     },
     body: JSON.stringify(body)
   });
@@ -66,7 +66,7 @@ export async function del(path: string, body: object|null, token: string|null = 
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}` // TODO exclude when token is null
+      Authorization: `Bearer ${token}` // TODO exclude when auth is null
     },
     body: JSON.stringify(body)
   });

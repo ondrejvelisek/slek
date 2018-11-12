@@ -7,7 +7,8 @@ import {selectChannelsKeys} from '../../selectors/chat';
 const mapStateToProps = (state: IRootState): IChannelsProps => ({
   isLoading: state.chat.channels.isLoading,
   error: state.chat.channels.error,
-  content: selectChannelsKeys(state)
+  content: selectChannelsKeys(state),
+  token: state.chat.auth.content.token
 });
 
 const mapDispatchToProps: IChannelsActions = {

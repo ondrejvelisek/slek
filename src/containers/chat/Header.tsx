@@ -1,9 +1,16 @@
 import {IRootState} from '../../states/IRootState';
 import {connect} from 'react-redux';
-import {Header, IHeaderProps} from '../../components/chat/Header';
+import {Header, IHeaderActions, IHeaderProps} from '../../components/chat/Header';
 import {selectActiveAccount} from '../../selectors/chat';
+import {logout} from '../../actions/chat/Authorisation';
 
-const mapStateToProps = (state: IRootState): IHeaderProps =>
-  selectActiveAccount(state);
+const mapStateToProps = (state: IRootState): IHeaderProps => {
+  console.log(state);
+  return selectActiveAccount(state);
+};
 
-export const HeaderContainer = connect(mapStateToProps)(Header);
+const mapDispatchToProps: IHeaderActions = {
+  logout,
+};
+
+export const HeaderContainer = connect(mapStateToProps, mapDispatchToProps)(Header);

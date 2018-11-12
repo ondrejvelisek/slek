@@ -3,8 +3,10 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { rootReducer } from './reducers/rootReducer';
-import {ChatPage} from './components/chat/ChatPage';
 import {state} from './components/state';
+import {ChatContainer} from './containers/chat/Chat';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {LoginContainer} from './containers/chat/Login';
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const middleware = [thunk];
@@ -19,7 +21,13 @@ export class App extends React.PureComponent {
   render() {
     return (
       <Provider store={store}>
-        <ChatPage/>
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/" component={ChatContainer}/>
+            <Route path="/login" component={LoginContainer}/>
+            {/*<Route path="/profile" component={ProfileContainer}/>*/}
+          </Switch>
+        </BrowserRouter>
       </Provider>
     );
   }
