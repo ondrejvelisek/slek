@@ -25,7 +25,7 @@ export class Profile extends React.PureComponent<IProfileProps & IProfileActions
     return (
       <div className="h-100 d-flex flex-column">
         <div className="header">
-          <HeaderContainer token={this.props.token}/>
+          <HeaderContainer/>
         </div>
         <Form className="info-content">
           <FormGroup>

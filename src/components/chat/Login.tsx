@@ -1,27 +1,28 @@
 import * as React from 'react';
 import '../../less/chat/Login.less';
 import '../../less/chat/Layout.less';
-import {Button, Form, FormGroup, Input} from 'reactstrap';
-import {IAuthData} from '../../models/chat/IAuthData';
-import {Redirect} from 'react-router-dom';
+import {Button, Form, FormFeedback, FormGroup, Input} from 'reactstrap';
 import {HeaderContainer} from '../../containers/chat/Header';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCommentAlt} from '@fortawesome/free-solid-svg-icons';
+import {ILoadable} from '../../states/common/ILoadable';
+import {IAuthData} from '../../models/chat/IAuthData';
+import {Loader} from './Loader';
 
-export interface ILoginProps extends IAuthData {}
+export interface ILoginProps extends ILoadable<IAuthData|null> {}
 
-export  interface ILoginOwnProps {
+export  interface ILoginOwnState {
   readonly email: string;
   readonly password: string;
 }
 
 export interface ILoginActions {
-  readonly login: (loginData: ILoginOwnProps) => void;
+  readonly login: (email: string, password: string) => void;
 }
 
 type IProps = ILoginProps & ILoginActions;
 
-export class Login extends React.PureComponent<IProps, ILoginOwnProps> {
+export class Login extends React.PureComponent<IProps, ILoginOwnState> {
 
   constructor(props: IProps) {
     super(props);
@@ -45,21 +46,16 @@ export class Login extends React.PureComponent<IProps, ILoginOwnProps> {
   private onLogin = (event: React.FormEvent) => {
     event.preventDefault();
 
-    this.props.login(this.state);
+    this.props.login(this.state.email, this.state.password);
   };
 
   render(): JSX.Element {
-    const {token} = this.props;
-    if (token.length > 0) {
-      return (
-        <Redirect to="/"/>
-      );
-    }
+    const { isLoading, error } = this.props;
     return (
       <div className="h-100 d-flex flex-column login">
 
         <div className="header">
-          <HeaderContainer token={token}/>
+          <HeaderContainer/>
         </div>
 
         <div className="login-header">
@@ -73,9 +69,12 @@ export class Login extends React.PureComponent<IProps, ILoginOwnProps> {
           </FormGroup>
           <FormGroup>
             <Input type="text" name="username" id="accountUsername" placeholder="password" tooltip="Password"
-                   value={this.state.password} onChange={this.onPasswordChanged}/>
+                   value={this.state.password} onChange={this.onPasswordChanged} invalid={error}/>
+            {error && (<FormFeedback >Bad email</FormFeedback>)}
           </FormGroup>
-          <Button type="submit" className="btn btn-primary">Login</Button>
+          <Button type="submit" className="btn btn-primary btn-block" disabled={isLoading}>Login</Button>
+
+          {isLoading && (<Loader/>)}
         </Form>
 
       </div>

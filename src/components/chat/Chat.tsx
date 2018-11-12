@@ -10,11 +10,10 @@ import {IChatState} from '../../states/chat/IChatState';
 import {IAuthData} from '../../models/chat/IAuthData';
 import {ILoadable} from '../../states/common/ILoadable';
 
-export interface IChatProps extends ILoadable<IAuthData> {}
+export interface IChatProps extends ILoadable<IAuthData | null> {}
 
 export class Chat extends React.PureComponent<IChatProps, IChatState> {
   renderContent = (): JSX.Element => {
-    console.log(this.props);
     return (
       <div className="flex-grow-1 d-flex flex-column flex-md-row">
 
@@ -25,7 +24,7 @@ export class Chat extends React.PureComponent<IChatProps, IChatState> {
         <div className="d-flex flex-grow-1 flex-column">
 
           <div className="content-header">
-            <ChannelHeaderContainer token={this.props.content.token}/>
+            <ChannelHeaderContainer/>
           </div>
 
           <div className="content flex-grow-1">
@@ -42,8 +41,8 @@ export class Chat extends React.PureComponent<IChatProps, IChatState> {
     );
   };
   render(): JSX.Element {
-    const {token, expiration} = this.props.content;
-    if (token.length === 0 || Date.parse(expiration).valueOf() < Date.now().valueOf()) {
+    const { content: auth } = this.props;
+    if (!auth || Date.parse(auth.expiration) < Date.now()) {
       return (
         <Redirect to="/login"/>
       );
@@ -53,7 +52,7 @@ export class Chat extends React.PureComponent<IChatProps, IChatState> {
       <div className="h-100 d-flex flex-column">
 
         <div className="header">
-          <HeaderContainer token={token}/>
+          <HeaderContainer/>
         </div>
 
         {this.renderContent()}

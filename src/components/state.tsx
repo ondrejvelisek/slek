@@ -6,14 +6,20 @@ import {IAccount} from '../models/chat/IAccount';
 import {ILoadable} from '../states/common/ILoadable';
 
 export const state: IRootState = {
+  router: {
+    location: {
+      pathname: '/',
+      search: '',
+      state: '',
+      hash: ''
+    },
+    action: 'POP'
+  },
   chat: {
     auth: {
       isLoading: false,
       error: null,
-      content: {
-        token: '',
-        expiration: ''
-      }
+      content: null
     },
     channels: {
       active: null,

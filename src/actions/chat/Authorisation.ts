@@ -6,35 +6,37 @@ import {
 import {ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {IRootState} from '../../states/IRootState';
 import * as api from '../../api/api';
-import {ILoginOwnProps} from '../../components/chat/Login';
 import {IAuthData} from '../../models/chat/IAuthData';
+import {push} from 'connected-react-router';
 
 
-const loginSuccess = (auth: IAuthData): Action => ({
+const loginSuccess = (email: string, auth: IAuthData): Action => ({
   type: SLEK_LOGIN_SUCCESS,
   payload: {
+    email,
     token: auth.token,
     expiration: auth.expiration
   }
 });
 
-const loginFailure = (): Action => ({
+const loginFailure = (email: string): Action => ({
   type: SLEK_LOGIN_FAILURE,
-  payload: {}
+  payload: {email}
 });
 
-export const login = (loginData: ILoginOwnProps): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const login = (email: string, password: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
   try {
     dispatch({
       type: SLEK_LOGIN,
       payload: {
-        loginData
+        email
       }
     });
-    const auth = await api.login(loginData);
-    dispatch(loginSuccess(auth));
+    const auth = await api.login(email, password);
+    dispatch(loginSuccess(email, auth));
+    dispatch(push('/'));
   } catch (e) {
-    dispatch(loginFailure());
+    dispatch(loginFailure(email));
   }
 };
 
@@ -45,21 +47,20 @@ const logoutSuccess = (): Action => ({
   }
 });
 
-const logoutFailure = (token: string): Action => ({
+const logoutFailure = (): Action => ({
   type: SLEK_LOGOUT_FAILURE,
-  payload: {
-    token,
-  }
+  payload: {}
 });
 
-export const logout = (token: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const logout = (): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
   try {
     dispatch({
       type: SLEK_LOGOUT,
       payload: {}
     });
     dispatch(logoutSuccess());
+    dispatch(push('/login'));
   } catch (e) {
-    dispatch(logoutFailure(token));
+    dispatch(logoutFailure());
   }
 };

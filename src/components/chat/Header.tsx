@@ -15,12 +15,10 @@ import {AvatarContainer} from '../../containers/chat/Avatar';
 
 export interface IHeaderProps extends ILoadable<IAccount | null> {}
 
-export interface IHeaderOwnProps {
-  token: string;
-}
+export interface IHeaderOwnProps {}
 
 export interface IHeaderActions {
-  logout: (token: string) => void;
+  logout: () => void;
 }
 
 interface IState {
@@ -43,14 +41,12 @@ export class Header extends React.PureComponent<IProps, IState> {
       accountDropdownOpen: !prevState.accountDropdownOpen
     }));
   };
+
   onLogoutHandler = () => {
-    this.props.logout(this.props.token);
-  }
+    this.props.logout();
+  };
 
   renderAccount = (props: IHeaderProps): JSX.Element => {
-    if (this.props.token.length === 0) {
-      return (<div/>);
-    }
     const { isLoading, error, content: account } = props;
     const { accountDropdownOpen } = this.state;
     if (!isLoading && !error && account) {

@@ -16,6 +16,7 @@ import {IRootState} from '../../states/IRootState';
 import * as api from '../../api/api';
 import {IChannelData} from '../../models/chat/IChannelData';
 import {v4 as uuid} from 'uuid';
+import {push} from 'connected-react-router';
 
 const addChannelSuccess = (channel: IChannel, tempId: Uuid): Action => ({
   type: SLEK_ADD_CHANNEL_SUCCESS,
@@ -32,7 +33,8 @@ const addChannelFailure = (tempId: Uuid): Action => ({
   }
 });
 
-export const addChannel = (channelData: IChannelData, token: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const addChannel = (channelData: IChannelData): ThunkAction<void, IRootState, void, Action> =>
+  async (dispatch: ThunkDispatch<IRootState, void, Action>, getState: () => IRootState) => {
   const tempId = uuid();
   try {
     dispatch({
@@ -42,7 +44,13 @@ export const addChannel = (channelData: IChannelData, token: string): ThunkActio
         tempId
       }
     });
-    const channel = await api.addChannel(channelData, token);
+    const auth = getState().chat.auth.content;
+    if (!auth) {
+      dispatch(addChannelFailure(tempId));
+      dispatch(push('/login'));
+      return;
+    }
+    const channel = await api.addChannel(channelData, auth.token);
     dispatch(addChannelSuccess(channel, tempId));
   } catch (e) {
     dispatch(addChannelFailure(tempId));
@@ -58,13 +66,20 @@ const removeChannelFailure = (): Action => ({
   type: SLEK_REMOVE_CHANNEL_FAILURE
 });
 
-export const removeChannel = (channelId: Uuid, token: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const removeChannel = (channelId: Uuid): ThunkAction<void, IRootState, void, Action> =>
+  async (dispatch: ThunkDispatch<IRootState, void, Action>, getState: () => IRootState) => {
   try {
     dispatch({
       type: SLEK_REMOVE_CHANNEL,
       payload: channelId
     });
-    await api.removeChannel(channelId, token);
+    const auth = getState().chat.auth.content;
+    if (!auth) {
+      dispatch(removeChannelFailure());
+      dispatch(push('/login'));
+      return;
+    }
+    await api.removeChannel(channelId, auth.token);
     dispatch(removeChannelSuccess(channelId));
   } catch (e) {
     dispatch(removeChannelFailure());
@@ -85,12 +100,19 @@ const getChannelsFailure = (): Action => ({
   type: SLEK_GET_CHANNELS_FAILURE
 });
 
-export const channelsMounted = (token: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const channelsMounted = (): ThunkAction<void, IRootState, void, Action> =>
+  async (dispatch: ThunkDispatch<IRootState, void, Action>, getState: () => IRootState) => {
   try {
     dispatch({
       type: SLEK_CHANNELS_MOUNTED
     });
-    const channels = await api.getChannels(token);
+    const auth = getState().chat.auth.content;
+    if (!auth) {
+      dispatch(getChannelsFailure());
+      dispatch(push('/login'));
+      return;
+    }
+    const channels = await api.getChannels(auth.token);
     dispatch(getChannelsSuccess(channels));
   } catch (e) {
     dispatch(getChannelsFailure());

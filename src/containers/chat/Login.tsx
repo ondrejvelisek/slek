@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
-import {IRootState} from '../../states/IRootState';
 import {ILoginActions, ILoginProps, Login} from '../../components/chat/Login';
 import {login} from '../../actions/chat/Authorisation';
+import {IRootState} from '../../states/IRootState';
 
 const mapStateToProps = (state: IRootState): ILoginProps => ({
-  token: state.chat.auth.content.token,
-  expiration: state.chat.auth.content.expiration
+  isLoading: state.chat.auth.isLoading,
+  error: state.chat.auth.error,
+  content: state.chat.auth.content
 });
 
 const mapDispatchToProps: ILoginActions = {

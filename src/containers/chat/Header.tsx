@@ -5,7 +5,6 @@ import {selectActiveAccount} from '../../selectors/chat';
 import {logout} from '../../actions/chat/Authorisation';
 
 const mapStateToProps = (state: IRootState): IHeaderProps => {
-  console.log(state);
   return selectActiveAccount(state);
 };
 
