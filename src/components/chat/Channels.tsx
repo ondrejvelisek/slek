@@ -16,8 +16,8 @@ import {IChannelData} from '../../models/chat/IChannelData';
 export interface IChannelsProps extends ILoadable<Immutable.List<Uuid>> {}
 
 export interface IChannelsActions {
-  readonly channelsMounted: () => void;
-  readonly addChannel: (channel: IChannelData) => void;
+  readonly getChannels: () => void;
+  readonly createChannel: (channel: IChannelData) => void;
 }
 
 export class Channels extends React.PureComponent<IChannelsProps & IChannelsActions> {
@@ -27,11 +27,11 @@ export class Channels extends React.PureComponent<IChannelsProps & IChannelsActi
   }
 
   reloadChannels = () => {
-    this.props.channelsMounted();
+    this.props.getChannels();
   };
 
   addChannel = () => {
-    this.props.addChannel({name: `New #${randId()}`, unread: 666, accountIds: Immutable.Set<Uuid>()});
+    this.props.createChannel({name: `New #${randId()}`, unread: 666, accountEmails: Immutable.Set<string>()});
 
     function randId() {
       return `${Math.floor(Math.random() * 1000)}`;

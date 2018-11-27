@@ -1,120 +1,107 @@
 import {
-  SLEK_ADD_CHANNEL,
-  SLEK_ADD_CHANNEL_FAILURE,
-  SLEK_ADD_CHANNEL_SUCCESS,
-  SLEK_CHANNELS_MOUNTED,
-  SLEK_GET_CHANNELS_FAILURE,
-  SLEK_GET_CHANNELS_SUCCESS,
-  SLEK_REMOVE_CHANNEL, SLEK_REMOVE_CHANNEL_FAILURE,
-  SLEK_REMOVE_CHANNEL_SUCCESS,
-  SLEK_SELECT_CHANNEL
+  SLEK_CHANNEL_CREATION_STARTED,
+  SLEK_CHANNEL_CREATION_FAILED,
+  SLEK_CHANNEL_CREATION_SUCCEEDED,
+  SLEK_CHANNELS_GETTING_STARTED,
+  SLEK_CHANNELS_GETTING_FAILED,
+  SLEK_CHANNELS_GETTING_SUCCEEDED,
+  SLEK_CHANNEL_SELECTED, SLEK_CHANNEL_DELETION_SUCCEEDED, SLEK_CHANNEL_DELETION_FAILED, SLEK_CHANNEL_DELETION_STARTED
 } from '../../constants/actions';
 import {IChannel} from '../../models/chat/IChannel';
 import * as Immutable from 'immutable';
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
+import {ThunkAction} from 'redux-thunk';
 import {IRootState} from '../../states/IRootState';
-import * as api from '../../api/api';
 import {IChannelData} from '../../models/chat/IChannelData';
 import {v4 as uuid} from 'uuid';
-import {push} from 'connected-react-router';
+import {IServices} from '../../services';
 
-const addChannelSuccess = (channel: IChannel, tempId: Uuid): Action => ({
-  type: SLEK_ADD_CHANNEL_SUCCESS,
+
+const channelCreationStarted = (channel: IChannelData, tempId: Uuid): Action => ({
+  type: SLEK_CHANNEL_CREATION_STARTED,
   payload: {
     channel,
     tempId
   }
 });
 
-const addChannelFailure = (tempId: Uuid): Action => ({
-  type: SLEK_ADD_CHANNEL_FAILURE,
+const channelCreationSucceeded = (channel: IChannel, tempId: Uuid): Action => ({
+  type: SLEK_CHANNEL_CREATION_SUCCEEDED,
+  payload: {
+    channel,
+    tempId
+  }
+});
+
+const channelCreationFailed = (tempId: Uuid): Action => ({
+  type: SLEK_CHANNEL_CREATION_FAILED,
   payload: {
     tempId
   }
 });
 
-export const addChannel = (channelData: IChannelData): ThunkAction<void, IRootState, void, Action> =>
-  async (dispatch: ThunkDispatch<IRootState, void, Action>, getState: () => IRootState) => {
+export const createChannel = (channelData: IChannelData): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {chatService}) => {
   const tempId = uuid();
   try {
-    dispatch({
-      type: SLEK_ADD_CHANNEL,
-      payload: {
-        channelData,
-        tempId
-      }
-    });
-    const auth = getState().chat.auth.content;
-    if (!auth) {
-      dispatch(addChannelFailure(tempId));
-      dispatch(push('/login'));
-      return;
-    }
-    const channel = await api.addChannel(channelData, auth.token);
-    dispatch(addChannelSuccess(channel, tempId));
+    dispatch(channelCreationStarted(channelData, tempId));
+    const channel = await chatService.createChannel(channelData);
+    dispatch(channelCreationSucceeded(channel, tempId));
   } catch (e) {
-    dispatch(addChannelFailure(tempId));
+    dispatch(channelCreationFailed(tempId));
   }
 };
 
-const removeChannelSuccess = (channelId: Uuid): Action => ({
-  type: SLEK_REMOVE_CHANNEL_SUCCESS,
+const channelDeletionStarted = (channelId: Uuid): Action => ({
+  type: SLEK_CHANNEL_DELETION_STARTED,
   payload: channelId
 });
 
-const removeChannelFailure = (): Action => ({
-  type: SLEK_REMOVE_CHANNEL_FAILURE
+const channelDeletionSucceeded = (channelId: Uuid): Action => ({
+  type: SLEK_CHANNEL_DELETION_SUCCEEDED,
+  payload: channelId
 });
 
-export const removeChannel = (channelId: Uuid): ThunkAction<void, IRootState, void, Action> =>
-  async (dispatch: ThunkDispatch<IRootState, void, Action>, getState: () => IRootState) => {
+const channelDeletionFailed = (): Action => ({
+  type: SLEK_CHANNEL_DELETION_FAILED
+});
+
+export const deleteChannel = (channelId: Uuid): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {chatService}) => {
   try {
-    dispatch({
-      type: SLEK_REMOVE_CHANNEL,
-      payload: channelId
-    });
-    const auth = getState().chat.auth.content;
-    if (!auth) {
-      dispatch(removeChannelFailure());
-      dispatch(push('/login'));
-      return;
-    }
-    await api.removeChannel(channelId, auth.token);
-    dispatch(removeChannelSuccess(channelId));
+    dispatch(channelDeletionStarted(channelId));
+    await chatService.deleteChannel(channelId);
+    dispatch(channelDeletionSucceeded(channelId));
   } catch (e) {
-    dispatch(removeChannelFailure());
+    dispatch(channelDeletionFailed());
   }
 };
 
 export const selectChannel = (channelId: Uuid) => ({
-  type: SLEK_SELECT_CHANNEL,
+  type: SLEK_CHANNEL_SELECTED,
   payload: channelId
 });
 
-const getChannelsSuccess = (channels: Immutable.List<IChannel>): Action => ({
-  type: SLEK_GET_CHANNELS_SUCCESS,
+const channelsGettingStarted = (): Action => ({
+  type: SLEK_CHANNELS_GETTING_STARTED,
+});
+
+const channelsGettingSucceeded = (channels: Immutable.List<IChannel>): Action => ({
+  type: SLEK_CHANNELS_GETTING_SUCCEEDED,
   payload: channels
 });
 
-const getChannelsFailure = (): Action => ({
-  type: SLEK_GET_CHANNELS_FAILURE
+const channelsGettingFailed = (): Action => ({
+  type: SLEK_CHANNELS_GETTING_FAILED
 });
 
-export const channelsMounted = (): ThunkAction<void, IRootState, void, Action> =>
-  async (dispatch: ThunkDispatch<IRootState, void, Action>, getState: () => IRootState) => {
+export const getChannels = (): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {chatService}) => {
   try {
-    dispatch({
-      type: SLEK_CHANNELS_MOUNTED
-    });
-    const auth = getState().chat.auth.content;
-    if (!auth) {
-      dispatch(getChannelsFailure());
-      dispatch(push('/login'));
-      return;
-    }
-    const channels = await api.getChannels(auth.token);
-    dispatch(getChannelsSuccess(channels));
+    dispatch(channelsGettingStarted());
+    const channels = await chatService.getChannels();
+    console.log(channels);
+    dispatch(channelsGettingSucceeded(channels));
   } catch (e) {
-    dispatch(getChannelsFailure());
+    dispatch(channelsGettingFailed());
   }
 };

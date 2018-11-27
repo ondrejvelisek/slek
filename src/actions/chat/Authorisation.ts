@@ -1,66 +1,66 @@
 import {
-  SLEK_LOGIN_FAILURE,
-  SLEK_LOGIN_SUCCESS,
-  SLEK_LOGIN, SLEK_LOGOUT_SUCCESS, SLEK_LOGOUT_FAILURE, SLEK_LOGOUT
+  SLEK_LOGIN_FAILED,
+  SLEK_LOGIN_SUCCEEDED,
+  SLEK_LOGIN_STARTED, SLEK_LOGOUT_SUCCEEDED, SLEK_LOGOUT_FAILED, SLEK_LOGOUT_STARTED
 } from '../../constants/actions';
-import {ThunkAction, ThunkDispatch} from 'redux-thunk';
+import {ThunkAction} from 'redux-thunk';
 import {IRootState} from '../../states/IRootState';
-import * as api from '../../api/api';
-import {IAuthData} from '../../models/chat/IAuthData';
 import {push} from 'connected-react-router';
+import {IServices} from '../../services';
+import {ICredentials} from '../../models/chat/ICredentials';
 
-
-const loginSuccess = (email: string, auth: IAuthData): Action => ({
-  type: SLEK_LOGIN_SUCCESS,
+const loginStarted = (email: string): Action => ({
+  type: SLEK_LOGIN_STARTED,
   payload: {
-    email,
-    token: auth.token,
-    expiration: auth.expiration
+    email
   }
 });
 
-const loginFailure = (email: string): Action => ({
-  type: SLEK_LOGIN_FAILURE,
+const loginSucceeded = (email: string): Action => ({
+  type: SLEK_LOGIN_SUCCEEDED,
+  payload: {
+    email
+  }
+});
+
+const loginFailed = (email: string): Action => ({
+  type: SLEK_LOGIN_FAILED,
   payload: {email}
 });
 
-export const login = (email: string, password: string): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+export const login = (credentials: ICredentials): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {authService}) => {
   try {
-    dispatch({
-      type: SLEK_LOGIN,
-      payload: {
-        email
-      }
-    });
-    const auth = await api.login(email, password);
-    dispatch(loginSuccess(email, auth));
+    console.log('LOGIN ACTION', credentials);
+    dispatch(loginStarted(credentials.email));
+    await authService.login(credentials);
+    dispatch(loginSucceeded(credentials.email));
     dispatch(push('/'));
   } catch (e) {
-    dispatch(loginFailure(email));
+    dispatch(loginFailed(credentials.email));
   }
 };
 
-const logoutSuccess = (): Action => ({
-  type: SLEK_LOGOUT_SUCCESS,
-  payload: {
-    token: ''
-  }
+const logoutStarted = (): Action => ({
+  type: SLEK_LOGOUT_STARTED
 });
 
-const logoutFailure = (): Action => ({
-  type: SLEK_LOGOUT_FAILURE,
-  payload: {}
+const logoutSucceeded = (): Action => ({
+  type: SLEK_LOGOUT_SUCCEEDED
 });
 
-export const logout = (): ThunkAction<void, IRootState, void, Action> => async (dispatch: ThunkDispatch<IRootState, void, Action>) => {
+const logoutFailed = (): Action => ({
+  type: SLEK_LOGOUT_FAILED
+});
+
+export const logout = (): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {authService}) => {
   try {
-    dispatch({
-      type: SLEK_LOGOUT,
-      payload: {}
-    });
-    dispatch(logoutSuccess());
+    dispatch(logoutStarted());
+    await authService.logout();
+    dispatch(logoutSucceeded());
     dispatch(push('/login'));
   } catch (e) {
-    dispatch(logoutFailure());
+    dispatch(logoutFailed());
   }
 };

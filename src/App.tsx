@@ -9,11 +9,12 @@ import {Route, Switch} from 'react-router-dom';
 import {LoginContainer} from './containers/chat/Login';
 import createBrowserHistory from 'history/createBrowserHistory';
 import {ConnectedRouter, routerMiddleware} from 'connected-react-router';
+import {services} from './services';
 
 const history = createBrowserHistory();
 
 const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const middleware = [thunk, routerMiddleware(history)];
+const middleware = [thunk.withExtraArgument(services), routerMiddleware(history)];
 
 const rootReducer = createRootReducer(history);
 

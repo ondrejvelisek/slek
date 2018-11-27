@@ -6,11 +6,11 @@ import {Button, Form, FormGroup, Input, Label} from 'reactstrap';
 import {ILoadable} from '../../states/common/ILoadable';
 import {Loader} from './Loader';
 import {AvatarContainer} from '../../containers/chat/Avatar';
-import {IAuthData} from '../../models/chat/IAuthData';
+import {IAuth} from '../../models/chat/IAuth';
 
 export interface IProfileProps extends ILoadable<IAccount | null> {}
 
-export interface IProfileOwnProps extends IAuthData {}
+export interface IProfileOwnProps extends IAuth {}
 
 export interface IProfileActions {}
 
@@ -29,7 +29,7 @@ export class Profile extends React.PureComponent<IProfileProps & IProfileActions
         </div>
         <Form className="info-content">
           <FormGroup>
-            <AvatarContainer id={account.id} className="avatar profile-picture"/>
+            <AvatarContainer email={account.email} className="avatar profile-picture"/>
           </FormGroup>
           <FormGroup>
             <Label for="accountUsername">Name</Label>

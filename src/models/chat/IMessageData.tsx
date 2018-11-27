@@ -1,4 +1,4 @@
 export interface IMessageData {
-  accountId: Uuid;
-  text: string;
+  readonly accountEmail: string;
+  readonly text: string;
 }

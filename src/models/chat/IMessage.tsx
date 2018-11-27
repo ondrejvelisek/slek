@@ -1,7 +1,4 @@
 import {IHasId} from './IHasId';
 import {IMessageData} from './IMessageData';
 
-export interface IMessage extends IMessageData, IHasId {
-  accountId: Uuid;
-  text: string;
-}
+export interface IMessage extends IMessageData, IHasId {}

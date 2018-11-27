@@ -55,7 +55,7 @@ export class Header extends React.PureComponent<IProps, IState> {
           <Dropdown className="account-dropdown" isOpen={accountDropdownOpen} toggle={this.toggleAccountDropdown}>
 
             <DropdownToggle tag="div" className="toggler">
-              <AvatarContainer id={account.id} className="clickable"/>
+              <AvatarContainer email={account.email} className="clickable"/>
             </DropdownToggle>
 
             <DropdownMenu>

@@ -1,7 +1,7 @@
 import * as Immutable from 'immutable';
 
 export interface IChannelData {
-  name: string;
-  unread: number;
-  accountIds: Immutable.Set<Uuid>;
+  readonly name: string;
+  readonly unread: number;
+  readonly accountEmails: Immutable.Set<string>;
 }

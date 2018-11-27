@@ -1,13 +1,11 @@
 import {
-  SLEK_ADD_CHANNEL,
-  SLEK_ADD_CHANNEL_FAILURE,
-  SLEK_ADD_CHANNEL_SUCCESS,
-  SLEK_CHANNELS_MOUNTED,
-  SLEK_GET_CHANNELS_FAILURE,
-  SLEK_GET_CHANNELS_SUCCESS,
-  SLEK_REMOVE_CHANNEL, SLEK_REMOVE_CHANNEL_FAILURE,
-  SLEK_REMOVE_CHANNEL_SUCCESS,
-  SLEK_SELECT_CHANNEL
+  SLEK_CHANNEL_CREATION_STARTED,
+  SLEK_CHANNEL_CREATION_FAILED,
+  SLEK_CHANNEL_CREATION_SUCCEEDED,
+  SLEK_CHANNELS_GETTING_STARTED,
+  SLEK_CHANNELS_GETTING_FAILED,
+  SLEK_CHANNELS_GETTING_SUCCEEDED,
+  SLEK_CHANNEL_SELECTED, SLEK_CHANNEL_DELETION_STARTED, SLEK_CHANNEL_DELETION_SUCCEEDED, SLEK_CHANNEL_DELETION_FAILED
 } from '../../constants/actions';
 import * as Immutable from 'immutable';
 import {IChannel} from '../../models/chat/IChannel';
@@ -22,13 +20,13 @@ export const channels = (state: IChannelsState = {
                            },
                          action: Action): IChannelsState => {
   switch (action.type) {
-    case SLEK_CHANNELS_MOUNTED:
+    case SLEK_CHANNELS_GETTING_STARTED:
       return {
         ...state,
         isLoading: true,
         error: null
       };
-    case SLEK_GET_CHANNELS_SUCCESS:
+    case SLEK_CHANNELS_GETTING_SUCCEEDED:
       return {
         ...state,
         isLoading: false,
@@ -39,14 +37,14 @@ export const channels = (state: IChannelsState = {
             map.set(value.id, {isLoading: false, error: null, content: value}),
           Immutable.Map())
       };
-    case SLEK_GET_CHANNELS_FAILURE:
+    case SLEK_CHANNELS_GETTING_FAILED:
       return {
         ...state,
         active: null,
         isLoading: false,
         error: true
       };
-    case SLEK_ADD_CHANNEL:
+    case SLEK_CHANNEL_CREATION_STARTED:
       return {
         ...state,
         active: action.payload.tempId,
@@ -56,7 +54,7 @@ export const channels = (state: IChannelsState = {
           content: { ...action.payload.channelData, id: action.payload.tempId }
         })
       };
-    case SLEK_ADD_CHANNEL_SUCCESS:
+    case SLEK_CHANNEL_CREATION_SUCCEEDED:
       return {
         ...state,
         active: state.active === action.payload.tempId ? action.payload.channel.id : state.active,
@@ -64,29 +62,29 @@ export const channels = (state: IChannelsState = {
           .set(action.payload.channel.id, {isLoading: false, error: null, content: action.payload.channel})
           .remove(action.payload.tempId)
       };
-    case SLEK_ADD_CHANNEL_FAILURE:
+    case SLEK_CHANNEL_CREATION_FAILED:
       return {
         ...state,
         content: state.content.update(action.payload.tempId, channel => ({...channel, isLoading: false, error: true}))
       };
-    case SLEK_SELECT_CHANNEL:
+    case SLEK_CHANNEL_SELECTED:
       return {
         ...state,
         active: action.payload
       };
-    case SLEK_REMOVE_CHANNEL:
+    case SLEK_CHANNEL_DELETION_STARTED:
       return {
         ...state,
         active: state.active === action.payload ? null : state.active,
         content: state.content.update(action.payload, channel => ({...channel, isLoading: true}))
       };
-    case SLEK_REMOVE_CHANNEL_SUCCESS:
+    case SLEK_CHANNEL_DELETION_SUCCEEDED:
       return {
         ...state,
         active: state.active === action.payload ? null : state.active,
         content: state.content.remove(action.payload)
       };
-    case SLEK_REMOVE_CHANNEL_FAILURE:
+    case SLEK_CHANNEL_DELETION_FAILED:
       return {
         ...state,
         active: state.active === action.payload ? null : state.active,

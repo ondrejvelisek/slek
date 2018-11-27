@@ -7,10 +7,10 @@ import {MessagesContainer} from '../../containers/chat/Messages';
 import {ChannelHeaderContainer} from '../../containers/chat/ChannelHeader';
 import {Redirect} from 'react-router-dom';
 import {IChatState} from '../../states/chat/IChatState';
-import {IAuthData} from '../../models/chat/IAuthData';
+import {IAuth} from '../../models/chat/IAuth';
 import {ILoadable} from '../../states/common/ILoadable';
 
-export interface IChatProps extends ILoadable<IAuthData | null> {}
+export interface IChatProps extends ILoadable<IAuth | null> {}
 
 export class Chat extends React.PureComponent<IChatProps, IChatState> {
   renderContent = (): JSX.Element => {

@@ -1,4 +1,4 @@
 import {ILoadable} from '../common/ILoadable';
-import {IAuthData} from '../../models/chat/IAuthData';
+import {IAuth} from '../../models/chat/IAuth';
 
-export interface IAuthState extends ILoadable<IAuthData|null> {}
+export interface IAuthState extends ILoadable<IAuth|null> {}

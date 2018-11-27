@@ -7,7 +7,7 @@ interface IMessageOwnProps extends IHasId {}
 
 const mapStateToProps = (state: IRootState, ownProps: IMessageOwnProps): IMessageProps => ({
   ...state.chat.messages.content.get(ownProps.id),
-  mine: state.chat.accounts.active === state.chat.messages.content.get(ownProps.id).accountId,
+  mine: state.chat.accounts.active === state.chat.messages.content.get(ownProps.id).accountEmail,
 });
 
 export const MessageContainer = connect(mapStateToProps)(Message);

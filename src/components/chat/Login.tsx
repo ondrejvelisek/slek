@@ -6,10 +6,11 @@ import {HeaderContainer} from '../../containers/chat/Header';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faCommentAlt} from '@fortawesome/free-solid-svg-icons';
 import {ILoadable} from '../../states/common/ILoadable';
-import {IAuthData} from '../../models/chat/IAuthData';
+import {IAuth} from '../../models/chat/IAuth';
 import {Loader} from './Loader';
+import {ICredentials} from '../../models/chat/ICredentials';
 
-export interface ILoginProps extends ILoadable<IAuthData|null> {}
+export interface ILoginProps extends ILoadable<IAuth|null> {}
 
 export  interface ILoginOwnState {
   readonly email: string;
@@ -17,7 +18,7 @@ export  interface ILoginOwnState {
 }
 
 export interface ILoginActions {
-  readonly login: (email: string, password: string) => void;
+  readonly login: (credentials: ICredentials) => void;
 }
 
 type IProps = ILoginProps & ILoginActions;
@@ -46,7 +47,7 @@ export class Login extends React.PureComponent<IProps, ILoginOwnState> {
   private onLogin = (event: React.FormEvent) => {
     event.preventDefault();
 
-    this.props.login(this.state.email, this.state.password);
+    this.props.login(this.state);
   };
 
   render(): JSX.Element {

@@ -15,14 +15,14 @@ export interface IChannelHeaderProps extends ILoadable<(IChannel) | null> {}
 export interface IChannelHeaderOwnProps {}
 
 export interface IChannelHeaderActions {
-  removeChannel: (channelId: Uuid) => void;
+  deleteChannel: (channelId: Uuid) => void;
 }
 
 export class ChannelHeader extends React.PureComponent<IChannelHeaderProps & IChannelHeaderOwnProps & IChannelHeaderActions> {
 
   removeChannel = () => {
     if (this.props.content) {
-      this.props.removeChannel(this.props.content.id);
+      this.props.deleteChannel(this.props.content.id);
     }
   };
 
