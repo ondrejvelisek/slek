@@ -31,7 +31,6 @@ const loginFailed = (email: string): Action => ({
 export const login = (credentials: ICredentials): ThunkAction<void, IRootState, IServices, Action> =>
   async (dispatch, _, {authService}) => {
   try {
-    console.log('LOGIN ACTION', credentials);
     dispatch(loginStarted(credentials.email));
     await authService.login(credentials);
     dispatch(loginSucceeded(credentials.email));

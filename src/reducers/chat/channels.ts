@@ -5,7 +5,7 @@ import {
   SLEK_CHANNELS_GETTING_STARTED,
   SLEK_CHANNELS_GETTING_FAILED,
   SLEK_CHANNELS_GETTING_SUCCEEDED,
-  SLEK_CHANNEL_SELECTED, SLEK_CHANNEL_DELETION_STARTED, SLEK_CHANNEL_DELETION_SUCCEEDED, SLEK_CHANNEL_DELETION_FAILED
+  SLEK_CHANNEL_DELETION_STARTED, SLEK_CHANNEL_DELETION_SUCCEEDED, SLEK_CHANNEL_DELETION_FAILED, SLEK_CHANNEL_SELECTION_STARTED
 } from '../../constants/actions';
 import * as Immutable from 'immutable';
 import {IChannel} from '../../models/chat/IChannel';
@@ -67,7 +67,7 @@ export const channels = (state: IChannelsState = {
         ...state,
         content: state.content.update(action.payload.tempId, channel => ({...channel, isLoading: false, error: true}))
       };
-    case SLEK_CHANNEL_SELECTED:
+    case SLEK_CHANNEL_SELECTION_STARTED:
       return {
         ...state,
         active: action.payload

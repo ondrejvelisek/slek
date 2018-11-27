@@ -46,7 +46,6 @@ export const withHeader = (header: string, value: string): FetchDecorator => fet
 
 
 export const withErrorHandler = (handler: ErrorHandler<Response> = defaultErrorHandler): FetchDecorator => fetch => async (input, init) => {
-  console.log();
   const request = new Request(input);
   const response = await fetch(request, init);
   if (handler.isError(request, response)) {
@@ -102,10 +101,8 @@ export const del: FetchDecorator = fetch => (input, init) => fetch(input, _.exte
 
 
 export const withLogger = (message: string): FetchDecorator => fetch => async (input, init) => {
-  console.log('================================');
   console.log('BEFORE', message, input, init);
   const resp = await fetch(input, init);
-  console.log('------------------------');
   console.log('AFTER', message);
   return resp;
 };

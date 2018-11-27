@@ -6,7 +6,7 @@ import {selectMessagesKeys} from '../../selectors/chat';
 const mapStateToProps = (state: IRootState): IMessagesProps => ({
   isLoading: state.chat.messages.isLoading,
   error: state.chat.messages.error,
-  content: selectMessagesKeys(state)
+  content: selectMessagesKeys(state),
 });
 
 const mapDispatchToProps: IMessagesActions = {};

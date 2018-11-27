@@ -11,13 +11,14 @@ import {IMessage} from '../models/chat/IMessage';
 
 const selectAccounts = (state: IRootState): IAccountsState => state.chat.accounts;
 const selectChannels = (state: IRootState): IChannelsState => state.chat.channels;
+const selectActiveChannelId = (state: IRootState): Uuid|null => state.chat.channels.active;
 const selectChannelsMap = (state: IRootState): Immutable.Map<Uuid, ILoadable<IChannel>> => state.chat.channels.content;
 // const selectMessages = (state: IRootState): IMessagesState => state.chat.messages;
 const selectMessagesMap = (state: IRootState): Immutable.Map<Uuid, IMessage> => state.chat.messages.content;
 
-export const selectMessagesKeys = createSelector<IRootState, Immutable.Map<Uuid, IMessage>, Immutable.List<Uuid>>(
-  [selectMessagesMap],
-  messages => Immutable.List(messages.keySeq())
+export const selectMessagesKeys = createSelector<IRootState, Immutable.Map<Uuid, IMessage>, Uuid|null, Immutable.List<Uuid>>(
+  [selectMessagesMap, selectActiveChannelId],
+  (messages, channelId) => Immutable.List(messages.filter(msg => msg ? msg.channelId === channelId : false).keySeq())
 );
 
 export const selectChannelsKeys = createSelector<IRootState, Immutable.Map<Uuid, ILoadable<IChannel>>, Immutable.List<Uuid>>(

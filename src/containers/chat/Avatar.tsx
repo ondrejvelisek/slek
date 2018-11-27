@@ -8,8 +8,6 @@ interface IAvatarOwnProps {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: IAvatarOwnProps): IAvatarProps => {
-  console.log(ownProps);
-  console.log(state.chat.accounts.content);
   return ({
     ...state.chat.accounts.content.get(ownProps.email).content,
     className: ownProps.className

@@ -66,7 +66,7 @@ export class Login extends React.PureComponent<IProps, ILoginOwnState> {
         <Form className="login-content" onSubmit={this.onLogin}>
           <FormGroup>
             <Input type="text" name="name" id="accountName" placeholder="email" tooltip="Email"
-                   value={this.state.email} onChange={this.onEmailChanged}/>
+                   value={this.state.email} onChange={this.onEmailChanged} autoFocus/>
           </FormGroup>
           <FormGroup>
             <Input type="text" name="username" id="accountUsername" placeholder="password" tooltip="Password"

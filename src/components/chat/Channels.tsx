@@ -16,22 +16,19 @@ import {IChannelData} from '../../models/chat/IChannelData';
 export interface IChannelsProps extends ILoadable<Immutable.List<Uuid>> {}
 
 export interface IChannelsActions {
-  readonly getChannels: () => void;
-  readonly createChannel: (channel: IChannelData) => void;
+  readonly onMounted: () => void;
+  readonly onReloadChannels: () => void;
+  readonly onCreateChannel: (channel: IChannelData) => void;
 }
 
 export class Channels extends React.PureComponent<IChannelsProps & IChannelsActions> {
 
   componentDidMount() {
-    this.reloadChannels();
+    this.props.onMounted();
   }
 
-  reloadChannels = () => {
-    this.props.getChannels();
-  };
-
   addChannel = () => {
-    this.props.createChannel({name: `New #${randId()}`, unread: 666, accountEmails: Immutable.Set<string>()});
+    this.props.onCreateChannel({name: `New #${randId()}`, unread: 666, accountEmails: Immutable.Set<string>()});
 
     function randId() {
       return `${Math.floor(Math.random() * 1000)}`;
@@ -42,7 +39,7 @@ export class Channels extends React.PureComponent<IChannelsProps & IChannelsActi
     const { content: channelIds, error, isLoading } = this.props;
     if (error) {
       return (
-        <ListGroupItem className="clickable" onClick={this.reloadChannels}>
+        <ListGroupItem className="clickable" onClick={this.props.onReloadChannels}>
           <FontAwesomeIcon icon={faExclamationCircle}/>
           <span> Error - Try again</span>
         </ListGroupItem>

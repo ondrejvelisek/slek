@@ -67,41 +67,49 @@ export const state: IRootState = {
       content: Immutable.Map<Uuid, IMessage>({
         31: {
           id: '31',
+          channelId: '0',
           accountEmail: 'lenka@gmail.com',
           text: 'V arménovi cigaretu mísí jé zvykům.'
         },
         32: {
           id: '32',
+          channelId: '0',
           accountEmail: 'lenka@gmail.com',
           text: 'Míč divák ukaž růže. Měli, za ať babo: astrophytum, stala nuda tahal – vynikajícímu čili, uhnije holá kdo směje. Zaujetí dlužen šlapal slabý.'
         },
         33: {
           id: '33',
+          channelId: '0',
           accountEmail: 'ondrejvelisek@gmail.com',
           text: 'Pořádkovou akvaristé mi vědecká domovník čí vechtrem. Dal borneo my ba marš společník tympány ex pln věku řídil jo co uklidit obě krážem depeše jutou k režii ó zlý pít snídaněmi facti!'
         },
         34: {
           id: '34',
+          channelId: '0',
           accountEmail: 'bruno@gmail.com',
           text: 'Ji dům ergo teta snášet čeká krátkostí.'
         },
         35: {
           id: '35',
+          channelId: '0',
           accountEmail: 'ondrejvelisek@gmail.com',
           text: 'Hapatykářské hlásal ti vousy tří podťatý hodí ze ó mém druhé sílu auto bera si hajat hasičský.'
         },
         36: {
           id: '36',
+          channelId: '0',
           accountEmail: 'lenka@gmail.com',
           text: 'Indiáni ta uf přírodní housky! Oji penězi aby ně hup otevřít pohlížeje eh lesy bučí mě holeček pšt vrhla myši baby ve: se ve horny uloupil ať režii listí u vině potvrzenou.'
         },
         37: {
           id: '37',
+          channelId: '0',
           accountEmail: 'ondrejvelisek@gmail.com',
           text: 'Bát votes moct větu ach vtělená brouků a rozházet sedli.'
         },
         38: {
           id: '38',
+          channelId: '0',
           accountEmail: 'ondrejvelisek@gmail.com',
           text: 'Krk ráno ni svalového benda. Byste by 30 smíšený nesl vrhlo levé rozespalý tu neb ledajaké se 56 většina!'
         }
