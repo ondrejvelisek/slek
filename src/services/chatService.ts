@@ -19,11 +19,15 @@ import {IAppData} from '../models/chat/IAppData';
 import {IFileData} from '../models/chat/IFileData';
 import {IFileMetadata} from '../models/chat/IFileMetadata';
 import {identityParser, Parser, withoutResp, parseResp} from './fetchParsers';
-import {IAuthService} from './authService';
+import {IAuthData} from '../models/chat/IAuthData';
+import {ICredentials} from '../models/chat/ICredentials';
+import {IAuth} from '../models/chat/IAuth';
 
 export interface IChatService {
   getApp: () => Promise<IAppData>;
   updateApp: (app: IAppData) => Promise<IAppData>;
+
+  login: (credentials: ICredentials) => Promise<IAuthData>;
 
   getChannels: () => Promise<List<IChannel>>;
   getChannel: (channelId: Uuid) => Promise<IChannel>;
@@ -46,16 +50,20 @@ export interface IChatService {
   updateUser: (user: IAccount) => Promise<IAccount>;
 }
 
+export type GetAuth = () => IAuth|null;
+
 const withApp = (app: IAppData) => withJsonBody({customdata: app});
+const withCredentials = (credentials: ICredentials) => withJsonBody(credentials);
 const withChannel = (channel: IChannelData) => withJsonBody({name: channel.name, customdata: channel});
 const withFile = (file: IFileData) => withJsonBody(file); // TODO
 const withMessage = (message: IMessageData) => withJsonBody({value: message.text, customdata: message});
 const withAccount = (account: IAccount) => withJsonBody({email: account.email, customdata: account});
 
-const customDataParser: Parser<any> = resp => ({...resp.customdata, ...resp});
+const customDataParser: Parser<any> = resp => ({...resp.customData, ...resp});
 const listParser = <R>(itemParser: Parser<R>): Parser<List<R>> => resp => List<R>(resp.map(itemParser));
 
 const appParser: Parser<IAppData> = customDataParser;
+const authParser: Parser<IAuth> = identityParser;
 const channelParser: Parser<IChannel> = customDataParser;
 const channelListParser: Parser<List<IChannel>> = listParser(channelParser);
 const fileMetadataParser: Parser<IFileMetadata> = identityParser;
@@ -65,15 +73,20 @@ const messageListParser: Parser<List<IMessage>> = listParser(messageParser);
 const accountParser: Parser<IAccount> = customDataParser;
 const accountListParser: Parser<List<IAccount>> = listParser(accountParser);
 
-export const createService = (authService: IAuthService): IChatService => {
+export const createChatService = (getAuth: GetAuth): IChatService => {
 
   const delay = 1000;
   const errorProb = 0.0;
 
+  const apiFetch = _.flowRight(
+    withRebasedUrl(API_URL),
+    withErrorHandler()
+  )(fetch);
+
   const appFetch: Fetch = _.flowRight(
     withRebasedUrl(`${API_URL}/app/${SLEK_APP_ID}`),
     withErrorHandler(),
-    withAuth(authService),
+    withAuth(getAuth),
     withArtificialError(errorProb),
     withDelay(delay)
   )(fetch);
@@ -81,6 +94,8 @@ export const createService = (authService: IAuthService): IChatService => {
   return {
     getApp: () => parseResp(appParser)(appFetch)(''),
     updateApp: (app: IAppData) => parseResp(appParser)(withApp(app)(appFetch))('', {method: 'PUT'}),
+
+    login: (credentials: ICredentials) => parseResp(authParser)(post(withCredentials(credentials)(apiFetch)))('/auth'),
 
     getChannels: () => parseResp(channelListParser)(appFetch)('/channel'),
     getChannel: (channelId: Uuid) => parseResp(channelParser)(appFetch)(`/channel/${channelId}`),

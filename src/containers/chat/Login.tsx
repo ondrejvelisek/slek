@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {ILoginActions, ILoginProps, Login} from '../../components/chat/Login';
-import {login} from '../../actions/chat/Authorisation';
+import {login} from '../../actions/chat/Auth';
 import {IRootState} from '../../states/IRootState';
 
 const mapStateToProps = (state: IRootState): ILoginProps => ({

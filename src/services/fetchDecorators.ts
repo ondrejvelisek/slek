@@ -1,12 +1,9 @@
 import * as _ from 'lodash';
+import {GetAuth} from './chatService';
 
 export type Fetch = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
 type Decorator<D> = (decorated: D) => D;
 export type FetchDecorator = Decorator<Fetch>;
-
-export interface TokenProvider {
-  getToken: () => Promise<string>;
-}
 
 export interface ErrorHandler<R> {
   isError: (request: Request, response: R) => boolean;
@@ -63,8 +60,13 @@ const defaultErrorHandler: ErrorHandler<Response> = {
 
 
 
-export const withAuth = (provider: TokenProvider): FetchDecorator => fetch => async (input, init) =>
-  withHeader('Authorization', `Bearer ${await provider.getToken()}`)(fetch)(input, init);
+export const withAuth = (getAuth: GetAuth): FetchDecorator => fetch => async (input, init) => {
+  const auth = await getAuth();
+  if (!auth) {
+    return fetch(input, init);
+  }
+  return withHeader('Authorization', `Bearer ${auth.token}`)(fetch)(input, init);
+};
 
 
 

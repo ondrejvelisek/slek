@@ -6,7 +6,6 @@ import {ILoadable} from '../../states/common/ILoadable';
 export const accounts = (state: IAccountsState = {
                            isLoading: false,
                            error: null,
-                           active: null,
                            content: Immutable.Map<Uuid, ILoadable<IAccount>>()
                          },
                          action: Action): IAccountsState => {

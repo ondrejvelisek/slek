@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import {IRootState} from '../../states/IRootState';
 import {IMessagesActions, IMessagesProps, Messages} from '../../components/chat/Messages';
-import {selectMessagesKeys} from '../../selectors/chat';
+import {selectMessageIds} from '../../selectors/chat';
 
 const mapStateToProps = (state: IRootState): IMessagesProps => ({
   isLoading: state.chat.messages.isLoading,
   error: state.chat.messages.error,
-  content: selectMessagesKeys(state),
+  content: selectMessageIds(state),
 });
 
 const mapDispatchToProps: IMessagesActions = {};

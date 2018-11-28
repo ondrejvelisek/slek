@@ -1,6 +1,15 @@
+@import './variables';
+
 .messages {
+  position: relative;
   padding: 2rem 2rem 1rem;
   margin: 0;
+
+  &.empty {
+    color: @colorGrey;
+    text-align: center;
+    font-size: 2rem;
+  }
 
   li {
     + li {

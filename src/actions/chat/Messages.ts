@@ -18,10 +18,10 @@ import {v4 as uuid} from 'uuid';
 import {IServices} from '../../services';
 
 
-const messageCreationStarted = (message: IMessageData, tempId: Uuid): Action => ({
+const messageCreationStarted = (text: string, tempId: Uuid): Action => ({
   type: SLEK_MESSAGE_CREATION_STARTED,
   payload: {
-    message,
+    text,
     tempId
   }
 });
@@ -41,15 +41,20 @@ const messageCreationFailed = (tempId: Uuid): Action => ({
   }
 });
 
-export const createMessage = (messageData: IMessageData): ThunkAction<void, IRootState, IServices, Action> =>
+export const createMessage = (text: string): ThunkAction<void, IRootState, IServices, Action> =>
   async (dispatch, getState, {chatService}) => {
   const tempId = uuid();
   try {
-    dispatch(messageCreationStarted(messageData, tempId));
+    dispatch(messageCreationStarted(text, tempId));
     const channelId = getState().chat.channels.active;
     if (!channelId) {
       throw new Error('Sending message without active channel');
     }
+    const account = getState().chat.auth.content;
+    if (!account) {
+      throw new Error('Sending message without active account');
+    }
+    const messageData: IMessageData = {text, channelId, accountEmail: account.email};
     const message = await chatService.createMessage(channelId, messageData);
     dispatch(messageCreationSucceeded(message, tempId));
   } catch (e) {

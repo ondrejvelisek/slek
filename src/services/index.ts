@@ -1,12 +1,5 @@
-import {createService, IChatService} from './chatService';
-import {authService, IAuthService} from './authService';
+import {IChatService} from './chatService';
 
 export interface IServices {
-  readonly chatService: IChatService;
-  readonly authService: IAuthService;
+  chatService: IChatService;
 }
-
-export const services: IServices = {
-  authService,
-  chatService: createService(authService)
-};

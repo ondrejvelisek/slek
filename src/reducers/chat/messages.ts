@@ -2,7 +2,6 @@ import * as Immutable from 'immutable';
 import {IMessagesState} from '../../states/chat/IMessagesState';
 import {IMessage} from '../../models/chat/IMessage';
 import {SLEK_CHANNEL_SELECTION_FAILED, SLEK_CHANNEL_SELECTION_STARTED, SLEK_CHANNEL_SELECTION_SUCCEEDED} from '../../constants/actions';
-import * as _ from 'lodash';
 
 export const messages = (state: IMessagesState = {
                            isLoading: false,
@@ -18,11 +17,12 @@ export const messages = (state: IMessagesState = {
         error: false
       };
     case SLEK_CHANNEL_SELECTION_SUCCEEDED:
+      const messagesMap = Immutable.Map<Uuid, IMessage>(action.payload.messages.map((msg: IMessage) => [msg.id, msg]));
       return {
         ...state,
         isLoading: false,
         error: false,
-        content: state.content.merge(_.keyBy(action.payload.messages.toArray(), 'id'))
+        content: state.content.merge(messagesMap)
       };
     case SLEK_CHANNEL_SELECTION_FAILED:
       return {

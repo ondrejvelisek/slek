@@ -30,7 +30,6 @@ export const state: IRootState = {
     accounts: {
       isLoading: false,
       error: null,
-      active: 'ondrejvelisek@gmail.com',
       content: Immutable.Map<Uuid, ILoadable<IAccount>>({
         'ondrejvelisek@gmail.com': {
           isLoading: false,

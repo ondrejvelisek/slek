@@ -1,4 +1,5 @@
-export interface IAuth {
-  readonly token: string;
-  readonly expiration: string;
+import {IAuthData} from './IAuthData';
+
+export interface IAuth extends IAuthData {
+  readonly email: string;
 }
