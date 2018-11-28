@@ -26,7 +26,7 @@ export class Messages extends React.PureComponent<IMessagesProps & IMessagesActi
   }
 
   componentDidMount() {
-    const timer = setInterval(() => this.props.onMessagesTrigger(), 3000);
+    const timer = setInterval(() => this.props.onMessagesTrigger(), 5000);
     this.setState(prevState => ({...prevState, timer}));
   }
 

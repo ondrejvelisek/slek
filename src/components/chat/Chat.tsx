@@ -7,7 +7,11 @@ import {ChannelHeaderContainer} from '../../containers/chat/ChannelHeader';
 import {InputBoxContainer} from '../../containers/chat/InputBox';
 import {ProtectedContainer} from '../../containers/chat/Protected';
 
-export class Chat extends React.PureComponent {
+export interface IChatProps {
+  channelId: Uuid|null;
+}
+
+export class Chat extends React.PureComponent<IChatProps> {
 
   renderContent = (): JSX.Element => {
     return (
@@ -16,23 +20,29 @@ export class Chat extends React.PureComponent {
         <div className="sidebar">
           <ChannelsContainer/>
         </div>
+        {
+          this.props.channelId ? (
+            <div className="d-flex flex-grow-1 flex-column">
 
-        <div className="d-flex flex-grow-1 flex-column">
+              <div className="content-header">
+                <ChannelHeaderContainer/>
+              </div>
 
-          <div className="content-header">
-            <ChannelHeaderContainer/>
-          </div>
+              <div className="content flex-grow-1">
+                <MessagesContainer/>
+              </div>
 
-          <div className="content flex-grow-1">
-            <MessagesContainer/>
-          </div>
+              <div className="footer">
+                <InputBoxContainer/>
+              </div>
 
-          <div className="footer">
-            <InputBoxContainer/>
-          </div>
-
-        </div>
-
+            </div>
+          ) : (
+            <div className="empty d-flex flex-grow-1 flex-column">
+              Select channel
+            </div>
+          )
+        }
       </div>
     );
   };

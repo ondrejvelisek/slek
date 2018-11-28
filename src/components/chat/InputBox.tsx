@@ -36,6 +36,7 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
   onMessageSubmit = (event: FormEvent) => {
     event.preventDefault();
     this.props.onMessageSubmit(this.state.text);
+    this.setState(state => ({...state, text: ''}));
   };
 
   render(): JSX.Element {
@@ -43,7 +44,7 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
       <Navbar className="input-box">
         <Form onSubmit={this.onMessageSubmit}>
           <InputGroup>
-            <Input onChange={this.onMessageChange}/>
+            <Input onChange={this.onMessageChange} value={this.state.text}/>
             <InputGroupAddon addonType="append">
               <Button outline color="secondary">
                 <FontAwesomeIcon icon={faSmile}/>
