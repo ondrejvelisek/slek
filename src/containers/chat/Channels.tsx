@@ -2,11 +2,11 @@ import { connect } from 'react-redux';
 import {Channels, IChannelsActions, IChannelsProps} from '../../components/chat/Channels';
 import {createChannel, getChannels} from '../../actions/chat/Channels';
 import {IRootState} from '../../states/IRootState';
-import {selectChannelIds} from '../../selectors/chat';
+import {selectChannelIds, selectChannelsState} from '../../selectors/chat';
 
 const mapStateToProps = (state: IRootState): IChannelsProps => ({
-  isLoading: state.chat.channels.isLoading,
-  error: state.chat.channels.error,
+  isLoading: selectChannelsState(state).isLoading,
+  error: selectChannelsState(state).error,
   content: selectChannelIds(state)
 });
 

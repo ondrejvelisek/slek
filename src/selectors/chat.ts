@@ -3,57 +3,97 @@ import {IRootState} from '../states/IRootState';
 import {IAccountsState} from '../states/chat/IAccountsState';
 import {IAccount} from '../models/chat/IAccount';
 import {IChannelsState} from '../states/chat/IChannelsState';
-// import {IMessagesState} from '../states/chat/IMessagesState';
 import {IChannel} from '../models/chat/IChannel';
 import {ILoadable} from '../states/common/ILoadable';
-import * as Immutable from 'immutable';
+import {Map, List, Set} from 'immutable';
 import {IMessage} from '../models/chat/IMessage';
 import {IAuthState} from '../states/chat/IAuthState';
 
-const selectAccounts = (state: IRootState): IAccountsState => state.chat.accounts;
-const selectChannels = (state: IRootState): IChannelsState => state.chat.channels;
-const selectActiveChannelId = (state: IRootState): Uuid|null => state.chat.channels.active;
-const selectAuth = (state: IRootState): IAuthState => state.chat.auth;
-const selectChannelsMap = (state: IRootState): Immutable.Map<Uuid, ILoadable<IChannel>> => state.chat.channels.content;
-// const selectMessages = (state: IRootState): IMessagesState => state.chat.messages;
-const selectMessagesMap = (state: IRootState): Immutable.Map<Uuid, IMessage> => state.chat.messages.content;
+export const selectAccountsState = (state: IRootState) => state.chat.accounts;
+export const selectChannelsState = (state: IRootState) => state.chat.channels;
+export const selectMessagesState = (state: IRootState) => state.chat.messages;
+export const selectAuthState = (state: IRootState) => state.chat.auth;
 
+export const selectAccountsMap = (state: IRootState) => state.chat.accounts.content;
+export const selectChannelsMap = (state: IRootState) => state.chat.channels.content;
+export const selectMessagesMap = (state: IRootState) => state.chat.messages.content;
+export const selectAuth = (state: IRootState) => state.chat.auth.content;
 
-export const selectActAccount = createSelector<IRootState, Immutable.Map<Uuid, IMessage>, Uuid|null, Immutable.List<Uuid>>(
-  [selectMessagesMap, selectActiveChannelId],
-  (messages, channelId) => Immutable.List(messages.filter(msg => msg ? msg.channelId === channelId : false).keySeq())
+export const selectActiveChannelId = (state: IRootState) => state.chat.channels.active;
+
+export const selectAuthEmail = createSelector(
+  [selectAuthState],
+  (auth: IAuthState): ILoadable<string|null> => ({
+    ...auth,
+    content: auth.content ? auth.content.email : null
+  })
 );
 
-export const selectMessageIds = createSelector<IRootState, Immutable.Map<Uuid, IMessage>, Uuid|null, Immutable.List<Uuid>>(
-  [selectMessagesMap, selectActiveChannelId],
-  (messages, channelId) => Immutable.List(messages.filter(msg => msg ? msg.channelId === channelId : false).keySeq())
-);
-
-export const selectChannelIds = createSelector<IRootState, Immutable.Map<Uuid, ILoadable<IChannel>>, Immutable.List<Uuid>>(
-  [selectChannelsMap],
-  channels => Immutable.List(channels.keySeq())
-);
-
-export const selectActiveAccount = createSelector<IRootState, IAuthState, IAccountsState, ILoadable<IAccount|null>>(
-  [selectAuth, selectAccounts],
-  (auth: IAuthState, accounts: IAccountsState) => {
-    if (!auth.content) {
-      return {isLoading: false, error: null, content: null};
+export const selectAuthAccount = createSelector(
+  [selectAuthEmail, selectAccountsState],
+  (email: ILoadable<string|null>, accounts: IAccountsState): ILoadable<IAccount|null> => {
+    if (!email.content) {
+      return {
+        isLoading: false,
+        error: null,
+        content: null
+      };
     }
-    const activeEmail = auth.content.email;
-    const activeAccount =  accounts.content.get(activeEmail);
-    if (!activeAccount) {
-      return {isLoading: false, error: null, content: null};
-    }
-    return activeAccount;
+    const account = accounts.content.get(email.content);
+    return {
+      ...accounts,
+      content: account
+    };
   }
 );
 
+export const selectActiveMessageIds = createSelector(
+  [selectMessagesMap, selectActiveChannelId],
+  (messages: Map<Uuid, IMessage>, channelId: Uuid|null): List<Uuid>|null =>
+    channelId ? List(messages.filter(msg => msg ? msg.channelId === channelId : false).keySeq()) : null
+);
+
+export const selectMessageIds = createSelector(
+  [selectMessagesMap],
+  (messages: Map<Uuid, IMessage>): List<Uuid> =>
+    List(messages.keySeq())
+);
+
+export const selectChannelIds = createSelector(
+  [selectChannelsMap],
+  (channels: Map<Uuid, ILoadable<IChannel>>): List<Uuid> =>
+    List(channels.keySeq())
+);
+
+export const selectAccountEmails = createSelector(
+  [selectAccountsMap],
+  (accounts: Map<string, IAccount>): List<string> =>
+    List(accounts.keySeq())
+);
+
 export const selectActiveChannel = createSelector<IRootState, IChannelsState, ILoadable<IChannel|null>>(
-  [selectChannels],
-  channels => ({
-    isLoading: channels.active ? channels.content.get(channels.active).isLoading : channels.isLoading,
-    error: channels.active ? channels.content.get(channels.active).error : channels.error,
-    content: channels.active ? channels.content.get(channels.active).content : null
+  [selectChannelsState],
+  (channels: IChannelsState): ILoadable<IChannel|null> => {
+    if (!channels.active) {
+      return {
+        isLoading: channels.isLoading,
+        error: channels.error,
+        content: null
+      };
+    }
+    const channel = channels.content.get(channels.active);
+    return {
+      isLoading: channel.isLoading || channels.isLoading,
+      error: channel.error || channels.error,
+      content: channel.content
+    };
+  }
+);
+
+export const selectActiveAccountEmails = createSelector(
+  [selectActiveChannel],
+  (channel: ILoadable<IChannel|null>): ILoadable<Set<string>|null> => ({
+    ...channel,
+    content: channel.content ? channel.content.accountEmails : null
   })
 );

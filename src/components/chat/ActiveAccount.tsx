@@ -56,8 +56,10 @@ export class ActiveAccount extends React.PureComponent<IProps, IState> {
     const { isLoading, error, content: account } = this.props;
     if (isLoading) {
       return <span>Account loading</span>;
-    } else if (error || !account) {
+    } else if (error) {
       return <span>Error</span>;
+    } else if (!account) {
+      return <span>Unauthorized</span>;
     } else {
       return (
         <Dropdown className="account-dropdown" isOpen={accountDropdownOpen} toggle={this.toggleAccountDropdown}>

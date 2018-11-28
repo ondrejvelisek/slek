@@ -49,15 +49,15 @@ export class Chat extends React.PureComponent<IChatProps> {
   render(): JSX.Element {
     return (
       <div className="h-100 d-flex flex-column">
-        <ProtectedContainer>
 
           <div className="header">
             <HeaderContainer/>
           </div>
 
+        <ProtectedContainer>
           {this.renderContent()}
-
         </ProtectedContainer>
+
       </div>
     );
   }

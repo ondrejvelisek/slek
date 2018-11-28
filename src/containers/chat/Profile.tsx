@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import {IRootState} from '../../states/IRootState';
 import {IProfileActions, IProfileProps, Profile} from '../../components/chat/Profile';
-import {selectActiveAccount} from '../../selectors/chat';
+import {selectAuthAccount} from '../../selectors/chat';
 
 const mapStateToProps = (state: IRootState): IProfileProps =>
-  selectActiveAccount(state);
+  selectAuthAccount(state);
 
 const mapDispatchToProps: IProfileActions = {};
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Navbar, NavbarBrand, Nav, NavItem
+  Navbar, NavbarBrand, Nav, NavItem, Button
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -9,11 +9,10 @@ import {
 
 import '../../less/chat/Header.less';
 import {ActiveAccountContainer} from '../../containers/chat/ActiveAccount';
+import {ILoadable} from '../../states/common/ILoadable';
 // import {NavLink} from 'react-router-dom';
 
-export interface IHeaderProps {
-  activeAccountEmail: string|null;
-}
+export interface IHeaderProps extends ILoadable<string|null> {}
 
 export interface IHeaderActions {}
 
@@ -32,6 +31,7 @@ export class Header extends React.PureComponent<IProps, IState> {
   }
 
   render(): JSX.Element {
+    const { isLoading, error, content: email } = this.props;
     return (
       <Navbar className="header text-light">
 
@@ -43,10 +43,10 @@ export class Header extends React.PureComponent<IProps, IState> {
         <Nav right="true" navbar>
           <NavItem>
             {
-              this.props.activeAccountEmail ? (
-                <ActiveAccountContainer email={this.props.activeAccountEmail}/>
+              email && !isLoading && !error ? (
+                <ActiveAccountContainer email={email}/>
               ) : (
-                <button>Sign in</button>
+                <Button>Sign in</Button>
               )
             }
           </NavItem>

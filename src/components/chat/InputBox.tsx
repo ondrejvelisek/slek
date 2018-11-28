@@ -28,6 +28,10 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
     };
   }
 
+  onEmojiButtonClick = () => {
+    this.setState(state => ({...state, text: `${state.text}\u{1F642}`}));
+  };
+
   onMessageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const text = event.target.value;
     this.setState(state => ({...state, text}));
@@ -35,8 +39,10 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
 
   onMessageSubmit = (event: FormEvent) => {
     event.preventDefault();
-    this.props.onMessageSubmit(this.state.text);
-    this.setState(state => ({...state, text: ''}));
+    if (this.state.text.trim().length > 0) {
+      this.props.onMessageSubmit(this.state.text);
+      this.setState(state => ({...state, text: ''}));
+    }
   };
 
   render(): JSX.Element {
@@ -46,7 +52,7 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
           <InputGroup>
             <Input onChange={this.onMessageChange} value={this.state.text}/>
             <InputGroupAddon addonType="append">
-              <Button outline color="secondary">
+              <Button outline color="secondary" onClick={this.onEmojiButtonClick}>
                 <FontAwesomeIcon icon={faSmile}/>
               </Button>
             </InputGroupAddon>

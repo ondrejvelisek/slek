@@ -54,9 +54,17 @@ export const withErrorHandler = (handler: ErrorHandler<Response> = defaultErrorH
 const defaultErrorHandler: ErrorHandler<Response> = {
   isError: (_ignore, response) => !response.ok,
   handle: (request, response) => {
-    throw new Error(`${response.status} ${response.statusText}, While fetching ${request.method} ${request.url}`);
+    throw new HttpError(response.status, `${response.status} ${response.statusText}, While fetching ${request.method} ${request.url}`);
   }
 };
+
+export class HttpError extends Error {
+  code: number;
+  constructor(code: number, message?: string) {
+    super(message);
+    this.code = code;
+  }
+}
 
 
 

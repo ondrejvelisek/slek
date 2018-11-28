@@ -2,11 +2,10 @@ import { connect } from 'react-redux';
 import {ILoginActions, ILoginProps, Login} from '../../components/chat/Login';
 import {login} from '../../actions/chat/Auth';
 import {IRootState} from '../../states/IRootState';
+import {selectAuthState} from '../../selectors/chat';
 
 const mapStateToProps = (state: IRootState): ILoginProps => ({
-  isLoading: state.chat.auth.isLoading,
-  error: state.chat.auth.error,
-  content: state.chat.auth.content
+  ...selectAuthState(state)
 });
 
 const mapDispatchToProps: ILoginActions = {

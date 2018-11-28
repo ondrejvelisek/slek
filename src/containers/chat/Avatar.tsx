@@ -1,6 +1,7 @@
 import {IRootState} from '../../states/IRootState';
 import {connect} from 'react-redux';
 import {Avatar, IAvatarProps} from '../../components/chat/Avatar';
+import {selectAccountsMap} from '../../selectors/chat';
 
 interface IAvatarOwnProps {
   email: string;
@@ -8,10 +9,11 @@ interface IAvatarOwnProps {
 }
 
 const mapStateToProps = (state: IRootState, ownProps: IAvatarOwnProps): IAvatarProps => {
-  return ({
-    ...state.chat.accounts.content.get(ownProps.email).content,
+  const account = selectAccountsMap(state).get(ownProps.email);
+  return {
+    account,
     className: ownProps.className
-  });
+  };
 };
 
 export const AvatarContainer = connect(mapStateToProps)(Avatar);

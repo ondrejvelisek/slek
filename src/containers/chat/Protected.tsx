@@ -1,14 +1,22 @@
 import { connect } from 'react-redux';
 import {IRootState} from '../../states/IRootState';
 import {IProtectedActions, IProtectedProps, Protected} from '../../components/chat/Protected';
-import {push} from 'connected-react-router';
+import {authorizeAccount} from '../../actions/chat/Accounts';
+import {selectAuthAccount, selectAuthEmail} from '../../selectors/chat';
 
-const mapStateToProps = (state: IRootState): IProtectedProps => ({
-  authorized: state.chat.auth.content !== null && !state.chat.auth.isLoading && !state.chat.auth.error
-});
+const mapStateToProps = (state: IRootState): IProtectedProps => {
+  const account = selectAuthAccount(state);
+  const auth = selectAuthEmail(state);
+  console.log(account);
+  return {
+    ...account,
+    content: !!account.content,
+    email: !auth.isLoading && !auth.error ? auth.content : null
+  };
+};
 
 const mapDispatchToProps: IProtectedActions = {
-  onUnauthorizedAccess: () => push('/login')
+  onMounted: authorizeAccount
 };
 
 export const ProtectedContainer = connect(mapStateToProps, mapDispatchToProps)(Protected);

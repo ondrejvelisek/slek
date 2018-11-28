@@ -1,11 +1,10 @@
 import {IRootState} from '../../states/IRootState';
 import {connect} from 'react-redux';
 import {Header, IHeaderProps} from '../../components/chat/Header';
+import {selectAuthEmail} from '../../selectors/chat';
 
 const mapStateToProps = (state: IRootState): IHeaderProps => {
-  return {
-    activeAccountEmail: state.chat.auth.content ? state.chat.auth.content.email : null,
-  };
+  return selectAuthEmail(state);
 };
 
 export const HeaderContainer = connect(mapStateToProps)(Header);
