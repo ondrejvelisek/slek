@@ -43,24 +43,24 @@ const messageCreationFailed = (tempId: Uuid): Action => ({
 
 export const createMessage = (text: string): ThunkAction<void, IRootState, IServices, Action> =>
   async (dispatch, getState, {chatService}) => {
-  const tempId = uuid();
-  try {
-    const channelId = getState().chat.channels.active;
-    if (!channelId) {
-      throw new Error('Sending message without active channel');
+    const tempId = uuid();
+    try {
+      const channelId = getState().chat.channels.active;
+      if (!channelId) {
+        throw new Error('Sending message without active channel');
+      }
+      const account = getState().chat.auth.content;
+      if (!account) {
+        throw new Error('Sending message without active account');
+      }
+      const messageData: IMessageData = {text, channelId, accountEmail: account.email};
+      dispatch(messageCreationStarted({id: tempId, ...messageData}, tempId));
+      const message = await chatService.createMessage(channelId, messageData);
+      dispatch(messageCreationSucceeded(message, tempId));
+    } catch (e) {
+      dispatch(messageCreationFailed(tempId));
     }
-    const account = getState().chat.auth.content;
-    if (!account) {
-      throw new Error('Sending message without active account');
-    }
-    const messageData: IMessageData = {text, channelId, accountEmail: account.email};
-    dispatch(messageCreationStarted({id: tempId, ...messageData}, tempId));
-    const message = await chatService.createMessage(channelId, messageData);
-    dispatch(messageCreationSucceeded(message, tempId));
-  } catch (e) {
-    dispatch(messageCreationFailed(tempId));
-  }
-};
+  };
 
 const messageDeletionStarted = (messageId: Uuid): Action => ({
   type: SLEK_MESSAGE_DELETION_STARTED,
@@ -78,43 +78,48 @@ const messageDeletionFailed = (): Action => ({
 
 export const deleteMessage = (messageId: Uuid): ThunkAction<void, IRootState, IServices, Action> =>
   async (dispatch, getState, {chatService}) => {
-  try {
-    dispatch(messageDeletionStarted(messageId));
-    const channelId = getState().chat.channels.active;
-    if (!channelId) {
-      throw new Error('Deleting message without active channel');
+    try {
+      dispatch(messageDeletionStarted(messageId));
+      const channelId = getState().chat.channels.active;
+      if (!channelId) {
+        throw new Error('Deleting message without active channel');
+      }
+      await chatService.deleteMessage(channelId, messageId);
+      dispatch(messageDeletionSucceeded(messageId));
+    } catch (e) {
+      dispatch(messageDeletionFailed());
     }
-    await chatService.deleteMessage(channelId, messageId);
-    dispatch(messageDeletionSucceeded(messageId));
-  } catch (e) {
-    dispatch(messageDeletionFailed());
-  }
-};
+  };
 
-const messagesGettingStarted = (): Action => ({
+const messagesGettingStarted = (channelId: Uuid): Action => ({
   type: SLEK_MESSAGES_GETTING_STARTED,
+  payload: channelId
 });
 
-const messagesGettingSucceeded = (messages: Immutable.List<IMessage>): Action => ({
+const messagesGettingSucceeded = (channelId: Uuid, messages: Immutable.List<IMessage>): Action => ({
   type: SLEK_MESSAGES_GETTING_SUCCEEDED,
-  payload: messages
+  payload: {
+    messages,
+    channelId
+  }
 });
 
-const messagesGettingFailed = (): Action => ({
-  type: SLEK_MESSAGES_GETTING_FAILED
+const messagesGettingFailed = (channelId: Uuid|null): Action => ({
+  type: SLEK_MESSAGES_GETTING_FAILED,
+  payload: channelId
 });
 
 export const getMessages = (): ThunkAction<void, IRootState, IServices, Action> =>
   async (dispatch, getState, {chatService}) => {
-  try {
-    dispatch(messagesGettingStarted());
     const channelId = getState().chat.channels.active;
-    if (!channelId) {
-      throw new Error('Getting message without active channel');
+    try {
+      if (!channelId) {
+        throw new Error('Getting message without active channel');
+      }
+      dispatch(messagesGettingStarted(channelId));
+      const messages = await chatService.getMessages(channelId, 50);
+      dispatch(messagesGettingSucceeded(channelId, messages));
+    } catch (e) {
+      dispatch(messagesGettingFailed(channelId));
     }
-    const messages = await chatService.getMessages(channelId, 50);
-    dispatch(messagesGettingSucceeded(messages));
-  } catch (e) {
-    dispatch(messagesGettingFailed());
-  }
-};
+  };
