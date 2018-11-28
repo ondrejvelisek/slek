@@ -11,7 +11,7 @@ export class Avatar extends React.PureComponent<IAvatarProps> {
     const { avatar, className } = this.props;
     return (
       <div className={`avatar ${className}`}>
-        <img src={avatar} alt="avatar"/>
+        <img src={avatar ? avatar : 'default-url'} alt="avatar"/>
       </div>
     );
   }

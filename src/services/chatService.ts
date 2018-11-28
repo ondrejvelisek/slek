@@ -91,6 +91,14 @@ export const createChatService = (getAuth: GetAuth): IChatService => {
     withDelay(delay)
   )(fetch);
 
+  const app2Fetch: Fetch = _.flowRight(
+    withRebasedUrl(`${API_URL}/${SLEK_APP_ID}`),
+    withErrorHandler(),
+    withAuth(getAuth),
+    withArtificialError(errorProb),
+    withDelay(delay)
+  )(fetch);
+
   return {
     getApp: () => parseResp(appParser)(appFetch)(''),
     updateApp: (app: IAppData) => parseResp(appParser)(withApp(app)(appFetch))('', {method: 'PUT'}),
@@ -116,9 +124,9 @@ export const createChatService = (getAuth: GetAuth): IChatService => {
     deleteMessage: (channelId: Uuid, messageId: Uuid) =>
       withoutResp(del(appFetch))(`/channel/${channelId}/message${messageId}`),
 
-    getUsers: () => parseResp(accountListParser)(appFetch)('/user'),
-    getUser: (email: string) => parseResp(accountParser)(appFetch)(`/user/${email}`),
-    createUser: (user: IAccount) => parseResp(accountParser)(post(withAccount(user)(appFetch)))('/channel'),
-    updateUser: (user: IAccount) => parseResp(accountParser)(put(withAccount(user)(appFetch)))(`/channel/${user.email}`)
+    getUsers: () => parseResp(accountListParser)(app2Fetch)('/user'),
+    getUser: (email: string) => parseResp(accountParser)(app2Fetch)(`/user/${email}`),
+    createUser: (user: IAccount) => parseResp(accountParser)(post(withAccount(user)(app2Fetch)))('/user'),
+    updateUser: (user: IAccount) => parseResp(accountParser)(put(withAccount(user)(app2Fetch)))(`/user/${user.email}`)
   };
 };

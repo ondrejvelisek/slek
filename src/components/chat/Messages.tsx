@@ -5,33 +5,25 @@ import {ILoadable} from '../../states/common/ILoadable';
 import {MessageContainer} from '../../containers/chat/Message';
 import * as Immutable from 'immutable';
 import {Loader} from './Loader';
-
-export interface IMessagesOwnState {
-  timer: any;
-}
+import Timeout = NodeJS.Timeout;
 
 export interface IMessagesProps extends ILoadable<Immutable.List<Uuid>> {}
 
 export interface IMessagesActions {
-  onMessagesTrigger: () => void
+  onMessagesTrigger: () => void;
+  onMounted: () => void;
 }
 
-export class Messages extends React.PureComponent<IMessagesProps & IMessagesActions, IMessagesOwnState> {
-  constructor(props: IMessagesProps & IMessagesActions) {
-    super(props);
-
-    this.state = {
-      timer: null
-    };
-  }
+export class Messages extends React.PureComponent<IMessagesProps & IMessagesActions> {
+  private timer: Timeout;
 
   componentDidMount() {
-    const timer = setInterval(() => this.props.onMessagesTrigger(), 5000);
-    this.setState(prevState => ({...prevState, timer}));
+    this.props.onMounted();
+    this.timer = setInterval(() => this.props.onMessagesTrigger(), 5000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.timer);
+    clearInterval(this.timer);
   }
 
   render(): JSX.Element {
