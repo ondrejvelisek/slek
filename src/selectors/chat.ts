@@ -21,28 +21,12 @@ const selectMessagesMap = (state: IRootState): Immutable.Map<Uuid, IMessage> => 
 
 export const selectActAccount = createSelector<IRootState, Immutable.Map<Uuid, IMessage>, Uuid|null, Immutable.List<Uuid>>(
   [selectMessagesMap, selectActiveChannelId],
-  (messages, channelId) => {
-    console.log('===================');
-    console.log(channelId);
-    return Immutable.List(messages.filter(msg => {
-      console.log('-------------');
-      console.log('MESSAGE', msg);
-      return msg ? msg.channelId === channelId : false;
-    }).keySeq());
-  }
+  (messages, channelId) => Immutable.List(messages.filter(msg => msg ? msg.channelId === channelId : false).keySeq())
 );
 
 export const selectMessageIds = createSelector<IRootState, Immutable.Map<Uuid, IMessage>, Uuid|null, Immutable.List<Uuid>>(
   [selectMessagesMap, selectActiveChannelId],
-  (messages, channelId) => {
-    console.log('===================');
-    console.log(channelId);
-    return Immutable.List(messages.filter(msg => {
-      console.log('-------------');
-      console.log('MESSAGE', msg);
-      return msg ? msg.channelId === channelId : false;
-    }).keySeq());
-  }
+  (messages, channelId) => Immutable.List(messages.filter(msg => msg ? msg.channelId === channelId : false).keySeq())
 );
 
 export const selectChannelIds = createSelector<IRootState, Immutable.Map<Uuid, ILoadable<IChannel>>, Immutable.List<Uuid>>(

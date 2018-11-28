@@ -11,11 +11,6 @@ export interface IMessageProps extends IMessage {
 
 export class Message extends React.PureComponent<IMessageProps> {
 
-  componentDidMount() {
-    console.log('One Message did mount');
-  }
-
-
   render(): JSX.Element {
     const { text, mine, accountEmail } = this.props;
     return (

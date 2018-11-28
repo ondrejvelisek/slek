@@ -1,7 +1,7 @@
 import * as Immutable from 'immutable';
 import {IMessagesState} from '../../states/chat/IMessagesState';
 import {IMessage} from '../../models/chat/IMessage';
-import {SLEK_CHANNEL_SELECTION_FAILED, SLEK_CHANNEL_SELECTION_STARTED, SLEK_CHANNEL_SELECTION_SUCCEEDED} from '../../constants/actions';
+import {SLEK_CHANNEL_SELECTION_FAILED, SLEK_CHANNEL_SELECTION_STARTED, SLEK_CHANNEL_SELECTION_SUCCEEDED, SLEK_MESSAGE_CREATION_FAILED, SLEK_MESSAGE_CREATION_STARTED, SLEK_MESSAGE_CREATION_SUCCEEDED} from '../../constants/actions';
 
 export const messages = (state: IMessagesState = {
                            isLoading: false,
@@ -29,6 +29,21 @@ export const messages = (state: IMessagesState = {
         ...state,
         isLoading: false,
         error: true
+      };
+    case SLEK_MESSAGE_CREATION_STARTED:
+      return {
+        ...state,
+        content: state.content.set(action.payload.tempId, action.payload.message)
+      };
+    case SLEK_MESSAGE_CREATION_SUCCEEDED:
+      return {
+        ...state,
+        content: state.content.remove(action.payload.tempId).set(action.payload.message.id, action.payload.message)
+      };
+    case SLEK_MESSAGE_CREATION_FAILED:
+      return {
+        ...state,
+        content: state.content.remove(action.payload.tempId)
       };
     default:
       return state;

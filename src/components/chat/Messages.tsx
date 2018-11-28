@@ -12,10 +12,6 @@ export interface IMessagesActions {}
 
 export class Messages extends React.PureComponent<IMessagesProps & IMessagesActions> {
 
-  componentDidMount() {
-    console.log('Messages did mount');
-  }
-
   render(): JSX.Element {
     if (this.props.content.isEmpty()) {
       if (this.props.isLoading) {
