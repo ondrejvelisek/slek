@@ -7,7 +7,7 @@ import {
   SLEK_MESSAGES_GETTING_SUCCEEDED,
   SLEK_MESSAGE_DELETION_SUCCEEDED,
   SLEK_MESSAGE_DELETION_FAILED,
-  SLEK_MESSAGE_DELETION_STARTED
+  SLEK_MESSAGE_DELETION_STARTED, SLEK_MESSAGE_VOTE_UP_FAILED, SLEK_MESSAGE_VOTE_UP_SUCCEEDED, SLEK_MESSAGE_VOTE_UP_STARTED, SLEK_MESSAGE_VOTE_DOWN_STARTED, SLEK_MESSAGE_VOTE_DOWN_SUCCEEDED, SLEK_MESSAGE_VOTE_DOWN_FAILED
 } from '../../constants/actions';
 import {IMessage} from '../../models/chat/IMessage';
 import * as Immutable from 'immutable';
@@ -41,14 +41,15 @@ const messageCreationFailed = (tempId: Uuid): Action => ({
   }
 });
 
-const createTempMessage = (text: string, email: string, channelId: Uuid) => {
+const createTempMessage = (text: string, email: string, channelId: Uuid): IMessageData => {
   return {
     value: text,
     channelId,
     createdBy: email,
     createdAt: new Date().toISOString(),
     updatedBy: email,
-    updatedAt: new Date().toISOString()
+    updatedAt: new Date().toISOString(),
+    votes: 0
   };
 };
 
@@ -99,6 +100,76 @@ export const deleteMessage = (messageId: Uuid): ThunkAction<void, IRootState, IS
       dispatch(messageDeletionSucceeded(messageId));
     } catch (e) {
       dispatch(messageDeletionFailed());
+    }
+  };
+
+const messageVoteUpStarted = (messageId: Uuid): Action => ({
+  type: SLEK_MESSAGE_VOTE_UP_STARTED,
+  payload: messageId
+});
+
+const messageVoteUpSucceeded = (messageId: Uuid): Action => ({
+  type: SLEK_MESSAGE_VOTE_UP_SUCCEEDED,
+  payload: messageId
+});
+
+const messageVoteUpFailed = (messageId: Uuid): Action => ({
+  type: SLEK_MESSAGE_VOTE_UP_FAILED,
+  payload: messageId
+});
+
+export const voteMessageUp = (messageId: Uuid): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, getState, {chatService}) => {
+    try {
+      dispatch(messageVoteUpStarted(messageId));
+      const channelId = getState().chat.channels.active;
+      if (!channelId) {
+        throw new Error('Voting Up message without active channel');
+      }
+      const message = getState().chat.messages.content.get(messageId);
+      if (!message) {
+        throw new Error('Voting Up message witch does not exists');
+      }
+      const upVotedMessage: IMessage = {...message, votes: message.votes + 1 };
+      await chatService.updateMessage(channelId, upVotedMessage);
+      dispatch(messageVoteUpSucceeded(messageId));
+    } catch (e) {
+      dispatch(messageVoteUpFailed(messageId));
+    }
+  };
+
+const messageVoteDownStarted = (messageId: Uuid): Action => ({
+  type: SLEK_MESSAGE_VOTE_DOWN_STARTED,
+  payload: messageId
+});
+
+const messageVoteDownSucceeded = (messageId: Uuid): Action => ({
+  type: SLEK_MESSAGE_VOTE_DOWN_SUCCEEDED,
+  payload: messageId
+});
+
+const messageVoteDownFailed = (messageId: Uuid): Action => ({
+  type: SLEK_MESSAGE_VOTE_DOWN_FAILED,
+  payload: messageId
+});
+
+export const voteMessageDown = (messageId: Uuid): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, getState, {chatService}) => {
+    try {
+      dispatch(messageVoteDownStarted(messageId));
+      const channelId = getState().chat.channels.active;
+      if (!channelId) {
+        throw new Error('Voting Down message without active channel');
+      }
+      const message = getState().chat.messages.content.get(messageId);
+      if (!message) {
+        throw new Error('Voting Down message witch does not exists');
+      }
+      const downVotedMessage: IMessage = {...message, votes: message.votes - 1 };
+      await chatService.updateMessage(channelId, downVotedMessage);
+      dispatch(messageVoteDownSucceeded(messageId));
+    } catch (e) {
+      dispatch(messageVoteDownFailed(messageId));
     }
   };
 

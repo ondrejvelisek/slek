@@ -122,7 +122,7 @@ export const createChatService = (getAuth: GetAuth): IChatService => {
     updateMessage: (channelId: Uuid, message: IMessage) =>
       parseResp(messageParser)(put(withMessage(message)(appFetch)))(`/channel/${channelId}/message/${message.id}`),
     deleteMessage: (channelId: Uuid, messageId: Uuid) =>
-      withoutResp(del(appFetch))(`/channel/${channelId}/message${messageId}`),
+      withoutResp(del(appFetch))(`/channel/${channelId}/message/${messageId}`),
 
     getUsers: () => parseResp(accountListParser)(app2Fetch)('/user'),
     getUser: (email: string) => parseResp(accountParser)(app2Fetch)(`/user/${email}`),

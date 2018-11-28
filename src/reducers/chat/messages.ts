@@ -7,7 +7,14 @@ import {
   SLEK_CHANNEL_SELECTION_SUCCEEDED,
   SLEK_MESSAGE_CREATION_FAILED,
   SLEK_MESSAGE_CREATION_STARTED,
-  SLEK_MESSAGE_CREATION_SUCCEEDED, SLEK_MESSAGES_GETTING_FAILED, SLEK_MESSAGES_GETTING_STARTED,
+  SLEK_MESSAGE_CREATION_SUCCEEDED,
+  SLEK_MESSAGE_DELETION_FAILED,
+  SLEK_MESSAGE_DELETION_STARTED,
+  SLEK_MESSAGE_DELETION_SUCCEEDED, SLEK_MESSAGE_VOTE_DOWN_FAILED, SLEK_MESSAGE_VOTE_DOWN_STARTED, SLEK_MESSAGE_VOTE_DOWN_SUCCEEDED, SLEK_MESSAGE_VOTE_UP_FAILED,
+  SLEK_MESSAGE_VOTE_UP_STARTED,
+  SLEK_MESSAGE_VOTE_UP_SUCCEEDED,
+  SLEK_MESSAGES_GETTING_FAILED,
+  SLEK_MESSAGES_GETTING_STARTED,
   SLEK_MESSAGES_GETTING_SUCCEEDED
 } from '../../constants/actions';
 
@@ -56,6 +63,44 @@ export const messages = (state: IMessagesState = {
         ...state,
         content: state.content.remove(action.payload.tempId)
       };
+    case SLEK_MESSAGE_DELETION_STARTED:
+      return {
+        ...state,
+        content: state.content.remove(action.payload)
+      };
+    case SLEK_MESSAGE_DELETION_SUCCEEDED:
+      return state;
+    case SLEK_MESSAGE_DELETION_FAILED:
+      // TODO
+      return state;
+    case SLEK_MESSAGE_VOTE_UP_STARTED:
+      const messageToUpVote = state.content.get(action.payload);
+      return {
+        ...state,
+        content: state.content.set(action.payload, {
+          ...messageToUpVote,
+          votes: messageToUpVote.votes + 1
+        })
+      };
+    case SLEK_MESSAGE_VOTE_UP_SUCCEEDED:
+      return state;
+    case SLEK_MESSAGE_VOTE_UP_FAILED:
+      // TODO
+      return state;
+    case SLEK_MESSAGE_VOTE_DOWN_STARTED:
+      const messageToDownVote = state.content.get(action.payload);
+      return {
+        ...state,
+        content: state.content.set(action.payload, {
+          ...messageToDownVote,
+          votes: messageToDownVote.votes - 1
+        })
+      };
+    case SLEK_MESSAGE_VOTE_DOWN_SUCCEEDED:
+      return state;
+    case SLEK_MESSAGE_VOTE_DOWN_FAILED:
+      // TODO
+      return state;
     default:
       return state;
   }

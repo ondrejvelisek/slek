@@ -3,16 +3,87 @@
 
 .message {
 
-  &.mine span {
+  &.mine .text {
     border-radius: 8px 8px 0 8px;
     background-color: @colorDarkLight;
   }
 
-  span {
+  .text {
     padding: 8px 12px;
     display: inline-block;
     color: @colorWhite;
     border-radius: 8px 8px 8px 0;
     background-color: @colorPrimaryDarkest;
+  }
+
+  .votes {
+    padding: 8px 8px;
+    display: inline-block;
+    color: @colorWhite;
+  }
+
+  &:hover {
+    .tools {
+      ul {
+        opacity: 1;
+        left: -40px;
+        li {
+          top: -40px;
+          & + li {
+            top: 0;
+            margin-top: 2px;
+          }
+          & + li + li {
+            top: 40px;
+            margin-top: 2px;
+          }
+        }
+        &:hover {
+          .btn {
+            background: @colorGrey;
+            border-color: @colorDarkLight;
+          }
+        }
+      }
+    }
+  }
+
+  .tools {
+    display: inline-block;
+    position: relative;
+    width: 0;
+    height: 38px;
+    vertical-align: top;
+    ul {
+      position: absolute;
+      padding: 0;
+      border-radius: 20px;
+      transition: all 0.3s;
+      transition-delay: 0.2s;
+      opacity: 0;
+      left: 0;
+      li {
+        list-style: none;
+        transition: all 0.3s;
+        transition-delay: 0.2s;
+        position: absolute;
+        top: 0;
+        & + li {
+          top: 0;
+          margin-top: 2px;
+        }
+        & + li + li {
+          top: 0;
+          margin-top: 2px;
+        }
+        .btn {
+          border-radius: 20px;
+          background: transparent;
+          border-color: transparent;
+          width: 38px;
+          height: 38px;
+        }
+      }
+    }
   }
 }
