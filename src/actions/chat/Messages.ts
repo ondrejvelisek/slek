@@ -41,6 +41,17 @@ const messageCreationFailed = (tempId: Uuid): Action => ({
   }
 });
 
+const createTempMessage = (text: string, email: string, channelId: Uuid) => {
+  return {
+    value: text,
+    channelId,
+    createdBy: email,
+    createdAt: new Date().toISOString(),
+    updatedBy: email,
+    updatedAt: new Date().toISOString()
+  };
+};
+
 export const createMessage = (text: string): ThunkAction<void, IRootState, IServices, Action> =>
   async (dispatch, getState, {chatService}) => {
     const tempId = uuid();
@@ -53,7 +64,7 @@ export const createMessage = (text: string): ThunkAction<void, IRootState, IServ
       if (!account) {
         throw new Error('Sending message without active account');
       }
-      const messageData: IMessageData = {text, channelId, accountEmail: account.email};
+      const messageData: IMessageData = createTempMessage(text, account.email, channelId);
       dispatch(messageCreationStarted({id: tempId, ...messageData}, tempId));
       const message = await chatService.createMessage(channelId, messageData);
       dispatch(messageCreationSucceeded(message, tempId));

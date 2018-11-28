@@ -11,14 +11,14 @@ export interface IMessageProps extends IMessage {
 export class Message extends React.PureComponent<IMessageProps> {
 
   render(): JSX.Element {
-    const { text, mine, accountEmail } = this.props;
+    const { value, mine, createdBy } = this.props;
     return (
       <Media tag="li" className={mine ? 'text-right' : ''}>
-        {!mine && (<AvatarContainer className="avatar align-self-end" email={accountEmail}/>)}
+        {!mine && (<AvatarContainer className="avatar align-self-end" email={createdBy}/>)}
         <Media body>
           <p className={`message ${mine ? 'mine' : ''}`}>
             <span>
-              {text}
+              {value}
             </span>
           </p>
         </Media>

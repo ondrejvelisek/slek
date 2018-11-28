@@ -50,7 +50,12 @@ export const selectAuthAccount = createSelector(
 export const selectActiveMessageIds = createSelector(
   [selectMessagesMap, selectActiveChannelId],
   (messages: Map<Uuid, IMessage>, channelId: Uuid|null): List<Uuid>|null =>
-    channelId ? List(messages.filter(msg => msg ? msg.channelId === channelId : false).keySeq()) : null
+    channelId ? List(
+      messages
+        .filter(msg => msg ? msg.channelId === channelId : false)
+        .sort((a: IMessage, b: IMessage) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+        .keySeq()
+    ) : null
 );
 
 export const selectMessageIds = createSelector(

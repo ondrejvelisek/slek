@@ -8,7 +8,7 @@ interface IMessageOwnProps extends IHasId {}
 
 const mapStateToProps = (state: IRootState, ownProps: IMessageOwnProps): IMessageProps => ({
   ...selectMessagesMap(state).get(ownProps.id),
-  mine: selectAuthState(state).content ? selectAuthEmail(state).content === selectMessagesMap(state).get(ownProps.id).accountEmail : false,
+  mine: selectAuthState(state).content ? selectAuthEmail(state).content === selectMessagesMap(state).get(ownProps.id).createdBy : false,
 });
 
 export const MessageContainer = connect(mapStateToProps)(Message);

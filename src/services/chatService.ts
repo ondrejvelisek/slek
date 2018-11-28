@@ -56,7 +56,7 @@ const withApp = (app: IAppData) => withJsonBody({customdata: app});
 const withCredentials = (credentials: ICredentials) => withJsonBody(credentials);
 const withChannel = (channel: IChannelData) => withJsonBody({name: channel.name, customdata: channel});
 const withFile = (file: IFileData) => withJsonBody(file); // TODO
-const withMessage = (message: IMessageData) => withJsonBody({value: message.text, customdata: message});
+const withMessage = (message: IMessageData) => withJsonBody({value: message.value, customdata: message});
 const withAccount = (account: IAccount) => withJsonBody({email: account.email, customdata: account});
 
 const customDataParser: Parser<any> = resp => ({...resp.customData, ...resp});

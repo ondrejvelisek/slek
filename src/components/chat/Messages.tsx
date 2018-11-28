@@ -16,10 +16,26 @@ export interface IMessagesActions {
 
 export class Messages extends React.PureComponent<IMessagesProps & IMessagesActions> {
   private timer: Timeout;
+  private bottomElement: React.RefObject<HTMLDivElement>;
+  constructor(props: IMessagesProps & IMessagesActions) {
+    super(props);
+    this.bottomElement = React.createRef();
+  }
+
+  scrollToBottom() {
+    if (this.bottomElement.current) {
+      this.bottomElement.current.scrollIntoView({behavior: 'smooth'});
+    }
+  }
 
   componentDidMount() {
     this.props.onMounted();
     this.timer = setInterval(() => this.props.onMessagesTrigger(), 5000);
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   componentWillUnmount() {
@@ -41,6 +57,7 @@ export class Messages extends React.PureComponent<IMessagesProps & IMessagesActi
             <MessageContainer key={messageId} id={messageId}/>
           ))
         }
+        <div ref={this.bottomElement}/>
       </Media>
     );
   }
