@@ -1,4 +1,4 @@
-import * as Immutable from 'immutable';
+import {Map} from 'immutable';
 import {IMessagesState} from '../../states/chat/IMessagesState';
 import {IMessage} from '../../models/chat/IMessage';
 import {
@@ -21,7 +21,7 @@ import {
 export const messages = (state: IMessagesState = {
                            isLoading: false,
                            error: null,
-                           content: Immutable.Map<Uuid, IMessage>()
+                           content: Map<Uuid, IMessage>()
                          },
                          action: Action): IMessagesState => {
   switch (action.type) {
@@ -34,12 +34,12 @@ export const messages = (state: IMessagesState = {
       };
     case SLEK_CHANNEL_SELECTION_SUCCEEDED:
     case SLEK_MESSAGES_GETTING_SUCCEEDED:
-      const messagesMap = Immutable.Map<Uuid, IMessage>(action.payload.messages.map((msg: IMessage) => [msg.id, msg]));
+      const messagesMap = Map<Uuid, IMessage>(action.payload.messages.map((msg: IMessage) => [msg.id, msg]));
       return {
         ...state,
         isLoading: false,
         error: false,
-        content: state.content.merge(messagesMap)
+        content: Map<Uuid, IMessage>(state.content.filter((msg: IMessage) => msg.channelId !== action.payload.channelId)).merge(messagesMap)
       };
     case SLEK_CHANNEL_SELECTION_FAILED:
     case SLEK_MESSAGES_GETTING_FAILED:

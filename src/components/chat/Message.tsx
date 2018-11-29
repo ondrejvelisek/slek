@@ -39,30 +39,36 @@ export class Message extends React.PureComponent<IMessageProps & IMessageActions
         {!mine && (<AvatarContainer className="avatar align-self-end" email={createdBy}/>)}
         <Media body>
           <p className={`message ${mine ? 'mine' : ''}`}>
-            <div className="tools">
-              <ul className="tools-list">
-                <li>
-                  <Button onClick={this.voteUp}>
-                    <FontAwesomeIcon icon={faThumbsUp}/>
-                  </Button>
-                </li>
-                <li>
-                  <Button onClick={this.delete}>
-                    <FontAwesomeIcon icon={faTrashAlt}/>
-                  </Button>
-                </li>
-                <li>
-                  <Button onClick={this.voteDown}>
-                    <FontAwesomeIcon icon={faThumbsDown}/>
-                  </Button>
-                </li>
-              </ul>
-            </div>
-            <span className="votes">
-              {votes ? `${votes > 0 ? '+' : ''}${votes}` : ''}
-            </span>
-            <span className="text">
-              {value}
+            <span className="body">
+
+              <span className="tools">
+                <span className="list">
+                  <span className="item">
+                    <Button onClick={this.voteUp}>
+                      <FontAwesomeIcon icon={faThumbsUp}/>
+                    </Button>
+                  </span>
+                  <span className="item">
+                    <Button onClick={this.delete}>
+                      <FontAwesomeIcon icon={faTrashAlt}/>
+                    </Button>
+                  </span>
+                  <span className="item">
+                    <Button onClick={this.voteDown}>
+                      <FontAwesomeIcon icon={faThumbsDown}/>
+                    </Button>
+                  </span>
+                </span>
+              </span>
+
+              <span className="votes">
+                {votes ? `${votes > 0 ? '+' : ''}${votes}` : ''}
+              </span>
+
+              <span className="text">
+                {value}
+              </span>
+
             </span>
           </p>
         </Media>

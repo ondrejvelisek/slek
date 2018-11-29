@@ -22,68 +22,72 @@
     color: @colorWhite;
   }
 
-  &:hover {
+  .body {
+
     .tools {
-      ul {
-        opacity: 1;
-        left: -40px;
-        li {
-          top: -40px;
-          & + li {
+      display: inline-block;
+      position: relative;
+      width: 0;
+      height: 38px;
+      vertical-align: top;
+      .list {
+        display: block;
+        position: absolute;
+        padding: 0;
+        border-radius: 20px;
+        transition: all 0.3s;
+        transition-delay: 0.2s;
+        opacity: 0;
+        left: 0;
+        .item {
+          display: block;
+          list-style: none;
+          transition: all 0.3s;
+          transition-delay: 0.2s;
+          position: absolute;
+          top: 0;
+          & + .item {
             top: 0;
             margin-top: 2px;
           }
-          & + li + li {
-            top: 40px;
+          & + .item + .item {
+            top: 0;
             margin-top: 2px;
           }
-        }
-        &:hover {
           .btn {
-            background: @colorGrey;
-            border-color: @colorDarkLight;
+            border-radius: 20px;
+            background: transparent;
+            border-color: transparent;
+            width: 38px;
+            height: 38px;
           }
         }
       }
     }
-  }
 
-  .tools {
-    display: inline-block;
-    position: relative;
-    width: 0;
-    height: 38px;
-    vertical-align: top;
-    ul {
-      position: absolute;
-      padding: 0;
-      border-radius: 20px;
-      transition: all 0.3s;
-      transition-delay: 0.2s;
-      opacity: 0;
-      left: 0;
-      li {
-        list-style: none;
-        transition: all 0.3s;
-        transition-delay: 0.2s;
-        position: absolute;
-        top: 0;
-        & + li {
-          top: 0;
-          margin-top: 2px;
-        }
-        & + li + li {
-          top: 0;
-          margin-top: 2px;
-        }
-        .btn {
-          border-radius: 20px;
-          background: transparent;
-          border-color: transparent;
-          width: 38px;
-          height: 38px;
+    &:hover {
+      .tools {
+        .list {
+          opacity: 1;
+          left: -40px;
+          .item {
+            top: -40px;
+            & + .item {
+              top: 0;
+              margin-top: 2px;
+            }
+            & + .item + .item {
+              top: 40px;
+              margin-top: 2px;
+            }
+            .btn:hover {
+              background: @colorGrey;
+              border-color: @colorDarkLight;
+            }
+          }
         }
       }
     }
+
   }
 }

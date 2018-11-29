@@ -126,11 +126,11 @@ export const voteMessageUp = (messageId: Uuid): ThunkAction<void, IRootState, IS
       if (!channelId) {
         throw new Error('Voting Up message without active channel');
       }
-      const message = getState().chat.messages.content.get(messageId);
-      if (!message) {
+      const upVotedMessage = getState().chat.messages.content.get(messageId);
+      if (!upVotedMessage) {
         throw new Error('Voting Up message witch does not exists');
       }
-      const upVotedMessage: IMessage = {...message, votes: message.votes + 1 };
+      // const upVotedMessage: IMessage = {...message, votes: message.votes + 1 };
       await chatService.updateMessage(channelId, upVotedMessage);
       dispatch(messageVoteUpSucceeded(messageId));
     } catch (e) {
@@ -161,11 +161,11 @@ export const voteMessageDown = (messageId: Uuid): ThunkAction<void, IRootState, 
       if (!channelId) {
         throw new Error('Voting Down message without active channel');
       }
-      const message = getState().chat.messages.content.get(messageId);
-      if (!message) {
+      const downVotedMessage = getState().chat.messages.content.get(messageId);
+      if (!downVotedMessage) {
         throw new Error('Voting Down message witch does not exists');
       }
-      const downVotedMessage: IMessage = {...message, votes: message.votes - 1 };
+      // const downVotedMessage: IMessage = {...message, votes: message.votes - 1 };
       await chatService.updateMessage(channelId, downVotedMessage);
       dispatch(messageVoteDownSucceeded(messageId));
     } catch (e) {
