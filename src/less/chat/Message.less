@@ -17,9 +17,11 @@
   }
 
   .votes {
-    padding: 8px 8px;
+    padding: 8px 0;
     display: inline-block;
     color: @colorWhite;
+    width: 0;
+    margin: 0 24px 0 -24px;
   }
 
   .body {
@@ -33,17 +35,19 @@
       .list {
         display: block;
         position: absolute;
+        height: 40px;
         padding: 0;
         border-radius: 20px;
         transition: all 0.3s;
-        transition-delay: 0.2s;
+        transition-delay: 0.3s;
+        width: 0;
         opacity: 0;
         left: 0;
         .item {
           display: block;
           list-style: none;
           transition: all 0.3s;
-          transition-delay: 0.2s;
+          transition-delay: 0.3s;
           position: absolute;
           top: 0;
           & + .item {
@@ -69,7 +73,8 @@
       .tools {
         .list {
           opacity: 1;
-          left: -40px;
+          width: 60px;
+          left: -60px;
           .item {
             top: -40px;
             & + .item {
