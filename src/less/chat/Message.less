@@ -3,9 +3,41 @@
 
 .message {
 
-  &.mine .text {
-    border-radius: 8px 8px 0 8px;
-    background-color: @colorDarkLight;
+  &.mine {
+    .text {
+      border-radius: 8px 8px 0 8px;
+      background-color: @colorDarkLight;
+    }
+
+    .votes {
+      margin: 0 24px 0 -24px;
+    }
+
+    .body {
+
+      .tools {
+        .list {
+          left: 0;
+          .item {
+
+          }
+        }
+      }
+
+      &:hover {
+        .tools {
+          .list {
+            width: 60px;
+            left: -60px;
+            padding-left: 0;
+            .item {
+
+            }
+          }
+        }
+      }
+
+    }
   }
 
   .text {
@@ -21,7 +53,7 @@
     display: inline-block;
     color: @colorWhite;
     width: 0;
-    margin: 0 24px 0 -24px;
+    margin: 0 -8px 0 8px;
   }
 
   .body {
@@ -42,7 +74,7 @@
         transition-delay: 0.3s;
         width: 0;
         opacity: 0;
-        left: 0;
+        left: -40px;
         .item {
           display: block;
           list-style: none;
@@ -74,16 +106,15 @@
         .list {
           opacity: 1;
           width: 60px;
-          left: -60px;
+          left: 0;
+          padding-left: 20px;
           .item {
             top: -40px;
             & + .item {
               top: 0;
-              margin-top: 2px;
             }
             & + .item + .item {
               top: 40px;
-              margin-top: 2px;
             }
             .btn:hover {
               background: @colorGrey;

@@ -5,6 +5,7 @@ import {HeaderContainer} from '../../containers/chat/Header';
 import {MessagesContainer} from '../../containers/chat/Messages';
 import {ChannelHeaderContainer} from '../../containers/chat/ChannelHeader';
 import {InputBoxContainer} from '../../containers/chat/InputBox';
+import {ProtectedContainer} from '../../containers/chat/Protected';
 
 export interface IChatProps {
   channelId: Uuid|null;
@@ -49,13 +50,13 @@ export class Chat extends React.PureComponent<IChatProps> {
     return (
       <div className="h-100 d-flex flex-column">
 
-          <div className="header">
-            <HeaderContainer/>
-          </div>
+        <div className="header">
+          <HeaderContainer/>
+        </div>
 
-        {/*<ProtectedContainer>*/}
+        <ProtectedContainer>
           {this.renderContent()}
-        {/*</ProtectedContainer>*/}
+        </ProtectedContainer>
 
       </div>
     );

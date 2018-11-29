@@ -7,7 +7,6 @@ import {selectAuthAccount, selectAuthEmail} from '../../selectors/chat';
 const mapStateToProps = (state: IRootState): IProtectedProps => {
   const account = selectAuthAccount(state);
   const auth = selectAuthEmail(state);
-  console.log(account);
   return {
     ...account,
     content: !!account.content,

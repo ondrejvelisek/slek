@@ -32,8 +32,37 @@ export class Message extends React.PureComponent<IMessageProps & IMessageActions
     this.props.onDelete(this.props.id);
   };
 
+  renderVotes = (): JSX.Element => {
+    const { votes } = this.props;
+    return <span className="votes">{votes ? `${votes > 0 ? '+' : ''}${votes}` : ''}</span>;
+  };
+
+  renderTools = (): JSX.Element => {
+    return (
+      <span className="tools">
+        <span className="list">
+          <span className="item">
+            <Button onClick={this.voteUp}>
+              <FontAwesomeIcon icon={faThumbsUp}/>
+            </Button>
+          </span>
+          <span className="item">
+            <Button onClick={this.delete}>
+              <FontAwesomeIcon icon={faTrashAlt}/>
+            </Button>
+          </span>
+          <span className="item">
+            <Button onClick={this.voteDown}>
+              <FontAwesomeIcon icon={faThumbsDown}/>
+            </Button>
+          </span>
+        </span>
+      </span>
+    );
+  };
+
   render(): JSX.Element {
-    const { value, mine, createdBy, votes } = this.props;
+    const { value, mine, createdBy } = this.props;
     return (
       <Media tag="li" className={mine ? 'text-right' : ''}>
         {!mine && (<AvatarContainer className="avatar align-self-end" email={createdBy}/>)}
@@ -41,33 +70,15 @@ export class Message extends React.PureComponent<IMessageProps & IMessageActions
           <p className={`message ${mine ? 'mine' : ''}`}>
             <span className="body">
 
-              <span className="tools">
-                <span className="list">
-                  <span className="item">
-                    <Button onClick={this.voteUp}>
-                      <FontAwesomeIcon icon={faThumbsUp}/>
-                    </Button>
-                  </span>
-                  <span className="item">
-                    <Button onClick={this.delete}>
-                      <FontAwesomeIcon icon={faTrashAlt}/>
-                    </Button>
-                  </span>
-                  <span className="item">
-                    <Button onClick={this.voteDown}>
-                      <FontAwesomeIcon icon={faThumbsDown}/>
-                    </Button>
-                  </span>
-                </span>
-              </span>
-
-              <span className="votes">
-                {votes ? `${votes > 0 ? '+' : ''}${votes}` : ''}
-              </span>
+              {mine && this.renderTools()}
+              {mine && this.renderVotes()}
 
               <span className="text">
                 {value}
               </span>
+
+              {!mine && this.renderVotes()}
+              {!mine && this.renderTools()}
 
             </span>
           </p>
