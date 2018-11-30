@@ -4,36 +4,31 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPlus, faUserFriends, faExclamationCircle
+  faUserFriends, faExclamationCircle
 } from '@fortawesome/free-solid-svg-icons';
 import '../../less/chat/Channels.less';
 import * as Immutable from 'immutable';
 import {ChannelContainer} from '../../containers/chat/Channel';
 import {ILoadable} from '../../states/common/ILoadable';
 import {Loader} from './Loader';
-import {IChannelData} from '../../models/chat/IChannelData';
+import {NewChannelContainer} from '../../containers/chat/NewChannel';
+// import {IChannelData} from '../../models/chat/IChannelData';
 
 export interface IChannelsProps extends ILoadable<Immutable.List<Uuid>> {}
 
 export interface IChannelsActions {
   readonly onMounted: () => void;
   readonly onReloadChannels: () => void;
-  readonly onCreateChannel: (channel: IChannelData) => void;
 }
 
 export class Channels extends React.PureComponent<IChannelsProps & IChannelsActions> {
 
+  constructor(props: IChannelsProps & IChannelsActions) {
+    super(props);
+  }
   componentDidMount() {
     this.props.onMounted();
   }
-
-  addChannel = () => {
-    this.props.onCreateChannel({name: `New #${randId()}`, unread: 666, accountEmails: Immutable.Set<string>()});
-
-    function randId() {
-      return `${Math.floor(Math.random() * 1000)}`;
-    }
-  };
 
   renderList = () => {
     const { content: channelIds, error, isLoading } = this.props;
@@ -66,11 +61,7 @@ export class Channels extends React.PureComponent<IChannelsProps & IChannelsActi
             <span> Channels</span>
           </ListGroupItem>
           {this.renderList()}
-          <ListGroupItem className="clickable" onClick={this.addChannel}>
-            <FontAwesomeIcon icon={faPlus}/>
-            <span> Add</span>
-          </ListGroupItem>
-
+          <NewChannelContainer/>
         </ListGroup>
 
       </div>
