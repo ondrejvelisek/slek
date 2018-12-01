@@ -47,6 +47,16 @@ export const selectAuthAccount = createSelector(
   }
 );
 
+export const selectActiveAccountEmail = createSelector(
+  [selectAuthEmail],
+  (email: ILoadable<string|null>): string => {
+    if (!email.content) {
+      return '';
+    }
+    return email.content;
+  }
+);
+
 export const selectActiveMessageIds = createSelector(
   [selectMessagesMap, selectActiveChannelId],
   (messages: Map<Uuid, IMessage>, channelId: Uuid|null): List<Uuid>|null =>

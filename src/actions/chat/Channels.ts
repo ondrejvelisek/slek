@@ -40,9 +40,14 @@ const channelCreationFailed = (tempId: Uuid): Action => ({
   }
 });
 
-export const createChannel = (channelData: IChannelData): ThunkAction<void, IRootState, IServices, Action> =>
+export const createChannel = (channelName: string, activeEmail: string): ThunkAction<void, IRootState, IServices, Action> =>
   async (dispatch, _, {chatService}) => {
     const tempId = uuid();
+    const channelData: IChannelData = {
+      name: channelName,
+      unread: 0,
+      accountEmails: Immutable.Set.of(activeEmail)
+    };
     try {
       dispatch(channelCreationStarted(channelData, tempId));
       const channel = await chatService.createChannel(channelData);
