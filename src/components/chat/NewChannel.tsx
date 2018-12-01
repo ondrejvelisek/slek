@@ -10,7 +10,8 @@ export interface INewChannelActions {
   readonly onChannelAdd: (channelData: IChannelData) => void;
 }
 
-interface INewChannelState extends IChannelData {
+interface INewChannelState {
+  value: string;
   isCreating: boolean;
 }
 
@@ -19,20 +20,22 @@ export class NewChannel extends React.PureComponent<INewChannelActions, INewChan
     super(props);
 
     this.state = {
-      name: '',
-      unread: 0,
-      accountEmails: Immutable.Set(),
+      value: '',
       isCreating: false
     };
   }
 
   private onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
-    this.props.onChannelAdd(this.state);
+    const channelData = {
+      name: this.state.value,
+      unread: 0,
+      accountEmails: Immutable.Set<string>()
+    };
+    this.props.onChannelAdd(channelData);
 
     this.setState(_ => ({
-      name: '',
+      value: '',
       isCreating: false
     }));
   };
@@ -40,7 +43,7 @@ export class NewChannel extends React.PureComponent<INewChannelActions, INewChan
   private onValueChanged = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
     console.log(event.currentTarget)
-    this.setState(_ => ({ name: value }));
+    this.setState(_ => ({ value }));
   };
 
   private addChannel = (): void => {
@@ -64,7 +67,7 @@ export class NewChannel extends React.PureComponent<INewChannelActions, INewChan
         <InputGroup className="input-group">
           <Input
             id="new-channel"
-            value={this.state.name}
+            value={this.state.value}
             onChange={this.onValueChanged}
             className="form-control"
             placeholder="Channel name"

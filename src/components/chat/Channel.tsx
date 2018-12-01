@@ -28,7 +28,7 @@ export class Channel extends React.PureComponent<IChannelProps & IChannelActions
         <span>
           {channel.name}
         </span>
-        {channel.unread && (<Badge pill>{channel.unread}</Badge>)}
+        {channel.unread > 0 && (<Badge pill>{channel.unread}</Badge>)}
         {isLoading && (<Loader/>)}
       </ListGroupItem>
     );
