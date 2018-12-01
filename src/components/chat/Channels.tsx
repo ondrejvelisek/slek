@@ -12,8 +12,9 @@ import {ChannelContainer} from '../../containers/chat/Channel';
 import {ILoadable} from '../../states/common/ILoadable';
 import {Loader} from './Loader';
 import {NewChannelContainer} from '../../containers/chat/NewChannel';
+import {IActiveAccountOwnProps} from '../../containers/chat/ActiveAccount';
 
-export interface IChannelsProps extends ILoadable<Immutable.List<Uuid>> {}
+export interface IChannelsProps extends ILoadable<Immutable.List<Uuid>>, IActiveAccountOwnProps {}
 
 export interface IChannelsActions {
   readonly onMounted: () => void;
@@ -56,7 +57,7 @@ export class Channels extends React.PureComponent<IChannelsProps & IChannelsActi
             <span> Channels</span>
           </ListGroupItem>
           {this.renderList()}
-          <NewChannelContainer/>
+          <NewChannelContainer email={this.props.email}/>
         </ListGroup>
 
       </div>

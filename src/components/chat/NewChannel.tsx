@@ -1,13 +1,12 @@
 import * as React from 'react';
-import * as Immutable from 'immutable';
-import {IChannelData} from '../../models/chat/IChannelData';
 import '../../less/chat/NewChannel.less';
 import {Form, Input, InputGroup, ListGroupItem} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
+import {IActiveAccountOwnProps} from '../../containers/chat/ActiveAccount';
 
 export interface INewChannelActions {
-  readonly onChannelAdd: (channelData: IChannelData) => void;
+  readonly onChannelAdd: (channelName: string, activeEmail: string) => void;
 }
 
 interface INewChannelState {
@@ -15,8 +14,8 @@ interface INewChannelState {
   isCreating: boolean;
 }
 
-export class NewChannel extends React.PureComponent<INewChannelActions, INewChannelState> {
-  constructor(props: INewChannelActions) {
+export class NewChannel extends React.PureComponent<IActiveAccountOwnProps & INewChannelActions, INewChannelState> {
+  constructor(props: IActiveAccountOwnProps & INewChannelActions) {
     super(props);
 
     this.state = {
@@ -27,12 +26,7 @@ export class NewChannel extends React.PureComponent<INewChannelActions, INewChan
 
   private onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const channelData = {
-      name: this.state.value,
-      unread: 0,
-      accountEmails: Immutable.Set<string>()
-    };
-    this.props.onChannelAdd(channelData);
+    this.props.onChannelAdd(this.state.value, this.props.email);
 
     this.setState(_ => ({
       value: '',
