@@ -22,10 +22,6 @@ export interface IChannelsActions {
 }
 
 export class Channels extends React.PureComponent<IChannelsProps & IChannelsActions> {
-
-  constructor(props: IChannelsProps & IChannelsActions) {
-    super(props);
-  }
   componentDidMount() {
     this.props.onMounted();
   }
