@@ -42,7 +42,6 @@ export class NewChannel extends React.PureComponent<INewChannelActions, INewChan
 
   private onValueChanged = (event: React.FormEvent<HTMLInputElement>) => {
     const { value } = event.currentTarget;
-    console.log(event.currentTarget)
     this.setState(_ => ({ value }));
   };
 

@@ -12,7 +12,6 @@ import {ChannelContainer} from '../../containers/chat/Channel';
 import {ILoadable} from '../../states/common/ILoadable';
 import {Loader} from './Loader';
 import {NewChannelContainer} from '../../containers/chat/NewChannel';
-// import {IChannelData} from '../../models/chat/IChannelData';
 
 export interface IChannelsProps extends ILoadable<Immutable.List<Uuid>> {}
 

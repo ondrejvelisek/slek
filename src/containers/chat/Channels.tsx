@@ -12,8 +12,7 @@ const mapStateToProps = (state: IRootState): IChannelsProps => ({
 
 const mapDispatchToProps: IChannelsActions = {
   onMounted: getChannels,
-  onReloadChannels: getChannels,
-  // onCreateChannel: createChannel
+  onReloadChannels: getChannels
 };
 
 export const ChannelsContainer = connect(mapStateToProps, mapDispatchToProps)(Channels);
