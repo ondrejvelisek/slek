@@ -47,7 +47,7 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
 
   render(): JSX.Element {
     return (
-      <Navbar className="input-box">
+        <Navbar className="input-box">
         <Form onSubmit={this.onMessageSubmit}>
           <InputGroup>
             <Input onChange={this.onMessageChange} value={this.state.text}/>

@@ -1,0 +1,35 @@
+@import "./variables";
+
+form.edit-channel {
+  width: 100%;
+  display: flex;
+
+  input.form-control {
+    background-color: @colorDarker;
+    border-color: @colorDarkLight;
+    color: @colorLight;
+    margin: 0 3px;
+  }
+
+  .btn {
+    margin: 0 3px;
+
+    &.btn-danger {
+      background-color: @colorCancelButton;
+      border-color: @colorCancelButton;
+    }
+
+    &.btn-success {
+      background-color: @colorSubmitButton;
+      border-color: @colorSubmitButton;
+    }
+  }
+
+  .clickable {
+    color: @colorLightDark;
+    &:hover {
+      color: @colorLighter;
+      cursor: pointer;
+    }
+  }
+}

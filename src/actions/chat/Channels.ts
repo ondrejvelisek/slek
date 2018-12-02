@@ -5,7 +5,13 @@ import {
   SLEK_CHANNELS_GETTING_STARTED,
   SLEK_CHANNELS_GETTING_FAILED,
   SLEK_CHANNELS_GETTING_SUCCEEDED,
-  SLEK_CHANNEL_DELETION_SUCCEEDED, SLEK_CHANNEL_DELETION_FAILED, SLEK_CHANNEL_DELETION_STARTED, SLEK_CHANNEL_SELECTION_STARTED, SLEK_CHANNEL_SELECTION_SUCCEEDED, SLEK_CHANNEL_SELECTION_FAILED
+  SLEK_CHANNEL_DELETION_SUCCEEDED,
+  SLEK_CHANNEL_DELETION_FAILED,
+  SLEK_CHANNEL_DELETION_STARTED,
+  SLEK_CHANNEL_SELECTION_STARTED,
+  SLEK_CHANNEL_SELECTION_SUCCEEDED,
+  SLEK_CHANNEL_SELECTION_FAILED,
+  SLEK_CHANNEL_UPDATING_STARTED, SLEK_CHANNEL_UPDATING_SUCCEEDED, SLEK_CHANNEL_UPDATING_FAILED, SLEK_CHANNEL_EDITING_CANCELED, SLEK_CHANNEL_EDITING_STARTED
 } from '../../constants/actions';
 import {IChannel} from '../../models/chat/IChannel';
 import * as Immutable from 'immutable';
@@ -54,6 +60,56 @@ export const createChannel = (channelName: string, activeEmail: string): ThunkAc
       dispatch(channelCreationSucceeded(channel, tempId));
     } catch (e) {
       dispatch(channelCreationFailed(tempId));
+    }
+  };
+
+const channelUpdateStarted = (channel: IChannel): Action => ({
+  type: SLEK_CHANNEL_UPDATING_STARTED,
+  payload: {
+    channel
+  }
+});
+
+const channelUpdateSucceeded = (channel: IChannel): Action => ({
+  type: SLEK_CHANNEL_UPDATING_SUCCEEDED,
+  payload: {
+    channel
+  }
+});
+
+const channelUpdateFailed = (id: Uuid): Action => ({
+  type: SLEK_CHANNEL_UPDATING_FAILED,
+  payload: {
+    id
+  }
+});
+
+export const cancelEditingChannel = (id: Uuid): Action => ({
+  type: SLEK_CHANNEL_EDITING_CANCELED,
+  payload: {
+    id
+  }
+});
+
+export const startEditingChannel = (id: Uuid): Action => ({
+  type: SLEK_CHANNEL_EDITING_STARTED,
+  payload: {
+    id
+  }
+});
+
+export const updateChannel = (oldChannel: IChannel, newName: string): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {chatService}) => {
+    try {
+      const newChannel = {
+        ...oldChannel,
+        name: newName
+      };
+      dispatch(channelUpdateStarted(newChannel));
+      const channel = await chatService.updateChannel(newChannel);
+      dispatch(channelUpdateSucceeded(channel));
+    } catch (e) {
+      dispatch(channelUpdateFailed(oldChannel.id));
     }
   };
 
