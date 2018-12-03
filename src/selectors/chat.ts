@@ -108,6 +108,17 @@ export const selectActiveChannel = createSelector<IRootState, IChannelsState, IL
   }
 );
 
+export const selectActiveChannelEmails = createSelector<IRootState, IChannelsState, Set<string>>(
+  [selectChannelsState],
+  (channels: IChannelsState): Set<string> => {
+    if (!channels.active) {
+      return Set.of('');
+    }
+    const channel = channels.content.get(channels.active);
+    return channel.content.accountEmails;
+  }
+);
+
 export const selectActiveAccountEmails = createSelector(
   [selectActiveChannel],
   (channel: ILoadable<IChannel|null>): ILoadable<Set<string>|null> => ({

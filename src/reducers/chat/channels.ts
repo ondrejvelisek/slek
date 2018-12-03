@@ -12,7 +12,7 @@ import {
   SLEK_CHANNEL_EDITING_STARTED,
   SLEK_CHANNEL_EDITING_CANCELED,
   SLEK_CHANNEL_UPDATING_STARTED,
-  SLEK_CHANNEL_UPDATING_SUCCEEDED, SLEK_CHANNEL_UPDATING_FAILED
+  SLEK_CHANNEL_UPDATING_SUCCEEDED, SLEK_CHANNEL_UPDATING_FAILED, SLEK_CHANNEL_SUBSCRIBE_USER_STARTED, SLEK_CHANNEL_SUBSCRIBE_USER_SUCCEEDED, SLEK_CHANNEL_SUBSCRIBE_USER_FAILED
 } from '../../constants/actions';
 import * as Immutable from 'immutable';
 import {IChannel} from '../../models/chat/IChannel';
@@ -104,6 +104,23 @@ export const channels = (state: IChannelsState = {
       };
     }
     case SLEK_CHANNEL_UPDATING_FAILED:
+      return {
+        ...state,
+        content: state.content.update(action.payload.id, channel => ({...channel, isLoading: false, error: true}))
+      };
+    case SLEK_CHANNEL_SUBSCRIBE_USER_STARTED:
+      return {
+        ...state,
+        content: state.content.update(action.payload.channel.id, channel => ({...channel, isLoading: true, isEditing: false}))
+      };
+    case SLEK_CHANNEL_SUBSCRIBE_USER_SUCCEEDED: {
+      const {channel} = action.payload;
+      return {
+        ...state,
+        content: state.content.set(channel.id, {isLoading: false, error: null, isEditing: false, content: {...channel}})
+      };
+    }
+    case SLEK_CHANNEL_SUBSCRIBE_USER_FAILED:
       return {
         ...state,
         content: state.content.update(action.payload.id, channel => ({...channel, isLoading: false, error: true}))

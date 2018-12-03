@@ -6,7 +6,7 @@ import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {IActiveAccountOwnProps} from '../../containers/chat/ActiveAccount';
 
 export interface INewChannelActions {
-  readonly onChannelAdd: (channelName: string, activeEmail: string) => void;
+  onChannelAdd: (channelName: string, activeEmail: string) => void;
 }
 
 interface INewChannelState {

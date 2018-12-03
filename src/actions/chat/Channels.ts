@@ -11,7 +11,14 @@ import {
   SLEK_CHANNEL_SELECTION_STARTED,
   SLEK_CHANNEL_SELECTION_SUCCEEDED,
   SLEK_CHANNEL_SELECTION_FAILED,
-  SLEK_CHANNEL_UPDATING_STARTED, SLEK_CHANNEL_UPDATING_SUCCEEDED, SLEK_CHANNEL_UPDATING_FAILED, SLEK_CHANNEL_EDITING_CANCELED, SLEK_CHANNEL_EDITING_STARTED
+  SLEK_CHANNEL_UPDATING_STARTED,
+  SLEK_CHANNEL_UPDATING_SUCCEEDED,
+  SLEK_CHANNEL_UPDATING_FAILED,
+  SLEK_CHANNEL_EDITING_CANCELED,
+  SLEK_CHANNEL_EDITING_STARTED,
+  SLEK_CHANNEL_SUBSCRIBE_USER_STARTED,
+  SLEK_CHANNEL_SUBSCRIBE_USER_SUCCEEDED,
+  SLEK_CHANNEL_SUBSCRIBE_USER_FAILED
 } from '../../constants/actions';
 import {IChannel} from '../../models/chat/IChannel';
 import * as Immutable from 'immutable';
@@ -110,6 +117,40 @@ export const updateChannel = (oldChannel: IChannel, newName: string): ThunkActio
       dispatch(channelUpdateSucceeded(channel));
     } catch (e) {
       dispatch(channelUpdateFailed(oldChannel.id));
+    }
+  };
+
+const channesSubscribeUserStarted = (channel: IChannel): Action => ({
+  type: SLEK_CHANNEL_SUBSCRIBE_USER_STARTED,
+  payload: {
+    channel
+  }
+});
+
+const channesSubscribeUserSucceeded = (channel: IChannel): Action => ({
+  type: SLEK_CHANNEL_SUBSCRIBE_USER_SUCCEEDED,
+  payload: {
+    channel
+  }
+});
+
+const channelSubscribeUserFailed = (): Action => ({
+  type: SLEK_CHANNEL_SUBSCRIBE_USER_FAILED
+});
+
+export const channelSubscribeUser = (oldChannel: IChannel, userEmail: string): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {chatService}) => {
+    try {
+      const newChannel = {
+        ...oldChannel,
+        accountEmails: oldChannel.accountEmails.add(userEmail)
+      };
+      console.log(newChannel);
+      dispatch(channesSubscribeUserStarted(newChannel));
+      const channel = await chatService.updateChannel(newChannel);
+      dispatch(channesSubscribeUserSucceeded(channel));
+    } catch (e) {
+      dispatch(channelSubscribeUserFailed());
     }
   };
 
