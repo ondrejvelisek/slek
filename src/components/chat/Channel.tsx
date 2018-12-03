@@ -7,8 +7,9 @@ import {IChannel} from '../../models/chat/IChannel';
 import {ILoadable} from '../../states/common/ILoadable';
 import {Loader} from './Loader';
 import {IEditable} from '../../states/common/IEditable';
+import {IActiveAccountOwnProps} from '../../containers/chat/ActiveAccount';
 
-export interface IChannelProps extends ILoadable<IChannel>, IEditable {
+export interface IChannelProps extends ILoadable<IChannel>, IEditable, IActiveAccountOwnProps {
   active: boolean;
 }
 
@@ -23,15 +24,21 @@ export class Channel extends React.PureComponent<IChannelProps & IChannelActions
   };
 
   render(): JSX.Element {
-    const { content: channel, active, isLoading } = this.props;
-    return (
-      <ListGroupItem className={`clickable ' ${active ? 'selected' : ''}`} onClick={this.selectChannel}>
+    const { content: channel, active, isLoading, email } = this.props;
+    console.log(channel);
+    if (!channel.accountEmails || channel.accountEmails.includes(email)) {
+      return (
+        <ListGroupItem className={`clickable ' ${active ? 'selected' : ''}`} onClick={this.selectChannel}>
         <span>
           {channel.name}
         </span>
-        {channel.unread > 0 && (<Badge pill>{channel.unread}</Badge>)}
-        {isLoading && (<Loader/>)}
-      </ListGroupItem>
+          {channel.unread > 0 && (<Badge pill>{channel.unread}</Badge>)}
+          {isLoading && (<Loader/>)}
+        </ListGroupItem>
+      );
+    }
+    return (
+      <span/>
     );
   }
 }
