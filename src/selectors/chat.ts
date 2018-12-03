@@ -8,6 +8,7 @@ import {ILoadable} from '../states/common/ILoadable';
 import {Map, List, Set} from 'immutable';
 import {IMessage} from '../models/chat/IMessage';
 import {IAuthState} from '../states/chat/IAuthState';
+import {IEditable} from '../states/common/IEditable';
 
 export const selectAccountsState = (state: IRootState) => state.chat.accounts;
 export const selectChannelsState = (state: IRootState) => state.chat.channels;
@@ -86,21 +87,23 @@ export const selectAccountEmails = createSelector(
     List(accounts.keySeq())
 );
 
-export const selectActiveChannel = createSelector<IRootState, IChannelsState, ILoadable<IChannel|null>>(
+export const selectActiveChannel = createSelector<IRootState, IChannelsState, ILoadable<IChannel|null> & IEditable>(
   [selectChannelsState],
-  (channels: IChannelsState): ILoadable<IChannel|null> => {
+  (channels: IChannelsState): ILoadable<IChannel|null> & IEditable => {
     if (!channels.active) {
       return {
         isLoading: channels.isLoading,
         error: channels.error,
-        content: null
+        content: null,
+        isEditing: false
       };
     }
     const channel = channels.content.get(channels.active);
     return {
       isLoading: channel.isLoading || channels.isLoading,
       error: channel.error || channels.error,
-      content: channel.content
+      content: channel.content,
+      isEditing: channel.isEditing || false
     };
   }
 );

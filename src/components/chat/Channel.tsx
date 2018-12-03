@@ -6,8 +6,9 @@ import '../../less/chat/Channels.less';
 import {IChannel} from '../../models/chat/IChannel';
 import {ILoadable} from '../../states/common/ILoadable';
 import {Loader} from './Loader';
+import {IEditable} from '../../states/common/IEditable';
 
-export interface IChannelProps extends ILoadable<IChannel> {
+export interface IChannelProps extends ILoadable<IChannel>, IEditable {
   active: boolean;
 }
 
