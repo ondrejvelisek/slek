@@ -25,7 +25,6 @@ export class Channel extends React.PureComponent<IChannelProps & IChannelActions
 
   render(): JSX.Element {
     const { content: channel, active, isLoading, email } = this.props;
-    console.log(channel);
     if (!channel.accountEmails || channel.accountEmails.includes(email)) {
       return (
         <ListGroupItem className={`clickable ' ${active ? 'selected' : ''}`} onClick={this.selectChannel}>

@@ -11,7 +11,17 @@ import {
   SLEK_CHANNEL_SELECTION_STARTED,
   SLEK_CHANNEL_SELECTION_SUCCEEDED,
   SLEK_CHANNEL_SELECTION_FAILED,
-  SLEK_CHANNEL_UPDATING_STARTED, SLEK_CHANNEL_UPDATING_SUCCEEDED, SLEK_CHANNEL_UPDATING_FAILED, SLEK_CHANNEL_EDITING_CANCELED, SLEK_CHANNEL_EDITING_STARTED
+  SLEK_CHANNEL_UPDATING_STARTED,
+  SLEK_CHANNEL_UPDATING_SUCCEEDED,
+  SLEK_CHANNEL_UPDATING_FAILED,
+  SLEK_CHANNEL_EDITING_CANCELED,
+  SLEK_CHANNEL_EDITING_STARTED,
+  SLEK_CHANNEL_SUBSCRIBE_USER_STARTED,
+  SLEK_CHANNEL_SUBSCRIBE_USER_SUCCEEDED,
+  SLEK_CHANNEL_SUBSCRIBE_USER_FAILED,
+  SLEK_CHANNEL_UNSUBSCRIBE_USER_FAILED,
+  SLEK_CHANNEL_UNSUBSCRIBE_USER_SUCCEEDED,
+  SLEK_CHANNEL_UNSUBSCRIBE_USER_STARTED
 } from '../../constants/actions';
 import {IChannel} from '../../models/chat/IChannel';
 import * as Immutable from 'immutable';
@@ -110,6 +120,80 @@ export const updateChannel = (oldChannel: IChannel, newName: string): ThunkActio
       dispatch(channelUpdateSucceeded(channel));
     } catch (e) {
       dispatch(channelUpdateFailed(oldChannel.id));
+    }
+  };
+
+const channelSubscribeUserStarted = (channel: IChannel): Action => ({
+  type: SLEK_CHANNEL_SUBSCRIBE_USER_STARTED,
+  payload: {
+    channel
+  }
+});
+
+const channelSubscribeUserSucceeded = (channel: IChannel): Action => ({
+  type: SLEK_CHANNEL_SUBSCRIBE_USER_SUCCEEDED,
+  payload: {
+    channel
+  }
+});
+
+const channelSubscribeUserFailed = (id: Uuid): Action => ({
+  type: SLEK_CHANNEL_SUBSCRIBE_USER_FAILED,
+  payload: {
+    id
+  }
+});
+
+export const channelSubscribeUser = (oldChannel: IChannel, userEmail: string): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {chatService}) => {
+    try {
+      const newChannel = {
+        ...oldChannel,
+        accountEmails: Immutable.Set.of(userEmail).union(oldChannel.accountEmails)
+      };
+      dispatch(channelSubscribeUserStarted(newChannel));
+      const channel = await chatService.updateChannel(newChannel);
+      dispatch(channelSubscribeUserSucceeded(channel));
+    } catch (e) {
+      dispatch(channelSubscribeUserFailed(oldChannel.id));
+    }
+  };
+
+const channelUnsubscribeUserStarted = (channel: IChannel): Action => ({
+  type: SLEK_CHANNEL_UNSUBSCRIBE_USER_STARTED,
+  payload: {
+    channel
+  }
+});
+
+const channelUnsubscribeUserSucceeded = (channel: IChannel): Action => ({
+  type: SLEK_CHANNEL_UNSUBSCRIBE_USER_SUCCEEDED,
+  payload: {
+    channel
+  }
+});
+
+const channelUnsubscribeUserFailed = (id: Uuid): Action => ({
+  type: SLEK_CHANNEL_UNSUBSCRIBE_USER_FAILED,
+  payload: {
+    id
+  }
+});
+
+export const channelUnsubscribeUser = (oldChannel: IChannel, userEmail: string): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {chatService}) => {
+    try {
+      const emails = Immutable.Set<string>().union(oldChannel.accountEmails).subtract([userEmail]);
+      const newChannel = {
+        ...oldChannel,
+        accountEmails: emails
+      };
+      dispatch(channelUnsubscribeUserStarted(newChannel));
+      const channel = await chatService.updateChannel(newChannel);
+      dispatch(channelUnsubscribeUserSucceeded(channel));
+    } catch (e) {
+      console.log(e);
+      dispatch(channelUnsubscribeUserFailed(oldChannel.id));
     }
   };
 
