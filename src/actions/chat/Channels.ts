@@ -134,8 +134,11 @@ const channesSubscribeUserSucceeded = (channel: IChannel): Action => ({
   }
 });
 
-const channelSubscribeUserFailed = (): Action => ({
-  type: SLEK_CHANNEL_SUBSCRIBE_USER_FAILED
+const channelSubscribeUserFailed = (id: Uuid): Action => ({
+  type: SLEK_CHANNEL_SUBSCRIBE_USER_FAILED,
+  payload: {
+    id
+  }
 });
 
 export const channelSubscribeUser = (oldChannel: IChannel, userEmail: string): ThunkAction<void, IRootState, IServices, Action> =>
@@ -143,14 +146,13 @@ export const channelSubscribeUser = (oldChannel: IChannel, userEmail: string): T
     try {
       const newChannel = {
         ...oldChannel,
-        accountEmails: oldChannel.accountEmails.add(userEmail)
+        accountEmails: Immutable.Set.of(userEmail).union(oldChannel.accountEmails)
       };
-      console.log(newChannel);
       dispatch(channesSubscribeUserStarted(newChannel));
       const channel = await chatService.updateChannel(newChannel);
       dispatch(channesSubscribeUserSucceeded(channel));
     } catch (e) {
-      dispatch(channelSubscribeUserFailed());
+      dispatch(channelSubscribeUserFailed(oldChannel.id));
     }
   };
 
