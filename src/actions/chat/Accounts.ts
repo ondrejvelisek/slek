@@ -4,7 +4,11 @@ import {
   SLEK_ACCOUNT_GETTING_SUCCEEDED,
   SLEK_ACCOUNTS_GETTING_STARTED,
   SLEK_ACCOUNTS_GETTING_FAILED,
-  SLEK_ACCOUNTS_GETTING_SUCCEEDED, SLEK_ACCOUNT_AUTHORIZATION_FAILED,
+  SLEK_ACCOUNTS_GETTING_SUCCEEDED,
+  SLEK_ACCOUNT_AUTHORIZATION_FAILED,
+  SLEK_ACCOUNT_UPDATE_STARTED,
+  SLEK_ACCOUNT_UPDATE_SUCCEEDED,
+  SLEK_ACCOUNT_UPDATE_FAILED
 } from '../../constants/actions';
 import {IAccount} from '../../models/chat/IAccount';
 import * as Immutable from 'immutable';
@@ -106,5 +110,29 @@ export const getAccounts = (): ThunkAction<void, IRootState, IServices, Action> 
       dispatch(accountsGettingSucceeded(accounts));
     } catch (e) {
       dispatch(accountsGettingFailed());
+    }
+  };
+
+const updateAccountStarted = (): Action => ({
+  type: SLEK_ACCOUNT_UPDATE_STARTED,
+});
+
+const updateAccountSucceeded = (account: IAccount): Action => ({
+  type: SLEK_ACCOUNT_UPDATE_SUCCEEDED,
+  payload: account
+});
+
+const updateAccountFailed = (): Action => ({
+  type: SLEK_ACCOUNT_UPDATE_FAILED
+});
+
+export const updateAccount = (user: IAccount): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, _, {chatService}) => {
+    try {
+      dispatch(updateAccountStarted());
+      const account = await chatService.updateUser(user);
+      dispatch(updateAccountSucceeded(account));
+    } catch (e) {
+      dispatch(updateAccountFailed());
     }
   };

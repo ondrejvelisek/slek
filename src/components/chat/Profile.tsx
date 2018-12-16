@@ -8,15 +8,16 @@ import {ProtectedContainer} from '../../containers/chat/Protected';
 import {IAccount} from '../../models/chat/IAccount';
 import '../../less/chat/Layout.less';
 import '../../less/chat/Profile.less';
-import {IAccountData} from '../../models/chat/IAccountData';
 import {Redirect} from 'react-router';
 
 export interface IProfileProps extends ILoadable<IAccount | null> {}
 
-interface IProfileStateProps extends IAccount, IAccountData {
+export interface IProfileStateProps extends IAccount {
 }
 
-export interface IProfileActions {}
+export interface IProfileActions {
+  updateAccount: (user: IAccount) => void;
+}
 
 export class Profile extends React.PureComponent<IProfileProps & IProfileActions, IProfileStateProps> {
   constructor(props: IProfileProps & IProfileActions) {
@@ -34,7 +35,7 @@ export class Profile extends React.PureComponent<IProfileProps & IProfileActions
   private onSave = (event: React.FormEvent) => {
     event.preventDefault();
 
-
+    this.props.updateAccount(this.state);
     this.setState(_ => ({
       name: '',
       email: '',
