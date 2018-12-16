@@ -71,11 +71,17 @@ export const channels = (state: IChannelsState = {
         })
       };
     case SLEK_CHANNEL_CREATION_SUCCEEDED:
+      console.log(action.payload);
       return {
         ...state,
         active: state.active === action.payload.tempId ? action.payload.channel.id : state.active,
         content: state.content
-          .set(action.payload.channel.id, {isLoading: false, error: null, isEditing: false, content: {...action.payload.channel}})
+          .set(action.payload.channel.id, {
+            isLoading: false,
+            error: null,
+            isEditing: false,
+            content: {...action.payload.channel}
+          })
           .remove(action.payload.tempId)
       };
     case SLEK_CHANNEL_CREATION_FAILED:
@@ -107,7 +113,12 @@ export const channels = (state: IChannelsState = {
       const {channel} = action.payload;
       return {
         ...state,
-        content: state.content.set(channel.id, {isLoading: false, error: null, isEditing: false, content: {...channel}})
+        content: state.content.set(channel.id, {
+          isLoading: false,
+          error: null,
+          isEditing: false,
+          content: {...channel}
+        })
       };
     }
     case SLEK_CHANNEL_UPDATING_FAILED:

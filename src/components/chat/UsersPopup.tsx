@@ -29,10 +29,8 @@ export class UsersPopup extends React.PureComponent<IUserPopupProps & IUserPopup
     const { content: channel } = this.props.channel;
     if (channel) {
       if (event.target.checked) {
-        console.log('subscribe');
         this.props.channelSubscribeUser(channel, event.target.value);
       } else {
-        console.log('unsubscribe');
         this.props.channelUnsubscribeUser(channel, event.target.value);
       }
     }
