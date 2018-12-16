@@ -21,6 +21,7 @@ export class Protected extends React.PureComponent<IProtectedProps & IProtectedA
 
   render(): JSX.Element {
     const { isLoading, error, content } = this.props;
+    console.log(content);
     if (isLoading && !content) {
       return <div className="protected"><Loader/></div>;
     }
