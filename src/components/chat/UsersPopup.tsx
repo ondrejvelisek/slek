@@ -17,6 +17,7 @@ export interface IUserPopupProps extends ILoadable<Immutable.List<Uuid>> {
 export interface IUserPopupActions {
   onMounted: () => void;
   channelSubscribeUser: (channel: IChannel, userEmail: string) => void;
+  channelUnsubscribeUser: (channel: IChannel, userEmail: string) => void;
 }
 
 export class UsersPopup extends React.PureComponent<IUserPopupProps & IUserPopupActions> {
@@ -24,10 +25,16 @@ export class UsersPopup extends React.PureComponent<IUserPopupProps & IUserPopup
     this.props.onMounted();
   }
 
-  addUserToChannel = (event: ChangeEvent<HTMLInputElement>) => {
+  changeUserSubscription = (event: ChangeEvent<HTMLInputElement>) => {
     const { content: channel } = this.props.channel;
     if (channel) {
-      this.props.channelSubscribeUser(channel, event.target.value);
+      if (event.target.checked) {
+        console.log('subscribe');
+        this.props.channelSubscribeUser(channel, event.target.value);
+      } else {
+        console.log('unsubscribe');
+        this.props.channelUnsubscribeUser(channel, event.target.value);
+      }
     }
   };
 
@@ -49,7 +56,7 @@ export class UsersPopup extends React.PureComponent<IUserPopupProps & IUserPopup
           <span key={userEmail} id={userEmail}>
             <InputGroupAddon addonType="prepend">
               <InputGroupText>
-                <Input addon type="checkbox" checked={channel != null && channel.accountEmails.includes(userEmail)} onChange={this.addUserToChannel} value={userEmail}/>
+                <Input addon type="checkbox" checked={channel != null && channel.accountEmails.includes(userEmail)} onChange={this.changeUserSubscription} value={userEmail}/>
               </InputGroupText>
               <strong>{userEmail}</strong>
             </InputGroupAddon>

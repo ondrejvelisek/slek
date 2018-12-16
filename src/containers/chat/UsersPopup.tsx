@@ -3,7 +3,7 @@ import {IRootState} from '../../states/IRootState';
 import {IUserPopupActions, IUserPopupProps, UsersPopup} from '../../components/chat/UsersPopup';
 import {selectAccountEmails, selectAccountsState, selectActiveChannel} from '../../selectors/chat';
 import {getAccounts} from '../../actions/chat/Accounts';
-import {channelSubscribeUser} from '../../actions/chat/Channels';
+import {channelSubscribeUser, channelUnsubscribeUser} from '../../actions/chat/Channels';
 
 const mapStateToProps = (state: IRootState): IUserPopupProps => ({
   isLoading: selectAccountsState(state).isLoading,
@@ -14,7 +14,8 @@ const mapStateToProps = (state: IRootState): IUserPopupProps => ({
 
 const mapDispatchToProps: IUserPopupActions = {
   onMounted: getAccounts,
-  channelSubscribeUser
+  channelSubscribeUser,
+  channelUnsubscribeUser
 };
 
 export const UsersPopupContainer = connect(mapStateToProps, mapDispatchToProps)(UsersPopup);
