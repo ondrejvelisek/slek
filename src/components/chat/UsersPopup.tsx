@@ -5,7 +5,7 @@ import {Input, InputGroup, InputGroupAddon, InputGroupText} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faExclamationCircle} from '@fortawesome/free-solid-svg-icons';
 import {Loader} from './Loader';
-import '../../less/chat/Channels.less';
+import '../../less/chat/UsersPopup.less';
 import {ChangeEvent} from 'react';
 import {IChannel} from '../../models/chat/IChannel';
 import {IChannelHeaderProps} from './ChannelHeader';
@@ -70,7 +70,7 @@ export class UsersPopup extends React.PureComponent<IUserPopupProps & IUserPopup
     return (
       <div className="popup">
         <div className="popup_inner">
-          <InputGroup>
+          <InputGroup className="users-popup">
             {this.renderList()}
           </InputGroup>
         </div>

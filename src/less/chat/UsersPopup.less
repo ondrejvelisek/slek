@@ -1,0 +1,30 @@
+
+@import "./variables";
+
+.modal-dialog {
+  .modal-content {
+    .modal-header {
+      background-color: @colorLighter;
+    }
+
+    .modal-body {
+      background-color: @colorLightLighter;
+      .users-popup {
+        position: relative;
+
+        .input-group-text {
+          background-color: transparent;
+          border: none;
+
+          &.clickable:hover {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+
+    .modal-footer {
+      background-color: @colorLighter;
+    }
+  }
+}
