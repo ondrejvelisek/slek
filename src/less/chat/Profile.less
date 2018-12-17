@@ -1,0 +1,45 @@
+@import "./variables";
+
+.profile {
+  position: relative;
+  background-color: @colorDarker;
+
+  form {
+    border-radius: 0;
+    width: 50%;
+    text-align: center;
+    margin: 0 auto;
+    background-color: @colorDark;
+    @width: 90%;
+
+    .avatar {
+      height: 180px;
+      width: 180px;
+      border-radius: 175px;
+      margin: 50px auto;
+      img {
+        border-radius: 175px;
+      }
+    }
+
+    input {
+      margin-left: auto;
+      margin-right: auto;
+      width: @width;
+      background-color: @colorDarker;
+      border-color: @colorDarkest;
+      color: @colorLightest;
+    }
+
+    label {
+      text-align: left;
+      color: @colorLight;
+      width: @width;
+      padding: 0 5px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+  }
+}

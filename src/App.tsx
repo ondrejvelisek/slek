@@ -11,6 +11,7 @@ import {IRootState} from './states/IRootState';
 import {loadState, saveState} from './services/persistService';
 import {createChatService} from './services/chatService';
 import {ChatContainer} from './containers/chat/Chat';
+import {ProfileContainer} from './containers/chat/Profile';
 
 const history = createBrowserHistory();
 
@@ -45,7 +46,7 @@ export class App extends React.PureComponent {
         <ConnectedRouter history={history}>
           <Switch>
             <Route exact path="/" component={ChatContainer}/>
-            {/*<Route path="/profile" component={ProfileContainer}/>*/}
+            <Route path="/profile" component={ProfileContainer}/>
             <Route path="/login" component={LoginContainer}/>
           </Switch>
         </ConnectedRouter>

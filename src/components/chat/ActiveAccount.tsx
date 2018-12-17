@@ -4,14 +4,15 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faPowerOff, faUser // , faPowerOff, faUser
+  faCommentAlt,
+  faPowerOff, faUser
 } from '@fortawesome/free-solid-svg-icons';
 
 import '../../less/chat/Header.less';
 import {IAccount} from '../../models/chat/IAccount';
 import {ILoadable} from '../../states/common/ILoadable';
 import {AvatarContainer} from '../../containers/chat/Avatar';
-// import {NavLink} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 export interface IActiveAccountProps extends ILoadable<IAccount|null> {
   email: string;
@@ -71,12 +72,19 @@ export class ActiveAccount extends React.PureComponent<IProps, IState> {
           <DropdownMenu>
             <DropdownItem header>{account.name}</DropdownItem>
             <DropdownItem divider />
-            {/*<NavLink to={`/profile/${this.props.token}`}>*/}
-            <DropdownItem>
-              <FontAwesomeIcon icon={faUser}/>
-              <span> Edit profile</span>
-            </DropdownItem>
-            {/*</NavLink>*/}
+            <NavLink to={`/`}>
+              <DropdownItem>
+                  <FontAwesomeIcon icon={faCommentAlt}/>
+                  <span> Channels</span>
+              </DropdownItem>
+            </NavLink>
+            <DropdownItem divider />
+            <NavLink to={`/profile`}>
+              <DropdownItem>
+                  <FontAwesomeIcon icon={faUser}/>
+                  <span> Edit profile</span>
+              </DropdownItem>
+            </NavLink>
             <DropdownItem divider />
             <DropdownItem onClick={this.onLogoutHandler}>
               <FontAwesomeIcon icon={faPowerOff}/>
