@@ -66,7 +66,7 @@ export const channels = (state: IChannelsState = {
         content: state.content.set(action.payload.tempId, {
           isLoading: true,
           error: null,
-          content: { ...action.payload.channelData, id: action.payload.tempId },
+          content: { ...action.payload.channel, id: action.payload.tempId },
           isEditing: false
         })
       };

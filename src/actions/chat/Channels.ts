@@ -56,15 +56,19 @@ const channelCreationFailed = (tempId: Uuid): Action => ({
   }
 });
 
-export const createChannel = (channelName: string, activeEmail: string): ThunkAction<void, IRootState, IServices, Action> =>
-  async (dispatch, _, {chatService}) => {
+export const createChannel = (channelName: string): ThunkAction<void, IRootState, IServices, Action> =>
+  async (dispatch, getState, {chatService}) => {
     const tempId = uuid();
-    const channelData: IChannelData = {
-      name: channelName,
-      unread: 0,
-      accountEmails: Immutable.Set.of(activeEmail)
-    };
+    const auth = getState().chat.auth.content;
     try {
+      if (!auth) {
+        throw new Error('No logged user to create channel with');
+      }
+      const channelData: IChannelData = {
+        name: channelName,
+        unread: 0,
+        accountEmails: Immutable.Set.of(auth.email)
+      };
       dispatch(channelCreationStarted(channelData, tempId));
       const channel = await chatService.createChannel(channelData);
       dispatch(channelCreationSucceeded(channel, tempId));

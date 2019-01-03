@@ -75,7 +75,7 @@ export class ChannelHeader extends React.PureComponent<IChannelHeaderProps & ICh
           <span>{channel.name}</span>
         </NavbarBrand>
         <Nav right="true" navbar className="nav-button">
-          <NavItem onClick={this.toggleUsersModal.bind(this)} className="clickable">
+          <NavItem onClick={this.toggleUsersModal} className="clickable">
             <FontAwesomeIcon icon={faUsers}/>
           </NavItem>
           <NavItem onClick={this.editChannel} className="clickable">

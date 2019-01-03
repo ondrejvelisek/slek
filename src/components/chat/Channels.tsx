@@ -57,7 +57,7 @@ export class Channels extends React.PureComponent<IChannelsProps & IChannelsActi
             <span> Channels</span>
           </ListGroupItem>
           {this.renderList()}
-          <NewChannelContainer email={this.props.email}/>
+          <NewChannelContainer/>
         </ListGroup>
 
       </div>

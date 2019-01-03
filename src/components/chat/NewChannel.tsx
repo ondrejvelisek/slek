@@ -3,10 +3,11 @@ import '../../less/chat/NewChannel.less';
 import {Form, Input, InputGroup, ListGroupItem} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPlus} from '@fortawesome/free-solid-svg-icons';
-import {IActiveAccountOwnProps} from '../../containers/chat/ActiveAccount';
+
+export interface INewChannelProps {}
 
 export interface INewChannelActions {
-  onChannelAdd: (channelName: string, activeEmail: string) => void;
+  onChannelAdd: (channelName: string) => void;
 }
 
 interface INewChannelState {
@@ -14,9 +15,11 @@ interface INewChannelState {
   isCreating: boolean;
 }
 
-export class NewChannel extends React.PureComponent<IActiveAccountOwnProps & INewChannelActions, INewChannelState> {
-  constructor(props: IActiveAccountOwnProps & INewChannelActions) {
+export class NewChannel extends React.PureComponent<INewChannelProps & INewChannelActions, INewChannelState> {
+  public readonly componentRef: React.RefObject<HTMLDivElement>;
+  constructor(props: INewChannelActions) {
     super(props);
+    this.componentRef = React.createRef();
 
     this.state = {
       value: '',
@@ -24,9 +27,27 @@ export class NewChannel extends React.PureComponent<IActiveAccountOwnProps & INe
     };
   }
 
+  componentDidMount() {
+    document.addEventListener('mouseup', this.onAnyClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mouseup', this.onAnyClick);
+  }
+
+  private onAnyClick = (event: MouseEvent) => {
+    if (this.componentRef.current && event.target instanceof Element && !this.componentRef.current.contains(event.target)) {
+      // outside component click
+      this.setState(_ => ({
+        value: '',
+        isCreating: false
+      }));
+    }
+  };
+
   private onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    this.props.onChannelAdd(this.state.value, this.props.email);
+    this.props.onChannelAdd(this.state.value);
 
     this.setState(_ => ({
       value: '',
@@ -45,7 +66,7 @@ export class NewChannel extends React.PureComponent<IActiveAccountOwnProps & INe
     }));
   };
 
-  private getAddButton = (): JSX.Element => {
+  private renderAddButton = (): JSX.Element => {
     return (
       <ListGroupItem className="clickable" onClick={this.addChannel}>
         <FontAwesomeIcon icon={faPlus}/>
@@ -54,7 +75,7 @@ export class NewChannel extends React.PureComponent<IActiveAccountOwnProps & INe
     );
   };
 
-  private getForm = (): JSX.Element => {
+  private renderForm = (): JSX.Element => {
     return (
       <Form onSubmit={this.onSubmit} className="form-inline">
         <InputGroup className="input-group">
@@ -64,6 +85,7 @@ export class NewChannel extends React.PureComponent<IActiveAccountOwnProps & INe
             onChange={this.onValueChanged}
             className="form-control"
             placeholder="Channel name"
+            autoFocus
           />
         </InputGroup>
       </Form>
@@ -72,10 +94,10 @@ export class NewChannel extends React.PureComponent<IActiveAccountOwnProps & INe
 
   render() {
     return (
-      <div className="newChannel">
+      <div ref={this.componentRef} className="newChannel">
         {this.state.isCreating
-          ? this.getForm()
-          : this.getAddButton()
+          ? this.renderForm()
+          : this.renderAddButton()
         }
       </div>
     );
