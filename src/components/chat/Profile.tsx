@@ -55,7 +55,6 @@ export class Profile extends React.PureComponent<IProfileProps & IProfileActions
 
   render(): JSX.Element {
     const {content: account, isLoading} = this.props;
-    console.log(this.state);
     if (!account) {
       if (isLoading) {
         return (

@@ -27,11 +27,6 @@ export class Header extends React.PureComponent<IHeaderProps, IState> {
 
   render(): JSX.Element {
     const { isLoading, error, content: email } = this.props;
-    console.log({
-      isLoading,
-      error,
-      email
-    });
     return (
       <Navbar className="header text-light">
 
