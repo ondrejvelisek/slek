@@ -4,7 +4,7 @@
 .message {
 
   &.mine {
-    .text {
+    .text, .file, .image {
       border-radius: 8px 8px 0 8px;
       background-color: @colorDarkLight;
     }
@@ -40,12 +40,18 @@
     }
   }
 
-  .text {
+  .text, .file, .image {
     padding: 8px 12px;
     display: inline-block;
     color: @colorWhite;
     border-radius: 8px 8px 8px 0;
     background-color: @colorPrimaryDarkest;
+  }
+
+  .image {
+    padding: 0;
+    max-height: 300px;
+    max-width: 95%;
   }
 
   .votes {

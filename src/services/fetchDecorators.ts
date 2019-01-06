@@ -99,6 +99,12 @@ export const withJsonBody = <B>(body: B): FetchDecorator => _.flow(
   withHeader('Content-Type', 'application/json')
 );
 
+export const withFileBody = (file: File): FetchDecorator  => fetch => (input, init) => {
+  const data = new FormData();
+  data.append('files', file);
+  return fetch(input, _.extend(init, {body: data}));
+};
+
 
 export const get: FetchDecorator = fetch => (input, init) => fetch(input, _.extend(init, {method: 'GET'}));
 

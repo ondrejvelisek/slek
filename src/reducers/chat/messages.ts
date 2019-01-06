@@ -4,13 +4,17 @@ import {IMessage} from '../../models/chat/IMessage';
 import {
   SLEK_CHANNEL_SELECTION_FAILED,
   SLEK_CHANNEL_SELECTION_STARTED,
-  SLEK_CHANNEL_SELECTION_SUCCEEDED,
+  SLEK_CHANNEL_SELECTION_SUCCEEDED, SLEK_FILE_MESSAGE_UPLOADING_FAILED, SLEK_FILE_MESSAGE_UPLOADING_STARTED, SLEK_FILE_MESSAGE_UPLOADING_SUCCEEDED,
   SLEK_MESSAGE_CREATION_FAILED,
   SLEK_MESSAGE_CREATION_STARTED,
   SLEK_MESSAGE_CREATION_SUCCEEDED,
   SLEK_MESSAGE_DELETION_FAILED,
   SLEK_MESSAGE_DELETION_STARTED,
-  SLEK_MESSAGE_DELETION_SUCCEEDED, SLEK_MESSAGE_VOTE_DOWN_FAILED, SLEK_MESSAGE_VOTE_DOWN_STARTED, SLEK_MESSAGE_VOTE_DOWN_SUCCEEDED, SLEK_MESSAGE_VOTE_UP_FAILED,
+  SLEK_MESSAGE_DELETION_SUCCEEDED,
+  SLEK_MESSAGE_VOTE_DOWN_FAILED,
+  SLEK_MESSAGE_VOTE_DOWN_STARTED,
+  SLEK_MESSAGE_VOTE_DOWN_SUCCEEDED,
+  SLEK_MESSAGE_VOTE_UP_FAILED,
   SLEK_MESSAGE_VOTE_UP_STARTED,
   SLEK_MESSAGE_VOTE_UP_SUCCEEDED,
   SLEK_MESSAGES_GETTING_FAILED,
@@ -59,6 +63,21 @@ export const messages = (state: IMessagesState = {
         content: state.content.remove(action.payload.tempId).set(action.payload.message.id, action.payload.message)
       };
     case SLEK_MESSAGE_CREATION_FAILED:
+      return {
+        ...state,
+        content: state.content.remove(action.payload.tempId)
+      };
+    case SLEK_FILE_MESSAGE_UPLOADING_STARTED:
+      return {
+        ...state,
+        content: state.content.set(action.payload.tempId, action.payload.message)
+      };
+    case SLEK_FILE_MESSAGE_UPLOADING_SUCCEEDED:
+      return {
+        ...state,
+        content: state.content.remove(action.payload.tempId).set(action.payload.message.id, action.payload.message)
+      };
+    case SLEK_FILE_MESSAGE_UPLOADING_FAILED:
       return {
         ...state,
         content: state.content.remove(action.payload.tempId)

@@ -3,10 +3,9 @@ import '../../less/chat/Message.less';
 import {Button, Media} from 'reactstrap';
 import {IMessage} from '../../models/chat/IMessage';
 import {AvatarContainer} from '../../containers/chat/Avatar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faThumbsUp, faThumbsDown, faTrashAlt
-} from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faThumbsDown, faThumbsUp, faTrashAlt, faFile} from '@fortawesome/free-solid-svg-icons';
+import {MessageType} from '../../models/chat/IMessageData';
 
 export interface IMessageProps extends IMessage {
   mine?: boolean;
@@ -30,6 +29,19 @@ export class Message extends React.PureComponent<IMessageProps & IMessageActions
 
   delete = () => {
     this.props.onDelete(this.props.id);
+  };
+
+  renderMessage = (): JSX.Element => {
+    const { type, value, title } = this.props;
+    if (type === MessageType.Image) {
+      return <img src={value} className="image img-fluid"/>;
+    } else if (type === MessageType.File) {
+      return (
+        <a href={value} className="file"><FontAwesomeIcon icon={faFile}/> {title}</a>
+      );
+    } else {
+      return <span className="text">{value}</span>;
+    }
   };
 
   renderVotes = (): JSX.Element => {
@@ -62,7 +74,7 @@ export class Message extends React.PureComponent<IMessageProps & IMessageActions
   };
 
   render(): JSX.Element {
-    const { value, mine, createdBy } = this.props;
+    const { mine, createdBy } = this.props;
     return (
       <Media tag="li" className={mine ? 'text-right' : ''}>
         {!mine && (<AvatarContainer className="avatar align-self-end" email={createdBy}/>)}
@@ -73,9 +85,7 @@ export class Message extends React.PureComponent<IMessageProps & IMessageActions
               {mine && this.renderTools()}
               {mine && this.renderVotes()}
 
-              <span className="text">
-                {value}
-              </span>
+              {this.renderMessage()}
 
               {!mine && this.renderVotes()}
               {!mine && this.renderTools()}

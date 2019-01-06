@@ -13,10 +13,12 @@ export interface IInputBoxProps {}
 
 export interface IInputBoxActions {
   onMessageSubmit: (text: string) => void;
+  onFileUpload: (file: File) => void;
 }
 
 export interface IInputBoxOwnState {
   readonly text: string;
+  readonly file: string;
 }
 
 export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActions, IInputBoxOwnState> {
@@ -24,7 +26,8 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
     super(props);
 
     this.state = {
-      text: ''
+      text: '',
+      file: ''
     };
   }
 
@@ -45,6 +48,13 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
     }
   };
 
+  onFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value && event.target.files && event.target.files.length > 0) {
+      this.props.onFileUpload(event.target.files[0]);
+      this.setState(state => ({...state, file: ''}));
+    }
+  };
+
   render(): JSX.Element {
     return (
         <Navbar className="input-box">
@@ -57,9 +67,10 @@ export class InputBox extends React.PureComponent<IInputBoxProps & IInputBoxActi
               </Button>
             </InputGroupAddon>
             <InputGroupAddon addonType="append">
-              <Button outline color="secondary">
+              <label htmlFor="fileUpload" className="file-upload btn btn-secondary">
                 <FontAwesomeIcon icon={faImage}/>
-              </Button>
+                <input id="fileUpload" type="file" onChange={this.onFileUpload} value={this.state.file}/>
+              </label>
             </InputGroupAddon>
             <InputGroupAddon addonType="append">
               <Button outline color="secondary">

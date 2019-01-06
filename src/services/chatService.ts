@@ -8,7 +8,7 @@ import {
   withAuth,
   withJsonBody,
   post, put, del,
-  Fetch, withRebasedUrl
+  Fetch, withRebasedUrl, withFileBody
 } from './fetchDecorators';
 import {List} from 'immutable';
 import {IAccount} from '../models/chat/IAccount';
@@ -16,7 +16,6 @@ import {IMessageData} from '../models/chat/IMessageData';
 import {IMessage} from '../models/chat/IMessage';
 import * as _ from 'lodash';
 import {IAppData} from '../models/chat/IAppData';
-import {IFileData} from '../models/chat/IFileData';
 import {IFileMetadata} from '../models/chat/IFileMetadata';
 import {identityParser, Parser, withoutResp, parseResp} from './fetchParsers';
 import {IAuthData} from '../models/chat/IAuthData';
@@ -37,7 +36,7 @@ export interface IChatService {
 
   getFile: (fileId: Uuid) => Promise<IFileMetadata>;
   getFileLink: (fileId: Uuid) => Promise<string>;
-  uploadFile: (file: IFileData) => Promise<IFileMetadata>;
+  uploadFile: (file: File) => Promise<IFileMetadata>;
 
   getMessages: (channelId: Uuid, lastN?: number) => Promise<List<IMessage>>;
   createMessage: (channelId: Uuid, messageData: IMessageData) => Promise<IMessage>;
@@ -55,18 +54,19 @@ export type GetAuth = () => IAuth|null;
 const withApp = (app: IAppData) => withJsonBody({customdata: app});
 const withCredentials = (credentials: ICredentials) => withJsonBody(credentials);
 const withChannel = (channel: IChannelData) => withJsonBody({name: channel.name, customdata: channel});
-const withFile = (file: IFileData) => withJsonBody(file); // TODO
+const withFile = (file: File) => withFileBody(file);
 const withMessage = (message: IMessageData) => withJsonBody({value: message.value, customdata: message});
 const withAccount = (account: IAccount) => withJsonBody({email: account.email, customdata: account});
 
 const customDataParser: Parser<any> = resp => ({...resp.customData, ...resp});
+const firstItemParser: Parser<any> = resp => resp[0];
 const listParser = <R>(itemParser: Parser<R>): Parser<List<R>> => resp => List<R>(resp.map(itemParser));
 
 const appParser: Parser<IAppData> = customDataParser;
 const authParser: Parser<IAuth> = identityParser;
 const channelParser: Parser<IChannel> = customDataParser;
 const channelListParser: Parser<List<IChannel>> = listParser(channelParser);
-const fileMetadataParser: Parser<IFileMetadata> = identityParser;
+const fileMetadataParser: Parser<IFileMetadata> = firstItemParser;
 const fileLinkParser: Parser<string> = resp => resp.fileUri;
 const messageParser: Parser<IMessage> = customDataParser;
 const messageListParser: Parser<List<IMessage>> = listParser(messageParser);
@@ -111,9 +111,9 @@ export const createChatService = (getAuth: GetAuth): IChatService => {
     updateChannel: (channel: IChannel) => parseResp(channelParser)(put(withChannel(channel)(appFetch)))(`/channel/${channel.id}`),
     deleteChannel: (channelId: Uuid) => withoutResp(del(appFetch))(`/channel/${channelId}`),
 
-    getFile: (fileId: Uuid) => parseResp(fileMetadataParser)(appFetch)(`/file/${fileId}`),
-    getFileLink: (fileId: Uuid) => parseResp(fileLinkParser)(appFetch)(`/file/${fileId}/download-link`),
-    uploadFile: (file: IFileData) => parseResp(fileMetadataParser)(post(withFile(file)(appFetch)))('/file'),
+    getFile: (fileId: Uuid) => parseResp(fileMetadataParser)(withAuth(getAuth)(apiFetch))(`/file/${fileId}`),
+    getFileLink: (fileId: Uuid) => parseResp(fileLinkParser)(withAuth(getAuth)(apiFetch))(`/file/${fileId}/download-link`),
+    uploadFile: (file: File) => parseResp(fileMetadataParser)(post(withFile(file)(withAuth(getAuth)(apiFetch))))('/file'),
 
     getMessages: (channelId: Uuid, lastN?: number) =>
       parseResp(messageListParser)(appFetch)(`/channel/${channelId}/message?lastN=${lastN}`),
