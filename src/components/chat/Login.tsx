@@ -9,6 +9,7 @@ import {ILoadable} from '../../states/common/ILoadable';
 import {Loader} from './Loader';
 import {ICredentials} from '../../models/chat/ICredentials';
 import {IAuth} from '../../models/chat/IAuth';
+import {Redirect} from 'react-router';
 
 export interface ILoginProps extends ILoadable<IAuth|null> {}
 
@@ -51,7 +52,10 @@ export class Login extends React.PureComponent<IProps, ILoginOwnState> {
   };
 
   render(): JSX.Element {
-    const { isLoading, error } = this.props;
+    const { isLoading, error, content: account } = this.props;
+    if (account && Date.parse(account.expiration) > Date.now()) {
+      return <Redirect to="/"/>;
+    }
     return (
       <div className="h-100 d-flex flex-column login">
 

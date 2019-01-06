@@ -62,9 +62,9 @@ export class ChannelHeader extends React.PureComponent<IChannelHeaderProps & ICh
     const {content: channel} = this.props;
     if (channel) {
       const {showUsersModal} = this.state;
-      this.setState({
+      this.setState(() => ({
         showUsersModal: !showUsersModal
-      });
+      }));
     }
   };
 

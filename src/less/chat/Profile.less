@@ -12,13 +12,35 @@
     background-color: @colorDark;
     @width: 90%;
 
-    .avatar {
+    .avatar-container {
       height: 180px;
       width: 180px;
-      border-radius: 175px;
-      margin: 50px auto;
-      img {
-        border-radius: 175px;
+      margin: 60px auto;
+      border-radius: 50%;
+
+      .upload {
+        background: @colorDarker;
+        border: 1px solid @colorDarkest;
+        border-radius: 0.25rem;
+        cursor: pointer;
+        bottom: -50px;
+        color: #fff;
+        font-size: 12px;
+        font-weight: bold;
+        left: 183px;
+        line-height: 15px;
+        position: absolute;
+        padding: 7px 0;
+        text-align: center;
+        width: 150px;
+
+        &:hover {
+          background: @colorGrey;
+        }
+
+        &:active {
+          background: @colorDarker;
+        }
       }
     }
 
