@@ -8,7 +8,7 @@ import {
   SLEK_ACCOUNT_GETTING_SUCCEEDED,
   SLEK_ACCOUNTS_GETTING_FAILED,
   SLEK_ACCOUNTS_GETTING_STARTED,
-  SLEK_ACCOUNTS_GETTING_SUCCEEDED
+  SLEK_ACCOUNTS_GETTING_SUCCEEDED, SLEK_AVATAR_UPDATE_STARTED, SLEK_AVATAR_UPDATE_SUCCEEDED
 } from '../../constants/actions';
 
 export const accounts = (state: IAccountsState = {
@@ -30,6 +30,25 @@ export const accounts = (state: IAccountsState = {
         isLoading: false,
         error: null,
         content: state.content.set(action.payload.email, action.payload.account)
+      };
+    case SLEK_ACCOUNT_GETTING_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        error: true
+      };
+    case SLEK_AVATAR_UPDATE_STARTED:
+      return {
+        ...state,
+        content: state.content.update(action.payload.email, (acc) => ({
+            ...acc,
+            avatar: action.payload.tempUrl
+        }))
+      };
+    case SLEK_AVATAR_UPDATE_SUCCEEDED:
+      return {
+        ...state,
+        content: state.content.set(action.payload.account.email, action.payload.account)
       };
     case SLEK_ACCOUNT_GETTING_FAILED:
       return {

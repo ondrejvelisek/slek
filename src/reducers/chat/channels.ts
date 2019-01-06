@@ -71,7 +71,6 @@ export const channels = (state: IChannelsState = {
         })
       };
     case SLEK_CHANNEL_CREATION_SUCCEEDED:
-      console.log(action.payload);
       return {
         ...state,
         active: state.active === action.payload.tempId ? action.payload.channel.id : state.active,

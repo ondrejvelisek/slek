@@ -12,6 +12,28 @@
     background-color: @colorDark;
     @width: 90%;
 
+    .avatar-group {
+      position: relative;
+      &:hover .edit {
+        display: block;
+      }
+
+      .edit {
+        color: #fff;
+        background: rgba(0,0,0,0.3);
+        position: absolute;
+        display: none;
+        top: 200px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+      }
+
+      input {
+        display: none;
+      }
+    }
+
     .avatar {
       height: 180px;
       width: 180px;
