@@ -1,29 +1,30 @@
 import {
-  SLEK_CHANNEL_CREATION_STARTED,
   SLEK_CHANNEL_CREATION_FAILED,
+  SLEK_CHANNEL_CREATION_STARTED,
   SLEK_CHANNEL_CREATION_SUCCEEDED,
-  SLEK_CHANNELS_GETTING_STARTED,
-  SLEK_CHANNELS_GETTING_FAILED,
-  SLEK_CHANNELS_GETTING_SUCCEEDED,
+  SLEK_CHANNEL_DELETION_FAILED,
   SLEK_CHANNEL_DELETION_STARTED,
   SLEK_CHANNEL_DELETION_SUCCEEDED,
-  SLEK_CHANNEL_DELETION_FAILED,
-  SLEK_CHANNEL_SELECTION_STARTED,
-  SLEK_CHANNEL_EDITING_STARTED,
   SLEK_CHANNEL_EDITING_CANCELED,
-  SLEK_CHANNEL_UPDATING_STARTED,
-  SLEK_CHANNEL_UPDATING_SUCCEEDED,
-  SLEK_CHANNEL_UPDATING_FAILED,
+  SLEK_CHANNEL_EDITING_STARTED,
+  SLEK_CHANNEL_SELECTION_STARTED,
+  SLEK_CHANNEL_SUBSCRIBE_USER_FAILED,
   SLEK_CHANNEL_SUBSCRIBE_USER_STARTED,
   SLEK_CHANNEL_SUBSCRIBE_USER_SUCCEEDED,
-  SLEK_CHANNEL_SUBSCRIBE_USER_FAILED,
+  SLEK_CHANNEL_UNSUBSCRIBE_USER_FAILED,
   SLEK_CHANNEL_UNSUBSCRIBE_USER_STARTED,
   SLEK_CHANNEL_UNSUBSCRIBE_USER_SUCCEEDED,
-  SLEK_CHANNEL_UNSUBSCRIBE_USER_FAILED
+  SLEK_CHANNEL_UPDATING_FAILED,
+  SLEK_CHANNEL_UPDATING_STARTED,
+  SLEK_CHANNEL_UPDATING_SUCCEEDED,
+  SLEK_CHANNELS_GETTING_FAILED,
+  SLEK_CHANNELS_GETTING_STARTED,
+  SLEK_CHANNELS_GETTING_SUCCEEDED,
+  SLEK_REORDER_CHANNELES
 } from '../../constants/actions';
 import * as Immutable from 'immutable';
 import {IChannel} from '../../models/chat/IChannel';
-import {IChannelsState} from '../../states/chat/IChannelsState';
+import {IChannelsState, Order} from '../../states/chat/IChannelsState';
 import {ILoadable} from '../../states/common/ILoadable';
 import {IEditable} from '../../states/common/IEditable';
 
@@ -31,6 +32,7 @@ export const channels = (state: IChannelsState = {
                              active: null,
                              isLoading: false,
                              error: null,
+                             order: Order.Asc,
                              content: Immutable.Map<Uuid, ILoadable<IChannel> & IEditable>()
                            },
                          action: Action): IChannelsState => {
@@ -71,7 +73,6 @@ export const channels = (state: IChannelsState = {
         })
       };
     case SLEK_CHANNEL_CREATION_SUCCEEDED:
-      console.log(action.payload);
       return {
         ...state,
         active: state.active === action.payload.tempId ? action.payload.channel.id : state.active,
@@ -88,6 +89,11 @@ export const channels = (state: IChannelsState = {
       return {
         ...state,
         content: state.content.update(action.payload.tempId, channel => ({...channel, isLoading: false, error: true}))
+      };
+    case SLEK_REORDER_CHANNELES:
+      return {
+        ...state,
+        order: state.order === Order.Asc ? Order.Desc : Order.Asc
       };
     case SLEK_CHANNEL_SELECTION_STARTED:
       return {

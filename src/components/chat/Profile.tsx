@@ -17,6 +17,7 @@ export interface IProfileStateProps extends IAccount {
 
 export interface IProfileActions {
   updateAccount: (user: IAccount) => void;
+  updateAvatar: (file: File) => void;
 }
 
 export class Profile extends React.PureComponent<IProfileProps & IProfileActions, IProfileStateProps> {
@@ -53,9 +54,15 @@ export class Profile extends React.PureComponent<IProfileProps & IProfileActions
     this.setState(_ => ({ email }));
   };
 
+  private onAvatarChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      this.props.updateAvatar(files[0]);
+    }
+  };
+
   render(): JSX.Element {
     const {content: account, isLoading} = this.props;
-    console.log(this.state);
     if (!account) {
       if (isLoading) {
         return (
@@ -73,10 +80,17 @@ export class Profile extends React.PureComponent<IProfileProps & IProfileActions
 
         <ProtectedContainer>
           <div className="profile flex-grow-1 d-flex flex-column flex-md-row">
+
             <Form onSubmit={this.onSave}>
-              <FormGroup>
-                <AvatarContainer email={account.email} className="avatar profile-picture"/>
+
+              <FormGroup className="avatar-group">
+                <Label for="accountAvatar">
+                  <AvatarContainer email={account.email} className="avatar profile-picture"/>
+                  <div className="edit">Edit</div>
+                </Label>
+                <Input type="file" name="username"  id="accountAvatar" onChange={this.onAvatarChanged}/>
               </FormGroup>
+
               <FormGroup>
                 <Label for="accountUserName">Name:</Label>
                 <Input type="text" name="username" id="accountUserName" placeholder="username" value={account.name} onChange={this.onNameChanged}/>
