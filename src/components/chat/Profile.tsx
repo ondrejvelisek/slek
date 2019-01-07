@@ -28,7 +28,8 @@ export class Profile extends React.PureComponent<IProfileProps & IProfileActions
       this.state = {
         name,
         email,
-        avatar: props.content.avatar
+        avatar: props.content.avatar,
+        channelOrder: props.content.channelOrder
       };
     }
   }
