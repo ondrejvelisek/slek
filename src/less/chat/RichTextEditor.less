@@ -1,0 +1,71 @@
+
+@import "./variables";
+.rich-text-editor {
+  border: 1px @colorDarkLight solid;
+  border-radius: .3rem;
+  margin: 5px;
+  padding: 5px;
+
+  .emoji-picker {
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    float: right;
+    margin-left: 200px;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .btn {
+    background-color: @colorDarker;
+    color: @colorLight;
+    border: none;
+    font-size: 13px;
+    margin: 3px auto;
+
+    &.btn-send {
+      float: right;
+    }
+  }
+
+  .btn:hover {
+    background-color: @colorDarkLight;
+    color: @colorLighter;
+  }
+
+  .btn:active {
+    background-color: @colorDarkLight;
+    color: @colorLighter;
+    border: none;
+  }
+
+  .rich-text-options {
+    border-bottom: 0.5px @colorDarkLight solid;
+  }
+
+  .rich-text-content {
+    margin: 2px;
+    .DraftEditor-root {
+      background-color: @colorDarker;
+      border-color: @colorDarkLight;
+      color: @colorLight;
+      min-height: 60px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+  }
+
+  .rich-text-footer {
+    border-top: 0.5px @colorDarkLight solid;
+
+    .file-upload {
+      margin: 0;
+
+      input {
+        display: none;
+      }
+    }
+  }
+}
