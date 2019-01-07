@@ -21,7 +21,7 @@ import {
   SLEK_CHANNEL_SUBSCRIBE_USER_FAILED,
   SLEK_CHANNEL_UNSUBSCRIBE_USER_FAILED,
   SLEK_CHANNEL_UNSUBSCRIBE_USER_SUCCEEDED,
-  SLEK_CHANNEL_UNSUBSCRIBE_USER_STARTED
+  SLEK_CHANNEL_UNSUBSCRIBE_USER_STARTED, SLEK_REORDER_CHANNELES
 } from '../../constants/actions';
 import {IChannel} from '../../models/chat/IChannel';
 import * as Immutable from 'immutable';
@@ -32,6 +32,10 @@ import {v4 as uuid} from 'uuid';
 import {IServices} from '../../services';
 import {IMessage} from '../../models/chat/IMessage';
 
+export const reorderChannels = (): Action => ({
+  type: SLEK_REORDER_CHANNELES,
+  payload: {}
+});
 
 const channelCreationStarted = (channel: IChannelData, tempId: Uuid): Action => ({
   type: SLEK_CHANNEL_CREATION_STARTED,

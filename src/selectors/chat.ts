@@ -1,11 +1,11 @@
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect';
 import {IRootState} from '../states/IRootState';
 import {IAccountsState} from '../states/chat/IAccountsState';
 import {IAccount} from '../models/chat/IAccount';
-import {IChannelsState} from '../states/chat/IChannelsState';
+import {IChannelsState, Order} from '../states/chat/IChannelsState';
 import {IChannel} from '../models/chat/IChannel';
 import {ILoadable} from '../states/common/ILoadable';
-import {Map, List, Set} from 'immutable';
+import {List, Map, Set} from 'immutable';
 import {IMessage} from '../models/chat/IMessage';
 import {IAuthState} from '../states/chat/IAuthState';
 import {IEditable} from '../states/common/IEditable';
@@ -21,6 +21,7 @@ export const selectMessagesMap = (state: IRootState) => state.chat.messages.cont
 export const selectAuth = (state: IRootState) => state.chat.auth.content;
 
 export const selectActiveChannelId = (state: IRootState) => state.chat.channels.active;
+export const selectChannelsOrder = (state: IRootState) => state.chat.channels.order;
 
 export const selectAuthEmail = createSelector(
   [selectAuthState],
@@ -76,9 +77,11 @@ export const selectMessageIds = createSelector(
 );
 
 export const selectChannelIds = createSelector(
-  [selectChannelsMap],
-  (channels: Map<Uuid, ILoadable<IChannel>>): List<Uuid> =>
-    List(channels.keySeq())
+  [selectChannelsMap, selectChannelsOrder],
+  (channels: Map<Uuid, ILoadable<IChannel>>, order: Order): List<Uuid> =>
+    List(channels.sort(
+      (a: ILoadable<IChannel>, b: ILoadable<IChannel>) => (order === Order.Asc ? 1 : -1) * a.content.name.localeCompare(b.content.name)
+    ).keySeq())
 );
 
 export const selectAccountEmails = createSelector(

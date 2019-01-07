@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {Channels, IChannelsActions, IChannelsProps} from '../../components/chat/Channels';
-import { getChannels} from '../../actions/chat/Channels';
+import { getChannels, reorderChannels} from '../../actions/chat/Channels';
 import {IRootState} from '../../states/IRootState';
 import {selectActiveAccountEmail, selectChannelIds, selectChannelsState} from '../../selectors/chat';
 
@@ -13,7 +13,8 @@ const mapStateToProps = (state: IRootState): IChannelsProps => ({
 
 const mapDispatchToProps: IChannelsActions = {
   onMounted: getChannels,
-  onReloadChannels: getChannels
+  onReloadChannels: getChannels,
+  onReorder: reorderChannels
 };
 
 export const ChannelsContainer = connect(mapStateToProps, mapDispatchToProps)(Channels);
