@@ -75,7 +75,7 @@ const accountListParser: Parser<List<IAccount>> = listParser(accountParser);
 
 export const createChatService = (getAuth: GetAuth): IChatService => {
 
-  const delay = 1000;
+  const delay = 0;
   const errorProb = 0.0;
 
   const apiFetch = _.flowRight(
