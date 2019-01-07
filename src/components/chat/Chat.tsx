@@ -4,8 +4,8 @@ import '../../less/chat/Layout.less';
 import {HeaderContainer} from '../../containers/chat/Header';
 import {MessagesContainer} from '../../containers/chat/Messages';
 import {ChannelHeaderContainer} from '../../containers/chat/ChannelHeader';
-import {InputBoxContainer} from '../../containers/chat/InputBox';
 import {ProtectedContainer} from '../../containers/chat/Protected';
+import {RichTextEditorContainer} from '../../containers/chat/RichTextEditor';
 
 export interface IChatProps {
   channelId: Uuid|null;
@@ -28,12 +28,12 @@ export class Chat extends React.PureComponent<IChatProps> {
                 <ChannelHeaderContainer/>
               </div>
 
-              <div className="content flex-grow-1">
+              <div className="rich-text-content flex-grow-1">
                 <MessagesContainer/>
               </div>
 
               <div className="footer">
-                <InputBoxContainer/>
+                <RichTextEditorContainer/>
               </div>
 
             </div>
