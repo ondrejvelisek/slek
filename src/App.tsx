@@ -8,7 +8,7 @@ import {LoginContainer} from './containers/chat/Login';
 import createBrowserHistory from 'history/createBrowserHistory';
 import {ConnectedRouter, routerMiddleware} from 'connected-react-router';
 import {IRootState} from './states/IRootState';
-import {loadState, saveState} from './services/persistService';
+import {createPersistService} from './services/persistService';
 import {createChatService} from './services/chatService';
 import {ChatContainer} from './containers/chat/Chat';
 import {ProfileContainer} from './containers/chat/Profile';
@@ -22,20 +22,22 @@ const middleware = [thunk.withExtraArgument(services), routerMiddleware(history)
 
 const rootReducer = createRootReducer(history);
 
+const persistService = createPersistService(localStorage);
+
 const store = createStore(
   rootReducer,
-  loadState(),
+  persistService.loadState(),
   composeEnhancers(applyMiddleware(...middleware))
 );
 
-services.chatService = createChatService(() => store.getState().chat.auth.content);
+services.chatService = createChatService(fetch, () => store.getState().chat.auth.content);
 
 let currentState: IRootState;
 store.subscribe(() => {
   const previousState: IRootState = currentState;
   currentState = store.getState();
   if (currentState && (!previousState || currentState.chat.auth !== previousState.chat.auth)) {
-    saveState({ chat: { auth: currentState.chat.auth } });
+    persistService.saveState({ chat: { auth: currentState.chat.auth } });
   }
 });
 

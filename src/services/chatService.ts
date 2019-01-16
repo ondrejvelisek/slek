@@ -73,7 +73,7 @@ const messageListParser: Parser<List<IMessage>> = listParser(messageParser);
 const accountParser: Parser<IAccount> = customDataParser;
 const accountListParser: Parser<List<IAccount>> = listParser(accountParser);
 
-export const createChatService = (getAuth: GetAuth): IChatService => {
+export const createChatService = (fetch: Fetch, getAuth: GetAuth): IChatService => {
 
   const delay = 0;
   const errorProb = 0.0;

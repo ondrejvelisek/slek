@@ -8,22 +8,28 @@ export interface IPersistedState {
 
 const STORAGE_KEY = 'persisted_state';
 
-export const loadState = (): IPersistedState|undefined => {
-  try {
-    const state = localStorage.getItem(STORAGE_KEY);
-    if (!state) {
+
+export const createPersistService = (storage: Storage) => ({
+
+  loadState: (): IPersistedState|undefined => {
+    try {
+      const state = storage.getItem(STORAGE_KEY);
+      if (!state) {
+        return undefined;
+      }
+      return JSON.parse(state);
+    } catch (e) {
       return undefined;
     }
-    return JSON.parse(state);
-  } catch (e) {
-    return undefined;
-  }
-};
+  },
 
-export const saveState = (state: IPersistedState): void => {
-  try {
-    return localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-  } catch (e) {
-    console.log('Unable to save state. Incognito/Privacy window?');
+  saveState: (state: IPersistedState): void => {
+    try {
+      return storage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+      console.log('Unable to save state. Incognito/Privacy window?', e);
+    }
   }
-};
+
+});
+
